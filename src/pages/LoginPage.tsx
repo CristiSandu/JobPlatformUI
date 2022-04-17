@@ -1,34 +1,36 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee } from "@fortawesome/free-solid-svg-icons";
 import GoogleLogo from "../Images/gLogo.svg";
+import LoginImage from "../Images/login_image.svg";
 
 export const LoginPage = (): JSX.Element => {
   return (
-    <div className="flex h-screen">
-      <div className="m-auto space-y-64 text-center ">
-        <div className="space-y-8">
-          <form className="space-y-4 align-baseline ">
-            <div>
-              <i className="fa fa-instagram icon"></i>
-              <input
-                className="entry-primary"
-                type="text"
-                name="name"
-                placeholder="Email"
-              />
+    <div className="flex h-screen w-screen">
+      <div className="relative  m-auto space-y-0 text-center border-MainBlue border-2 pt-32 pb-44  px-72 rounded-md">
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <form className="space-y-4 align-baseline w-full">
+              <div>
+                <input
+                  className="entry-primary w-96"
+                  type="text"
+                  name="name"
+                  placeholder="Email"
+                />
+              </div>
+              <div>
+                <input
+                  className="entry-primary w-96"
+                  type="password"
+                  name="name"
+                  placeholder="Password"
+                />
+              </div>
+            </form>
+            <div className="space-x-10">
+              <button className="btn-primary">Login</button>
+              <button className="btn-primary">Register</button>
             </div>
-            <div>
-              <input
-                className="entry-primary"
-                type="password"
-                name="name"
-                placeholder="Password"
-              />
-            </div>
-          </form>
-          <div className="space-x-10">
-            <button className="btn-primary">Login</button>
-            <button className="btn-primary">Register</button>
           </div>
           <div className="flex justify-center items-center space-x-2">
             <div className="bg-black h-0.5 w-full content-center"></div>
@@ -43,6 +45,13 @@ export const LoginPage = (): JSX.Element => {
             <h1>Login with Google</h1>
           </div>
         </div>
+        <img
+          className="absolute top-0 left-0 z-0 "
+          src={LoginImage}
+          height="244"
+          width="410"
+          alt="React Logo"
+        />
       </div>
     </div>
   );
