@@ -33,7 +33,7 @@ export const LoginPage = (): JSX.Element => {
                 />
               </div>
             </form>
-            <div className="space-x-10">
+            <div className="grid grid-cols-2 gap-24 px-12 ">
               <button className="btn-primary">Login</button>
               <button className="btn-primary">Register</button>
             </div>
@@ -43,12 +43,14 @@ export const LoginPage = (): JSX.Element => {
             <div className="font-semibold">OR</div>
             <div className="bg-black h-0.5 w-full "></div>
           </div>
-          <div
-            className="flex items-center space-x-2 justify-center btn-primary cursor-pointer"
-            onClick={() => {}}
-          >
-            <img src={GoogleLogo} alt="React Logo" />
-            <h1>Login with Google</h1>
+          <div className="grid grid-cols-1 px-8">
+            <div
+              className="flex items-center space-x-2 justify-center btn-primary cursor-pointer"
+              onClick={() => {}}
+            >
+              <img src={GoogleLogo} alt="React Logo" />
+              <h1>Login with Google</h1>
+            </div>
           </div>
         </div>
       </div>

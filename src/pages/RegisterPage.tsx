@@ -40,7 +40,7 @@ export const RegisterPage = (): JSX.Element => {
                 />
               </div>
             </form>
-            <div className="space-x-5">
+            <div className="grid grid-cols-2 gap-2 px-12 pt-8">
               <button className="btn-primary">Register</button>
               <button className="btn-primary">Cancel</button>
             </div>
