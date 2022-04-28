@@ -1,13 +1,12 @@
-import GoogleLogo from "../Images/gLogo.svg";
-import LoginImage from "../Images/login_image.svg";
+import RegisterImage from "../Images/register_image.svg";
 
-export const LoginPage = (): JSX.Element => {
+export const RegisterPage = (): JSX.Element => {
   return (
     <div className="flex h-screen w-screen">
       <div className="relative m-auto space-y-0 text-center border-LightBlue border-2 pt-32 pb-44 h-2/3 w-2/4 px-72 rounded-md">
         <img
           className="absolute top-24 left-24 z-0 "
-          src={LoginImage}
+          src={RegisterImage}
           height="244"
           width="410"
           alt="React Logo"
@@ -21,6 +20,14 @@ export const LoginPage = (): JSX.Element => {
                   className="entry-primary w-96"
                   type="text"
                   name="name"
+                  placeholder="Name"
+                />
+              </div>
+              <div>
+                <input
+                  className="entry-primary w-96"
+                  type="text"
+                  name="email"
                   placeholder="Email"
                 />
               </div>
@@ -28,27 +35,15 @@ export const LoginPage = (): JSX.Element => {
                 <input
                   className="entry-primary w-96"
                   type="password"
-                  name="name"
+                  name="password"
                   placeholder="Password"
                 />
               </div>
             </form>
-            <div className="space-x-10">
-              <button className="btn-primary">Login</button>
+            <div className="space-x-5">
               <button className="btn-primary">Register</button>
+              <button className="btn-primary">Cancel</button>
             </div>
-          </div>
-          <div className="flex justify-center items-center space-x-2">
-            <div className="bg-black h-0.5 w-full content-center"></div>
-            <div className="font-semibold">OR</div>
-            <div className="bg-black h-0.5 w-full "></div>
-          </div>
-          <div
-            className="flex items-center space-x-2 justify-center btn-primary cursor-pointer"
-            onClick={() => {}}
-          >
-            <img src={GoogleLogo} alt="React Logo" />
-            <h1>Login with Google</h1>
           </div>
         </div>
       </div>
