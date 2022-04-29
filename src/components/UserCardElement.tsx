@@ -1,5 +1,6 @@
 import UserMImage from "../Images/userM_image.svg";
 import UserFImage from "../Images/userF_image.svg";
+import ModalUserInfo from "./ModalUserInfo";
 
 export type UserCardParameter = {
   gender: string;
@@ -45,6 +46,7 @@ export default function UserCardElement({
           {domain}
         </div>
       </div>
+      <ModalUserInfo />
     </div>
   );
 }
