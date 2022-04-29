@@ -9,6 +9,7 @@ module.exports = {
         WhiteBlue: "#E7F7FF",
         White: "#FFFFFF",
         Black: "#000000",
+        CardGray: "#C4C4C4",
 
         RedDelete: "#B50000",
         GreenCheck: "#19B500",

@@ -1,3 +1,10 @@
+import {
+  faUser,
+  faClipboardList,
+  faBars,
+  faUsersGear,
+} from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 
@@ -11,10 +18,10 @@ export const SideNavBar = ({
       <div className="w-20 h-20 p-6 box-border">
         {isUserAuthorized ? (
           <NavLink end to={"/"}>
-            <FontAwesomeIcon icon="users-gear" className="bg-white" />
+            <FontAwesomeIcon icon={faBars} className="h-10 w-10 text-white" />
           </NavLink>
         ) : (
-          <FontAwesomeIcon icon="users-gear" className="bg-white" />
+          <FontAwesomeIcon icon={faBars} className="h-10 w-10 text-white" />
         )}
       </div>
 
@@ -24,21 +31,23 @@ export const SideNavBar = ({
             <NavLink
               end
               to={"/"}
-              className="h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 border-MainBlue box-border border-interaction bg-red-50"
+              className="h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 border-LightBlue box-border border-interaction bg-MainBlue"
             >
-              <div className="w-8 h-8">
-                <FontAwesomeIcon icon="users-gear" />
-              </div>
+              <FontAwesomeIcon
+                icon={faUsersGear}
+                className="h-10 w-10 text-LightBlue"
+              />
             </NavLink>
 
             <NavLink
               end
               to={"/register"}
-              className="h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 border-MainBlue box-border border-interaction bg-LightBlue"
+              className="h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 border-MainBlue box-border border-interaction bg-MainBlue"
             >
-              <div className="w-8 h-8">
-                <FontAwesomeIcon icon="check-square" className="bg-white" />
-              </div>
+              <FontAwesomeIcon
+                icon={faClipboardList}
+                className="h-10 w-10 text-white"
+              />
             </NavLink>
 
             <NavLink
@@ -47,9 +56,10 @@ export const SideNavBar = ({
               className="h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 border-MainBlue "
             >
               <div className="relative">
-                <div className="w-8 h-8">
-                  <FontAwesomeIcon icon="check-square" className="bg-white" />
-                </div>
+                <FontAwesomeIcon
+                  icon={faUser}
+                  className="h-10 w-10 text-white"
+                />
               </div>
             </NavLink>
           </>

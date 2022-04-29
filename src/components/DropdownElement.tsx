@@ -42,9 +42,12 @@ export default function DropdownElement({
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center w-full  rounded border border-MainBlue shadow-sm px-4 py-3 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-LightBlue">
+        <Menu.Button className="inline-flex justify-center w-36 rounded border border-MainBlue shadow-sm px-4 py-3 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-LightBlue">
           {selectedElement}
-          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5 " aria-hidden="true" />
+          <ChevronDownIcon
+            className="-mr-1 ml-2 h-5 w-5 justify-end"
+            aria-hidden="true"
+          />
         </Menu.Button>
       </div>
 
