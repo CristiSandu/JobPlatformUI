@@ -5,6 +5,7 @@ import { CheckOffersPage } from "./pages/CheckOffersPage";
 import { EditUserPage, UserCardParameter } from "./pages/EditUserPage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfileFormPage } from "./pages/ProfileFormPage";
+import { ProfilePageTemplate } from "./pages/ProfilePageTemplate";
 import { RegisterPage } from "./pages/RegisterPage";
 
 function App() {
@@ -278,6 +279,16 @@ function App() {
       type: "Construction",
     },
   ];
+
+  const userInfo: UserCardParameter = {
+    domain: "construction",
+    email: "ilie.cristian.sandu@gmail.com",
+    gender: "M",
+    type: "employee",
+    age: "32",
+    name: "Sandu Ilie Cristian",
+  };
+
   return (
     <Router>
       <div className="app">
@@ -286,12 +297,16 @@ function App() {
           <Route path="/register" element={<RegisterPage />}></Route>
           <Route path="/profileForm" element={<ProfileFormPage />}></Route>
           <Route
-            path="/EditUsers"
+            path="/editUsers"
             element={<EditUserPage initialsElements={elem} />}
           ></Route>
           <Route
-            path="/checkOfferts"
+            path="/checkOffers"
             element={<CheckOffersPage initialsElements={elem2} />}
+          ></Route>
+          <Route
+            path="/profilePage"
+            element={<ProfilePageTemplate userInfo={userInfo} />}
           ></Route>
         </Routes>
       </div>

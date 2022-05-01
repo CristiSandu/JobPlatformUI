@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
-import { PageFooterHeaderTeamplate } from "./PageFooterHeaderTeamplate";
+import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobCardElement, { JobCardParameter } from "../components/JobCardElement";
 
 export type UserCardParameter = {
@@ -55,13 +55,13 @@ export const CheckOffersPage = ({
   ));
   return (
     <>
-      <PageFooterHeaderTeamplate>
+      <PageFooterHeaderTemplate>
         <div className="pt-8 w-full">
           <div className="space-y-12 scroll">
             <span className="font-sans text-3xl font-semibold pb-12">
               Offers
             </span>
-            <div className="flex space-x-12">
+            <div className="flex justify-between">
               <div className="grid grid-cols-3 gap-4">
                 <button
                   className="btn-primary focus:bg-LightBlue"
@@ -91,7 +91,7 @@ export const CheckOffersPage = ({
             <div className="space-y-5">{elementsRendered}</div>
           </div>
         </div>
-      </PageFooterHeaderTeamplate>
+      </PageFooterHeaderTemplate>
     </>
   );
 };

@@ -10,7 +10,7 @@ export type NavigatorProps = {
   isUserAuthorized?: boolean;
 };
 
-export const PageFooterHeaderTeamplate = ({
+export const PageFooterHeaderTemplate = ({
   isLoading,
   children,
   isUserAuthorized = true,

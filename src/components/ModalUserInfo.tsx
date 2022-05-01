@@ -29,7 +29,7 @@ export default function ModalUserInfo({
               {/*content*/}
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
-                <div className="flex items-start justify-between p-5 pr-28 border-b border-solid border-slate-200 rounded-t">
+                <div className="flex items-start justify-between p-5 pr-8 border-b border-solid border-slate-200 rounded-t">
                   {userInfo !== null ? (
                     <ProfilePicture
                       height="191"

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
-import { PageFooterHeaderTeamplate } from "./PageFooterHeaderTeamplate";
+import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import ProfilePicture from "../components/ProfilePicture";
 
 export const ProfileFormPage = (): JSX.Element => {
@@ -23,7 +23,7 @@ export const ProfileFormPage = (): JSX.Element => {
 
   return (
     <>
-      <PageFooterHeaderTeamplate>
+      <PageFooterHeaderTemplate>
         <div className="flex h-screen w-screen">
           <img
             className="absolute top-40 left-40 z-0 "
@@ -162,7 +162,7 @@ export const ProfileFormPage = (): JSX.Element => {
             </div>
           </div>
         </div>
-      </PageFooterHeaderTeamplate>
+      </PageFooterHeaderTemplate>
     </>
   );
 };
