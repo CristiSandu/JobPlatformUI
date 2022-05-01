@@ -1,9 +1,8 @@
 import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
-import UserMImage from "../Images/userM_image.svg";
-import UserFImage from "../Images/userF_image.svg";
 import { PageFooterHeaderTeamplate } from "./PageFooterHeaderTeamplate";
+import ProfilePicture from "../components/ProfilePicture";
 
 export const ProfileFormPage = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<string>("");
@@ -34,23 +33,11 @@ export const ProfileFormPage = (): JSX.Element => {
             alt="React Logo"
           />
           <div className="absolute top-1/3 left-3/4">
-            {selectedGender === "F" ? (
-              <img
-                className="z-0"
-                src={UserFImage}
-                height="306"
-                width="306"
-                alt="React Logo"
-              />
-            ) : (
-              <img
-                className="z-0"
-                src={UserMImage}
-                height="306"
-                width="306"
-                alt="React Logo"
-              />
-            )}
+            <ProfilePicture
+              height="306"
+              width="306"
+              isMasculine={selectedGender !== "F"}
+            />
           </div>
 
           <div className="space-y-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-10 w-max">

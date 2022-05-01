@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTeamplate } from "./PageFooterHeaderTeamplate";
-import UserCardElement from "../components/UserCardElement";
+import JobCardElement, { JobCardParameter } from "../components/JobCardElement";
 
 export type UserCardParameter = {
   domain: string;
@@ -13,20 +13,21 @@ export type UserCardParameter = {
 };
 
 export type ElementsListParams = {
-  initialsElements: UserCardParameter[];
+  initialsElements: JobCardParameter[];
 };
-export const EditUserPage = ({
+
+export const CheckOffersPage = ({
   initialsElements,
 }: ElementsListParams): JSX.Element => {
   const [elementsList, setElementsList] =
-    useState<UserCardParameter[]>(initialsElements);
+    useState<JobCardParameter[]>(initialsElements);
 
   function selectedElementChange(element: string, dropdownName: string): void {
-    if (element === "Domain") {
+    if (element === "Domains") {
       setElementsList(initialsElements);
       return;
     }
-    const elements = initialsElements.filter((elem) => elem.domain === element);
+    const elements = initialsElements.filter((elem) => elem.type === element);
     setElementsList(elements);
   }
 
@@ -36,42 +37,43 @@ export const EditUserPage = ({
       return;
     }
     const elements = initialsElements.filter(
-      (elem) => elem.type === filterName
+      (elem) => elem.isValidate === (filterName === "true")
     );
     setElementsList(elements);
   }
 
-  let elementsRendered = elementsList.map((element: UserCardParameter) => (
-    <UserCardElement
-      domain={element.domain}
-      email={element.email}
-      gender={element.gender}
+  let elementsRendered = elementsList.map((element: JobCardParameter) => (
+    <JobCardElement
       name={element.name}
       type={element.type}
-      age={element.age}
+      date={element.date}
+      description={element.description}
+      employer={element.employer}
+      location={element.location}
+      isValidate={element.isValidate}
     />
   ));
   return (
     <>
       <PageFooterHeaderTeamplate>
         <div className="pt-8 w-full">
-          <div className="space-y-3 scroll">
+          <div className="space-y-12 scroll">
             <span className="font-sans text-3xl font-semibold pb-12">
-              Users
+              Offers
             </span>
             <div className="flex space-x-12">
               <div className="grid grid-cols-3 gap-4">
                 <button
                   className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("employee")}
+                  onClick={() => onClickFilter("false")}
                 >
-                  employee
+                  To Check
                 </button>
                 <button
                   className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("recruiters")}
+                  onClick={() => onClickFilter("true")}
                 >
-                  recruiters
+                  Checked
                 </button>
                 <button
                   className="btn-primary focus:bg-LightBlue"
@@ -81,12 +83,12 @@ export const EditUserPage = ({
                 </button>
               </div>
               <DropdownElement
-                dropdownName="Domain"
+                dropdownName="Domains"
                 selectedElementChange={selectedElementChange}
-                elements={["Domain", "IT", "HoReCa", "Construction"]}
+                elements={["Domains", "IT", "HoReCa", "Construction"]}
               />
             </div>
-            {elementsRendered}
+            <div className="space-y-5">{elementsRendered}</div>
           </div>
         </div>
       </PageFooterHeaderTeamplate>

@@ -31,14 +31,7 @@ export default function UserCardElement(userinfo: UserCardParameter) {
             {userinfo.domain}
           </div>
         </div>
-        <ModalUserInfo
-          domain={userinfo.domain}
-          email={userinfo.email}
-          gender={userinfo.gender}
-          name={userinfo.name}
-          type={userinfo.type}
-          age={userinfo.age}
-        />
+        <ModalUserInfo userInfo={userinfo} jobInfo={null} />
       </div>
     </>
   );
