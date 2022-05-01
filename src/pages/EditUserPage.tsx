@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
-import FormImage from "../Images/form_logo.svg";
-import UserMImage from "../Images/userM_image.svg";
-import UserFImage from "../Images/userF_image.svg";
 import { PageFooterHeaderTeamplate } from "./PageFooterHeaderTeamplate";
 import UserCardElement from "../components/UserCardElement";
 
@@ -11,6 +8,7 @@ export type UserCardParameter = {
   email: string;
   gender: string;
   type: string;
+  age: string;
   name: string;
 };
 
@@ -45,6 +43,8 @@ export const EditUserPage = ({
       email={element.email}
       gender={element.gender}
       name={element.name}
+      type={element.type}
+      age={element.age}
     />
   ));
   return (

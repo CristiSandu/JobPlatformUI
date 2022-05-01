@@ -12,6 +12,7 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
       name: "Sandu Ilie Cristian",
     },
     {
@@ -19,6 +20,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -26,6 +29,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -33,6 +38,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "employee",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -40,6 +47,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -47,6 +56,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "employee",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -54,6 +65,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -61,6 +74,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "employee",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -68,6 +83,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -75,6 +92,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "employee",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -82,6 +101,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -89,6 +110,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "employee",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -96,6 +119,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
     {
@@ -103,6 +128,8 @@ function App() {
       email: "ioana.popa@gmail.com",
       gender: "F",
       type: "recruiters",
+      age: "32",
+
       name: "Popa Ioana",
     },
     {
@@ -110,6 +137,8 @@ function App() {
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
+      age: "32",
+
       name: "Sandu Ilie Cristian",
     },
   ];
