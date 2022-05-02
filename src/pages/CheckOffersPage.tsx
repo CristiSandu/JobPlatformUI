@@ -1,7 +1,8 @@
 import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
-import JobCardElement, { JobCardParameter } from "../components/JobCardElement";
+import JobCardElement from "../components/JobCardElement";
+import { JobUserCardParameter } from "../components/JobUserCardElement";
 
 export type UserCardParameter = {
   domain: string;
@@ -13,14 +14,14 @@ export type UserCardParameter = {
 };
 
 export type ElementsListParams = {
-  initialsElements: JobCardParameter[];
+  initialsElements: JobUserCardParameter[];
 };
 
 export const CheckOffersPage = ({
   initialsElements,
 }: ElementsListParams): JSX.Element => {
   const [elementsList, setElementsList] =
-    useState<JobCardParameter[]>(initialsElements);
+    useState<JobUserCardParameter[]>(initialsElements);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domains") {
@@ -42,8 +43,10 @@ export const CheckOffersPage = ({
     setElementsList(elements);
   }
 
-  let elementsRendered = elementsList.map((element: JobCardParameter) => (
+  let elementsRendered = elementsList.map((element: JobUserCardParameter) => (
     <JobCardElement
+      applicants={element.applicants}
+      number_of_places={element.number_of_places}
       name={element.name}
       type={element.type}
       date={element.date}

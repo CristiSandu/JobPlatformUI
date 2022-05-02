@@ -1,10 +1,7 @@
 import ModalUserInfo from "./ModalUserInfo";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
-import { JobUserCardParameter } from "./JobUserCardElement";
 
-export type JobCardParameter = {
+export type JobUserCardParameter = {
   name: string;
   type: string;
   employer: string;
@@ -12,9 +9,12 @@ export type JobCardParameter = {
   description: string;
   location: string;
   isValidate: boolean;
+  number_of_places: number;
+  applicants: number;
+  isMyOffer?: boolean;
 };
 
-export default function JobCardElement(jobInfo: JobUserCardParameter) {
+export default function JobUserCardElement(jobInfo: JobUserCardParameter) {
   return (
     <>
       <div
@@ -40,25 +40,23 @@ export default function JobCardElement(jobInfo: JobUserCardParameter) {
             {jobInfo.type}
           </div>
 
-          {jobInfo.isValidate ? (
-            <div className="flex rounded bg-WhiteBlue text-LightBlue px-2 py-1 text-center font-bold text-sm items-center h-max w-32">
-              <div className="flex-1"> Checked</div>
-              <FontAwesomeIcon
-                icon={faCheck}
-                className="h-5 w-8 flex-none font-bold text-GreenCheck"
-              />
-            </div>
-          ) : (
-            <div className="flex rounded bg-WhiteBlue text-LightBlue px-2 py-1 space-x-2 text-center font-bold text-sm items-end h-max w-32">
-              <div className="flex-1 items-end"> To Check</div>
-              <FontAwesomeIcon
-                icon={faRectangleXmark}
-                className="h-5 w-6 flex-none text-LightBlue"
-              />
+          {jobInfo.isMyOffer && (
+            <div className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
+              My Offer
             </div>
           )}
+
+          <div
+            className={`flex-none rounded bg-WhiteBlue  ${
+              jobInfo.applicants >= jobInfo.number_of_places
+                ? "text-SecondBlue border-SecondBlue border-2"
+                : "text-LightBlue "
+            }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
+          >
+            Nr: {jobInfo.applicants}/{jobInfo.number_of_places}
+          </div>
         </div>
-        <ModalUserInfo userInfo={null} isAdmin={true} jobInfo={jobInfo} />
+        <ModalUserInfo userInfo={null} isAdmin={false} jobInfo={jobInfo} />
       </div>
     </>
   );

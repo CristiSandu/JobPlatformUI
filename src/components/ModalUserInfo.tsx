@@ -2,17 +2,19 @@ import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import { UserCardParameter } from "./UserCardElement";
 import NoDataLogo from "../Images/no_data_logo.svg";
-import { JobCardParameter } from "./JobCardElement";
 import JobPostLogo from "../Images/job_post_logo.svg";
+import { JobUserCardParameter } from "./JobUserCardElement";
 
 export type ModalInformationParam = {
   userInfo: UserCardParameter | null;
-  jobInfo: JobCardParameter | null;
+  jobInfo: JobUserCardParameter | null;
+  isAdmin: boolean;
 };
 
 export default function ModalUserInfo({
   userInfo,
   jobInfo,
+  isAdmin,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
   return (
@@ -75,13 +77,16 @@ export default function ModalUserInfo({
                       </div>
                     </div>
                   ) : (
-                    <div className="space-y-8">
-                      <div className="space-y-2">
+                    <div className="space-y-1">
+                      <div>
                         <div className="title-primary text-4xl font-semibold">
                           {jobInfo?.name}
                         </div>
                         <div className="title-primary text-base font-mono">
                           {jobInfo?.employer}
+                        </div>
+                        <div className="title-primary text-base font-mono">
+                          Nr:{jobInfo?.applicants}/{jobInfo?.number_of_places}
                         </div>
                       </div>
 
@@ -183,7 +188,7 @@ export default function ModalUserInfo({
                         Cancel
                       </button>
                     </>
-                  ) : (
+                  ) : isAdmin ? (
                     <>
                       <button
                         className="btn-primary bg-GreenCheck"
@@ -199,6 +204,47 @@ export default function ModalUserInfo({
                       >
                         Delete
                       </button>
+                      <button
+                        className="btn-primary"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : jobInfo?.isMyOffer ? (
+                    <>
+                      <button
+                        className="btn-primary bg-SecondBlue"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Extended Page
+                      </button>
+                      <button
+                        className="btn-primary bg-SecondBlue"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Expired
+                      </button>
+                      <button
+                        className="btn-primary bg-RedDelete"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="btn-primary"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
                       <button
                         className="btn-primary"
                         type="button"
