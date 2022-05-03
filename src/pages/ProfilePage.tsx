@@ -2,8 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProfilePicture from "../components/ProfilePicture";
 import { UserPageParams } from "./ProfilePageTemplate";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { signOut } from "../provider/firebase";
+import { useNavigate } from "react-router-dom";
 
 export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
+  const navigate = useNavigate();
+
   return (
     <div className="pt-8 h-screen">
       <div className="space-y-12 grid place-items-center">
@@ -36,7 +40,13 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
             <div className="text-xl">Universitatea Politehnica Bucuresti</div>
           </div>
           <div className="grid place-items-end ">
-            <button className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue">
+            <button
+              className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
+              onClick={() => {
+                signOut();
+                navigate("/");
+              }}
+            >
               <div className="flex-1">Edit</div>
               <FontAwesomeIcon
                 icon={faPencil}
