@@ -3,19 +3,43 @@ import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import ProfilePicture from "../components/ProfilePicture";
+import { auth, updateUserInfo } from "../provider/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+
+export type UserProfileData = {
+  email: string;
+  name: string;
+  domain: string;
+  type: string;
+  gender: string | null;
+  age: number | null;
+  location: string;
+  phone: string;
+  last_level_grad: string | null;
+  description: string;
+  description_last_job: string | null;
+};
 
 export const ProfileFormPage = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
 
+  const [userData, setUserData] = useState({});
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {
       case "Domain":
+        setUserData({ ...userData, domain: element });
         break;
       case "Type":
+        setUserData({ ...userData, type: element });
         setSelectedType(element);
         break;
       case "Gender":
+        setUserData({ ...userData, gender: element });
         setSelectedGender(element);
         break;
     }
@@ -48,6 +72,9 @@ export const ProfileFormPage = (): JSX.Element => {
                     className="entry-primary w-96"
                     type="text"
                     name="name"
+                    onChange={(e) =>
+                      setUserData({ ...userData, name: e.target.value })
+                    }
                     placeholder="Full Name"
                   />
                 </div>
@@ -56,6 +83,9 @@ export const ProfileFormPage = (): JSX.Element => {
                     className="entry-primary w-96"
                     type="text"
                     name="email"
+                    onChange={(e) =>
+                      setUserData({ ...userData, email: e.target.value })
+                    }
                     placeholder="Email"
                   />
                 </div>
@@ -78,6 +108,9 @@ export const ProfileFormPage = (): JSX.Element => {
                       <input
                         className="entry-primary w-96"
                         type="tel"
+                        onChange={(e) =>
+                          setUserData({ ...userData, phone: e.target.value })
+                        }
                         name="name"
                         placeholder="Phone"
                       />
@@ -86,6 +119,9 @@ export const ProfileFormPage = (): JSX.Element => {
                       <input
                         className="entry-primary w-96"
                         type="text"
+                        onChange={(e) =>
+                          setUserData({ ...userData, location: e.target.value })
+                        }
                         name="name"
                         placeholder="Location"
                       />
@@ -95,6 +131,12 @@ export const ProfileFormPage = (): JSX.Element => {
                         className="entry-primary w-96"
                         type="text"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            description: e.target.value,
+                          })
+                        }
                         placeholder="Company Description"
                       />
                     </div>
@@ -112,6 +154,9 @@ export const ProfileFormPage = (): JSX.Element => {
                         className="entry-primary "
                         type="tel"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({ ...userData, phone: e.target.value })
+                        }
                         placeholder="Phone"
                       />
 
@@ -119,12 +164,18 @@ export const ProfileFormPage = (): JSX.Element => {
                         className="entry-primary "
                         type="number"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({ ...userData, age: +e.target.value })
+                        }
                         placeholder="Age"
                       />
                       <input
                         className="entry-primary "
                         type="text"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({ ...userData, location: e.target.value })
+                        }
                         placeholder="Location"
                       />
                     </div>
@@ -133,6 +184,12 @@ export const ProfileFormPage = (): JSX.Element => {
                         className="entry-primary w-96"
                         type="text"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            last_level_grad: e.target.value,
+                          })
+                        }
                         placeholder="Last level graduate"
                       />
                     </div>
@@ -141,6 +198,12 @@ export const ProfileFormPage = (): JSX.Element => {
                         className="entry-primary w-96"
                         type="text"
                         name="name"
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            description_last_job: e.target.value,
+                          })
+                        }
                         placeholder="Last job description"
                       />
                     </div>
@@ -148,6 +211,12 @@ export const ProfileFormPage = (): JSX.Element => {
                       <textarea
                         className="entry-primary w-96 "
                         name="name"
+                        onChange={(e) =>
+                          setUserData({
+                            ...userData,
+                            description: e.target.value,
+                          })
+                        }
                         placeholder="Description"
                       />
                     </div>
@@ -155,7 +224,15 @@ export const ProfileFormPage = (): JSX.Element => {
                 )}
               </form>
               <div className="grid grid-cols-3 gap-4 px-4 pt-8">
-                <button className="btn-primary">Save</button>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    updateUserInfo(user, userData);
+                    navigate("/editUsers");
+                  }}
+                >
+                  Save
+                </button>
                 <div />
                 <button className="btn-primary">Cancel</button>
               </div>

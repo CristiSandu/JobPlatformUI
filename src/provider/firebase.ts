@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInAnonymously, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInAnonymously, GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
+import { getFirestore, doc, setDoc, updateDoc } from "firebase/firestore"
 
 const firebaseConfig = {
     apiKey: "AIzaSyCX9jSxDKsFB2Q4Ecltc8Wb74SP8KE98AE",
@@ -71,6 +71,34 @@ const signUpWithGoogle = async () => {
     }
 };
 
+
+// export type UserProfileData = {
+//     email: string;
+//     name: string;
+//     domain: string;
+//     type: string;
+//     gender: string | null;
+//     age: number | null;
+//     location: string;
+//     phone: string;
+//     last_level_grad: string | null;
+//     description: string;
+//     description_last_job: string | null;
+//   };
+
+
+const updateUserInfo = async (user: User | null | undefined, userData: any) => {
+    try {
+        userData.name = user?.displayName ?? userData.name;
+        userData.email = user?.email ?? userData.email;
+        await updateDoc(doc(db, "Users", user?.uid ?? "test"), userData);
+    } catch (err: any) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
+
 const signOut = () => {
     firebaseSignOut(auth);
 };
@@ -82,5 +110,6 @@ export {
     signInAnon,
     signOut,
     signUp,
-    signUpWithGoogle
+    signUpWithGoogle,
+    updateUserInfo
 };

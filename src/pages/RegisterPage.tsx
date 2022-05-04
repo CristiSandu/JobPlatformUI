@@ -21,7 +21,7 @@ export const RegisterPage = (): JSX.Element => {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/profileForm");
     }
   }, [user, loading, error, navigate]);
 

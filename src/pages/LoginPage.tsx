@@ -9,14 +9,19 @@ export const LoginPage = (): JSX.Element => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isLoginWithGoogle, setIsLoginWithGoogle] = useState<boolean>(false);
+
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (user && isLoginWithGoogle) {
+      navigate("/profileForm");
+    }
+    if (user && !isLoginWithGoogle) {
       navigate("/editUsers");
     }
-  }, [user, loading, error, navigate]);
+  }, [user, loading, error, navigate, isLoginWithGoogle]);
 
   return (
     <div className="flex h-screen w-screen">
@@ -54,7 +59,11 @@ export const LoginPage = (): JSX.Element => {
             <div className="grid grid-cols-2 gap-24 px-12 ">
               <button
                 className="btn-primary"
-                onClick={() => signIn(email, password)}
+                onClick={() => {
+                  signIn(email, password);
+                  setIsLoginWithGoogle(false);
+                  navigate("/profileForm");
+                }}
               >
                 Login
               </button>
@@ -78,6 +87,8 @@ export const LoginPage = (): JSX.Element => {
               className="flex items-center space-x-2 justify-center btn-primary cursor-pointer"
               onClick={() => {
                 console.log(signUpWithGoogle());
+                setIsLoginWithGoogle(true);
+                navigate("/profileForm");
               }}
             >
               <img src={GoogleLogo} alt="React Logo" />
