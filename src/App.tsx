@@ -9,145 +9,76 @@ import {
   JobPageExtendedParams,
 } from "./pages/JobPageExtended";
 import { LoginPage } from "./pages/LoginPage";
-import { ProfileFormPage } from "./pages/ProfileFormPage";
+import { ProfileFormPage, UserProfileData } from "./pages/ProfileFormPage";
 import { ProfilePageTemplate } from "./pages/ProfilePageTemplate";
 import { RegisterPage } from "./pages/RegisterPage";
 import { UserOffersPage } from "./pages/UserOffersPage";
 
 function App() {
-  const elem: UserCardParameter[] = [
+  const elem: UserProfileData[] = [
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
+      age: 32,
+      description: "description",
+      description_last_job: "Inginer Programator (.NET with React)",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "Construction",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
     },
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
-
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "recruiters",
-      age: "32",
-
-      name: "Popa Ioana",
     },
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
-
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
+      name: "Sandu Ilie Cristian",
+    },
+    {
+      domain: "HoReCa",
+      email: "ilie.cristian.sandu@gmail.com",
+      gender: "M",
+      type: "employee",
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
+      name: "Sandu Ilie Cristian",
+    },
+    {
+      domain: "HoReCa",
+      email: "ilie.cristian.sandu@gmail.com",
+      gender: "M",
+      type: "employee",
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
     },
   ];

@@ -1,3 +1,4 @@
+import { UserProfileData } from "../pages/ProfileFormPage";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
 
@@ -10,7 +11,7 @@ export type UserCardParameter = {
   domain: string;
 };
 
-export default function UserCardElement(userinfo: UserCardParameter) {
+export default function UserCardElement(userinfo: UserProfileData) {
   return (
     <>
       <div

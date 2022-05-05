@@ -5,6 +5,7 @@ import JobPostLogo from "../Images/job_post_logo.svg";
 import UserCardElement, {
   UserCardParameter,
 } from "../components/UserCardElement";
+import { UserProfileData } from "./ProfileFormPage";
 
 export type JobPageExtendedParams = {
   jobInfo: JobUserCardParameter;
@@ -13,144 +14,76 @@ export type JobPageExtendedParams = {
 export const JobPageExtended = ({
   jobInfo,
 }: JobPageExtendedParams): JSX.Element => {
-  const elementsList: UserCardParameter[] = [
+  const elementsList: UserProfileData[] = [
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "Construction",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
+      age: 32,
+      description: "description",
+      description_last_job: "Inginer Programator (.NET with React)",
 
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
     },
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
-
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "employee",
-      age: "32",
-
-      name: "Popa Ioana",
-    },
-    {
-      domain: "IT",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: "32",
-
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "IT",
-      email: "ioana.popa@gmail.com",
-      gender: "F",
-      type: "recruiters",
-      age: "32",
-
-      name: "Popa Ioana",
     },
     {
       domain: "HoReCa",
       email: "ilie.cristian.sandu@gmail.com",
       gender: "M",
       type: "employee",
-      age: "32",
-
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
+      name: "Sandu Ilie Cristian",
+    },
+    {
+      domain: "HoReCa",
+      email: "ilie.cristian.sandu@gmail.com",
+      gender: "M",
+      type: "employee",
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
+      name: "Sandu Ilie Cristian",
+    },
+    {
+      domain: "HoReCa",
+      email: "ilie.cristian.sandu@gmail.com",
+      gender: "M",
+      type: "employee",
+      age: 32,
+      description: "description",
+      description_last_job: "asdasdasds",
+      last_level_grad: "UPB",
+      location: "Bucharest, Romania",
+      phone: "0725635489",
       name: "Sandu Ilie Cristian",
     },
   ];
 
-  let elementsRendered = elementsList.map((element: UserCardParameter) => (
+  let elementsRendered = elementsList.map((element: UserProfileData) => (
     <UserCardElement
       domain={element.domain}
       email={element.email}
@@ -158,6 +91,11 @@ export const JobPageExtended = ({
       name={element.name}
       type={element.type}
       age={element.age}
+      description={element.description}
+      description_last_job={element.description_last_job}
+      last_level_grad={element.last_level_grad}
+      location={element.location}
+      phone={element.phone}
     />
   ));
   return (

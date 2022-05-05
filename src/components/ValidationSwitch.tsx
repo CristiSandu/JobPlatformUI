@@ -1,0 +1,75 @@
+/* This example requires Tailwind CSS v2.0+ */
+import { useState } from "react";
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+export type ValidationSwitchParams = {
+  validationChange: (position: number) => void;
+};
+
+export default function ValidationSwitch({
+  validationChange,
+}: ValidationSwitchParams) {
+  const [selectedElement, setSelectedElement] = useState<number>(1);
+  const [selectedMessage, setSelectedMessage] = useState<string>("On Hold");
+
+  function validationPress(position: number): void {
+    switch (position) {
+      case 0:
+        setSelectedMessage("Accepted");
+        break;
+      case 1:
+        setSelectedMessage("On Hold");
+        break;
+      case 2:
+        setSelectedMessage("Rejected");
+        break;
+    }
+    setSelectedElement(position);
+    validationChange(position);
+  }
+
+  return (
+    <div className="justify-between space-y-2">
+      <div className="flex justify-between items-center h-9 border-4 border-LightBlue gb-WhiteBlue rounded-2xl p-2">
+        <div
+          className={`h-6 w-6 rounded-full  ${
+            selectedElement === 0 ? "bg-GreenCheck" : "bg-CardGray"
+          } `}
+          onClick={() => {
+            validationPress(0);
+          }}
+        ></div>
+        <div
+          className={`h-6 w-6 rounded-full  ${
+            selectedElement === 1 ? "bg-YellowWaiting" : "bg-CardGray"
+          } `}
+          onClick={() => {
+            validationPress(1);
+          }}
+        ></div>
+        <div
+          className={`h-6 w-6 rounded-full  ${
+            selectedElement === 2 ? "bg-RedDelete" : "bg-CardGray"
+          } `}
+          onClick={() => {
+            validationPress(2);
+          }}
+        ></div>
+      </div>
+      <p
+        className={`${
+          selectedElement === 1
+            ? "text-YellowWaiting"
+            : selectedElement === 2
+            ? "text-RedDelete"
+            : "text-GreenCheck"
+        } text-center font-bold text-xl`}
+      >
+        {selectedMessage}
+      </p>
+    </div>
+  );
+}

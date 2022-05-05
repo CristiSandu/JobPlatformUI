@@ -1,12 +1,12 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
-import { UserCardParameter } from "./UserCardElement";
-import NoDataLogo from "../Images/no_data_logo.svg";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import { JobUserCardParameter } from "./JobUserCardElement";
+import { UserProfileData } from "../pages/ProfileFormPage";
+import ValidationSwitch from "./ValidationSwitch";
 
 export type ModalInformationParam = {
-  userInfo: UserCardParameter | null;
+  userInfo: UserProfileData | null;
   jobInfo: JobUserCardParameter | null;
   isAdmin: boolean;
 };
@@ -17,6 +17,11 @@ export default function ModalUserInfo({
   isAdmin,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
+
+  function validationChange(position: number): void {
+    console.log(position);
+  }
+
   return (
     <>
       <button
@@ -108,25 +113,32 @@ export default function ModalUserInfo({
                 </div>
                 {/*body*/}
                 {userInfo !== null ? (
-                  <div className="relative p-6 space-y-8 flex-auto">
-                    <div>
+                  <div className="relative p-6 flex-auto">
+                    <div className="space-y-4">
                       <div className="font-semibold text-xl font-mono">
                         Last Level Graduate
                       </div>
                       <div className="text-4xl">
-                        Universiatate Polithenica Bucuresti
+                        {userInfo?.last_level_grad}
+                      </div>
+                      <div className="text-4xl">
+                        Location : {userInfo?.location}
+                      </div>
+                      <div className="text-4xl">
+                        Last job description: {userInfo?.description_last_job}
+                      </div>
+                      <div className="text-4xl">
+                        Phone Number: {userInfo?.phone}
                       </div>
                     </div>
                     {true ? (
-                      <div className="flex space-x-6 justify-center items-center">
-                        <img
-                          className="snap-center z-0"
-                          src={NoDataLogo}
-                          height="174"
-                          width="167"
-                          alt="React Logo"
-                        />
-                        <div className="text-4xl">No Job apply/post yet</div>
+                      <div className="grid grid-cols-3 grid-rows-2">
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <div />
+                        <ValidationSwitch validationChange={validationChange} />
                       </div>
                     ) : (
                       <p className="my-4 text-slate-500 text-lg leading-relaxed">

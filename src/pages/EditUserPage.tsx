@@ -2,6 +2,7 @@ import { useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import UserCardElement from "../components/UserCardElement";
+import { UserProfileData } from "./ProfileFormPage";
 
 export type UserCardParameter = {
   domain: string;
@@ -13,13 +14,13 @@ export type UserCardParameter = {
 };
 
 export type ElementsListParams = {
-  initialsElements: UserCardParameter[];
+  initialsElements: UserProfileData[];
 };
 export const EditUserPage = ({
   initialsElements,
 }: ElementsListParams): JSX.Element => {
   const [elementsList, setElementsList] =
-    useState<UserCardParameter[]>(initialsElements);
+    useState<UserProfileData[]>(initialsElements);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domain") {
@@ -41,7 +42,7 @@ export const EditUserPage = ({
     setElementsList(elements);
   }
 
-  let elementsRendered = elementsList.map((element: UserCardParameter) => (
+  let elementsRendered = elementsList.map((element: UserProfileData) => (
     <UserCardElement
       domain={element.domain}
       email={element.email}
@@ -49,6 +50,11 @@ export const EditUserPage = ({
       name={element.name}
       type={element.type}
       age={element.age}
+      description={element.description}
+      description_last_job={element.description_last_job}
+      last_level_grad={element.last_level_grad}
+      location={element.location}
+      phone={element.phone}
     />
   ));
   return (
