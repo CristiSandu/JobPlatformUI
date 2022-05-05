@@ -130,6 +130,9 @@ export default function ModalUserInfo({
                       <div className="text-4xl">
                         Phone Number: {userInfo?.phone}
                       </div>
+                      <div className="text-4xl">
+                        Description: {userInfo?.description}
+                      </div>
                     </div>
                     {true ? (
                       <div className="grid grid-cols-3 grid-rows-2">

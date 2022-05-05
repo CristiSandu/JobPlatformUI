@@ -4,6 +4,7 @@ import { JobCardParameter } from "./components/JobCardElement";
 import { JobUserCardParameter } from "./components/JobUserCardElement";
 import { CheckOffersPage } from "./pages/CheckOffersPage";
 import { EditUserPage, UserCardParameter } from "./pages/EditUserPage";
+import { JobDescriptionFormPage } from "./pages/JobDescriptionFormPage";
 import {
   JobPageExtended,
   JobPageExtendedParams,
@@ -485,6 +486,20 @@ function App() {
     },
   };
 
+  const test: JobUserCardParameter = {
+    date: new Date().toISOString().slice(0, 10),
+    description:
+      "Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.ing it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ips",
+    employer: "DELL",
+    applicants: 5,
+    number_of_places: 10,
+    isMyOffer: true,
+    isValidate: true,
+    name: ".Net Developer",
+    location: "Bucharest",
+    type: "IT",
+  };
+
   return (
     <Router>
       <div className="app">
@@ -502,7 +517,9 @@ function App() {
           ></Route>
           <Route
             path="/profilePage"
-            element={<ProfilePageTemplate userInfo={userInfo} />}
+            element={
+              <ProfilePageTemplate userInfo={userInfo} isRecruiter={1} />
+            }
           ></Route>
           <Route
             path="/profilePage1"
@@ -511,6 +528,10 @@ function App() {
           <Route
             path="/profilePage2"
             element={<JobPageExtended jobInfo={elem4.jobInfo} />}
+          ></Route>
+          <Route
+            path="/jobDataForm"
+            element={<JobDescriptionFormPage initialJobData={test} />}
           ></Route>
         </Routes>
       </div>

@@ -4,15 +4,17 @@ import { UserCardParameter } from "../components/UserCardElement";
 
 export type UserPageParams = {
   userInfo: UserCardParameter;
+  isRecruiter: number;
 };
 
 export const ProfilePageTemplate = ({
   userInfo,
+  isRecruiter: isRecruiters,
 }: UserPageParams): JSX.Element => {
   return (
     <>
       <PageFooterHeaderTemplate>
-        <ProfilePage userInfo={userInfo} />
+        <ProfilePage userInfo={userInfo} isRecruiter={isRecruiters} />
       </PageFooterHeaderTemplate>
     </>
   );
