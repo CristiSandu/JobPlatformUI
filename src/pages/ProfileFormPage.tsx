@@ -47,7 +47,7 @@ export const ProfileFormPage = (): JSX.Element => {
 
   return (
     <>
-      <PageFooterHeaderTemplate>
+      <PageFooterHeaderTemplate isAdmin={false}>
         <div className="flex h-screen w-screen">
           <img
             className="absolute top-40 left-40 z-0 "

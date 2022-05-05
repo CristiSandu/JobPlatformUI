@@ -4,6 +4,7 @@ import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobUserCardElement, {
   JobUserCardParameter,
 } from "../components/JobUserCardElement";
+import { useNavigate } from "react-router-dom";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -43,6 +44,7 @@ export const UserOffersPage = ({
       setElementsList(elements);
     }
   }
+  const navigate = useNavigate();
 
   let elementsRendered = elementsList.map((element: JobUserCardParameter) => (
     <JobUserCardElement
@@ -60,11 +62,16 @@ export const UserOffersPage = ({
   ));
   return (
     <>
-      <PageFooterHeaderTemplate>
+      <PageFooterHeaderTemplate isAdmin={false}>
         <div className="pt-8 w-full">
           <div className="space-y-12 scroll">
             <div className="space-y-6">
-              <button className="btn-primary text-2xl w-full focus:bg-LightBlue">
+              <button
+                className="btn-primary text-2xl w-full focus:bg-LightBlue"
+                onClick={() => {
+                  navigate("/jobDataForm");
+                }}
+              >
                 + Add A Offer
               </button>
               <div className="flex justify-between">

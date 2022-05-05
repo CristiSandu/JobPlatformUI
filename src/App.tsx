@@ -516,6 +516,12 @@ function App() {
             element={<CheckOffersPage initialsElements={elem3} />}
           ></Route>
           <Route
+            path="/profilePageAdmin"
+            element={
+              <ProfilePageTemplate userInfo={userInfo} isRecruiter={0} />
+            }
+          ></Route>
+          <Route
             path="/profilePage"
             element={
               <ProfilePageTemplate userInfo={userInfo} isRecruiter={1} />

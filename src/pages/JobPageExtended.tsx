@@ -99,7 +99,7 @@ export const JobPageExtended = ({
     />
   ));
   return (
-    <PageFooterHeaderTemplate>
+    <PageFooterHeaderTemplate isAdmin={true}>
       <div className="pt-8 w-full">
         <div className="space-y-12 scroll">
           <div className="grid grid-cols-4 gap-4">

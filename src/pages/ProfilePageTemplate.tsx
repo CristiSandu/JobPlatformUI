@@ -9,12 +9,12 @@ export type UserPageParams = {
 
 export const ProfilePageTemplate = ({
   userInfo,
-  isRecruiter: isRecruiters,
+  isRecruiter,
 }: UserPageParams): JSX.Element => {
   return (
     <>
-      <PageFooterHeaderTemplate>
-        <ProfilePage userInfo={userInfo} isRecruiter={isRecruiters} />
+      <PageFooterHeaderTemplate isAdmin={isRecruiter === 0}>
+        <ProfilePage userInfo={userInfo} isRecruiter={isRecruiter} />
       </PageFooterHeaderTemplate>
     </>
   );

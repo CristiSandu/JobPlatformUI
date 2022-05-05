@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DropdownElement from "../components/DropdownElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import FormImage from "../Images/form_logo.svg";
@@ -21,9 +22,11 @@ export const JobDescriptionFormPage = ({
     }
   }
 
+  const navigate = useNavigate();
+
   return (
     <>
-      <PageFooterHeaderTemplate>
+      <PageFooterHeaderTemplate isAdmin={false}>
         <div className="flex h-screen w-screen">
           <img
             className="absolute top-40 left-40 z-0 "
@@ -101,6 +104,7 @@ export const JobDescriptionFormPage = ({
                   className="btn-primary"
                   onClick={() => {
                     console.log(jobData);
+                    navigate(-1);
                   }}
                 >
                   Save

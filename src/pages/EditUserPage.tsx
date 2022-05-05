@@ -59,7 +59,7 @@ export const EditUserPage = ({
   ));
   return (
     <>
-      <PageFooterHeaderTemplate>
+      <PageFooterHeaderTemplate isAdmin={true}>
         <div className="pt-8 w-full">
           <div className="space-y-12 scroll">
             <span className="font-sans text-3xl font-semibold pb-12">
