@@ -36,7 +36,9 @@ export default function ValidationSwitch({
       <div className="flex justify-between items-center h-9 border-4 border-LightBlue gb-WhiteBlue rounded-2xl p-2">
         <div
           className={`h-6 w-6 rounded-full  ${
-            selectedElement === 0 ? "bg-GreenCheck" : "bg-CardGray"
+            selectedElement === 0
+              ? "bg-GreenCheck"
+              : "bg-CardGray hover:bg-GreenCheck"
           } `}
           onClick={() => {
             validationPress(0);
@@ -44,7 +46,9 @@ export default function ValidationSwitch({
         ></div>
         <div
           className={`h-6 w-6 rounded-full  ${
-            selectedElement === 1 ? "bg-YellowWaiting" : "bg-CardGray"
+            selectedElement === 1
+              ? "bg-YellowWaiting"
+              : "bg-CardGray hover:bg-YellowWaiting"
           } `}
           onClick={() => {
             validationPress(1);
@@ -52,7 +56,9 @@ export default function ValidationSwitch({
         ></div>
         <div
           className={`h-6 w-6 rounded-full  ${
-            selectedElement === 2 ? "bg-RedDelete" : "bg-CardGray"
+            selectedElement === 2
+              ? "bg-RedDelete"
+              : "bg-CardGray hover:bg-RedDelete"
           } `}
           onClick={() => {
             validationPress(2);
