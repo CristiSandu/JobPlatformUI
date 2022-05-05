@@ -40,10 +40,12 @@ export default function JobUserCardElement(jobInfo: JobUserCardParameter) {
             {jobInfo.type}
           </div>
 
-          {jobInfo.isMyOffer && (
+          {jobInfo.isMyOffer ? (
             <div className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
               My Offer
             </div>
+          ) : (
+            <div />
           )}
 
           <div

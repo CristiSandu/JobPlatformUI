@@ -4,6 +4,7 @@ import JobPostLogo from "../Images/job_post_logo.svg";
 import { JobUserCardParameter } from "./JobUserCardElement";
 import { UserProfileData } from "../pages/ProfileFormPage";
 import ValidationSwitch from "./ValidationSwitch";
+import { useNavigate } from "react-router-dom";
 
 export type ModalInformationParam = {
   userInfo: UserProfileData | null;
@@ -17,6 +18,8 @@ export default function ModalUserInfo({
   isAdmin,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
+
+  const navigate = useNavigate();
 
   function validationChange(position: number): void {
     console.log(position);
@@ -232,7 +235,10 @@ export default function ModalUserInfo({
                       <button
                         className="btn-primary bg-SecondBlue"
                         type="button"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          setShowModal(false);
+                          navigate("/profilePage2");
+                        }}
                       >
                         Extended Page
                       </button>

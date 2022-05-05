@@ -2,9 +2,7 @@
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import UserCardElement, {
-  UserCardParameter,
-} from "../components/UserCardElement";
+import UserCardElement from "../components/UserCardElement";
 import { UserProfileData } from "./ProfileFormPage";
 
 export type JobPageExtendedParams = {
@@ -99,7 +97,7 @@ export const JobPageExtended = ({
     />
   ));
   return (
-    <PageFooterHeaderTemplate isAdmin={true}>
+    <PageFooterHeaderTemplate isAdmin={false}>
       <div className="pt-8 w-full">
         <div className="space-y-12 scroll">
           <div className="grid grid-cols-4 gap-4">
