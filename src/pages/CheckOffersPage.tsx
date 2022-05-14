@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobCardElement from "../components/JobCardElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
+import { DomainModel, DropdownClient } from "../api/ui-service-client";
 
 export type UserCardParameter = {
   domain: string;
@@ -42,6 +43,23 @@ export const CheckOffersPage = ({
     );
     setElementsList(elements);
   }
+
+  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  useEffect(() => {
+    const dropdownsValues = new DropdownClient(
+      process.env.REACT_APP_UI_SERVICE
+    );
+    const fetchData = async () => {
+      const element = await dropdownsValues.domainsAll();
+      setDropdownElements(element);
+    };
+
+    // call the function
+    fetchData()
+      // make sure to catch any error
+      .catch(console.error);
+  }, []);
 
   let elementsRendered = elementsList.map((element: JobUserCardParameter) => (
     <JobCardElement
@@ -88,7 +106,7 @@ export const CheckOffersPage = ({
               <DropdownElement
                 dropdownName="Domains"
                 selectedElementChange={selectedElementChange}
-                elements={["Domains", "IT", "HoReCa", "Construction"]}
+                elements={dropdownElements}
               />
             </div>
             <div className="space-y-5">{elementsRendered}</div>

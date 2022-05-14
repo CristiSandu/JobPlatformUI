@@ -2,6 +2,7 @@
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { DomainModel } from "../api/ui-service-client";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -9,7 +10,7 @@ function classNames(...classes: string[]) {
 
 export type DropdownParameters = {
   dropdownName: string;
-  elements?: string[];
+  elements?: DomainModel[];
   selectedElementChange: (element: string, dropdownName: string) => void;
 };
 
@@ -20,7 +21,7 @@ export default function DropdownElement({
 }: DropdownParameters) {
   const [selectedElement, setSelectedElement] = useState<string>(dropdownName);
 
-  const elementsRendered = elements?.map((element: string) => (
+  const elementsRendered = elements?.map((element: DomainModel) => (
     <Menu.Item>
       {({ active }) => (
         <a
@@ -30,11 +31,11 @@ export default function DropdownElement({
             "block px-4 py-2 text-sm"
           )}
           onClick={() => {
-            setSelectedElement(element);
-            selectedElementChange(element, dropdownName);
+            setSelectedElement(element.name ?? "Domains");
+            selectedElementChange(element.name ?? "Domains", dropdownName);
           }}
         >
-          {element}
+          {element.name}
         </a>
       )}
     </Menu.Item>

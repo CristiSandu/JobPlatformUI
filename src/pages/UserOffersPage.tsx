@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobUserCardElement, {
   JobUserCardParameter,
 } from "../components/JobUserCardElement";
 import { useNavigate } from "react-router-dom";
+import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -15,6 +17,33 @@ export const UserOffersPage = ({
 }: OffersListParams): JSX.Element => {
   const [elementsList, setElementsList] =
     useState<JobUserCardParameter[]>(initialsElements);
+
+  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  useEffect(() => {
+    const dropdownsValues = new DropdownClient(
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
+    );
+
+    console.log("A intrat axios", AxiosHelpers.axiosClient);
+    console.log("A intrat URL", process.env.REACT_APP_UI_SERVICE);
+
+    console.log("A intrat ", dropdownsValues);
+
+    const fetchData = async () => {
+      console.log("in fecth data");
+
+      const element = await dropdownsValues.domainsAll();
+      setDropdownElements(element);
+      console.log("rezultat", element);
+    };
+
+    // call the function
+    fetchData()
+      // make sure to catch any error
+      .catch(console.error);
+  }, []);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domains") {
@@ -98,7 +127,7 @@ export const UserOffersPage = ({
                 <DropdownElement
                   dropdownName="Domains"
                   selectedElementChange={selectedElementChange}
-                  elements={["Domains", "IT", "HoReCa", "Construction"]}
+                  elements={dropdownElements}
                 />
               </div>
             </div>

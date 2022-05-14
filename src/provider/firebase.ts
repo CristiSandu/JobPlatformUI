@@ -60,6 +60,7 @@ const signUpWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
         const user = res.user;
+        localStorage.setItem('JWT', await res.user.getIdToken());
 
         await setDoc(doc(db, "Users", user.uid), {
             name: res.user.displayName,
