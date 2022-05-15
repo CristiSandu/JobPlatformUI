@@ -221,6 +221,11 @@ export interface IJobsClient {
      * @param body (optional) 
      * @return Success
      */
+    applyToAJob(body: ApplyToJobsModelRequest | undefined): Promise<boolean>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     validateJob(body: ValidateJobModelRequest | undefined): Promise<boolean>;
     /**
      * @param body (optional) 
@@ -232,6 +237,10 @@ export interface IJobsClient {
      * @return Success
      */
     jobsPUT(id: string, body: UpdateJobsModelRequest | undefined): Promise<boolean>;
+    /**
+     * @return Success
+     */
+    jobsDELETE(id: string): Promise<boolean>;
 }
 
 export class JobsClient implements IJobsClient {
@@ -335,6 +344,64 @@ export class JobsClient implements IJobsClient {
     }
 
     protected processJobsPOST(response: AxiosResponse): Promise<boolean> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<boolean>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    applyToAJob(body: ApplyToJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/Jobs/ApplyToAJob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processApplyToAJob(_response);
+        });
+    }
+
+    protected processApplyToAJob(response: AxiosResponse): Promise<boolean> {
         const status = response?.status;
         if (response == null)
             return Promise.resolve<boolean>(null as any);
@@ -535,6 +602,370 @@ export class JobsClient implements IJobsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    jobsDELETE(id: string , abortController?: AbortController | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/Jobs/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processJobsDELETE(_response);
+        });
+    }
+
+    protected processJobsDELETE(response: AxiosResponse): Promise<boolean> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<boolean>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+}
+
+export interface ISendMailClient {
+    /**
+     * @return Success
+     */
+    sendMailGET(): Promise<boolean>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMailPOST(body: string | undefined): Promise<void>;
+    /**
+     * @return Success
+     */
+    sendMailGET2(id: number): Promise<string>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMailPUT(id: number, body: string | undefined): Promise<void>;
+    /**
+     * @return Success
+     */
+    sendMailDELETE(id: number): Promise<void>;
+}
+
+export class SendMailClient implements ISendMailClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+        this.instance = instance ? instance : axios.create();
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    sendMailGET(  abortController?: AbortController | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/SendMail";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSendMailGET(_response);
+        });
+    }
+
+    protected processSendMailGET(response: AxiosResponse): Promise<boolean> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<boolean>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMailPOST(body: string | undefined , abortController?: AbortController | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/SendMail";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSendMailPOST(_response);
+        });
+    }
+
+    protected processSendMailPOST(response: AxiosResponse): Promise<void> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<void>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    sendMailGET2(id: number , abortController?: AbortController | undefined): Promise<string> {
+        let url_ = this.baseUrl + "/api/SendMail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSendMailGET2(_response);
+        });
+    }
+
+    protected processSendMailGET2(response: AxiosResponse): Promise<string> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<string>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<string>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMailPUT(id: number, body: string | undefined , abortController?: AbortController | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/SendMail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSendMailPUT(_response);
+        });
+    }
+
+    protected processSendMailPUT(response: AxiosResponse): Promise<void> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<void>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    sendMailDELETE(id: number , abortController?: AbortController | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/SendMail/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSendMailDELETE(_response);
+        });
+    }
+
+    protected processSendMailDELETE(response: AxiosResponse): Promise<void> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<void>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(null as any);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(null as any);
     }
 }
 
@@ -814,6 +1245,13 @@ export interface AddValuesModelRequest {
     value?: string | null;
 }
 
+export interface ApplyToJobsModelRequest {
+    jobId?: string | null;
+    angajatorId?: string | null;
+    candidateId?: string | null;
+    readonly recruterJobId?: string | null;
+}
+
 export interface DomainModel {
     readonly documentId?: string | null;
     name?: string | null;
@@ -831,7 +1269,7 @@ export interface GetJobsModelRequest {
 }
 
 export interface Job {
-    documentId?: string | null;
+    readonly documentId?: string | null;
     name?: string | null;
     numberEmp?: number;
     address?: string | null;
@@ -844,7 +1282,7 @@ export interface Job {
 }
 
 export interface JobExtendedModel {
-    documentId?: string | null;
+    readonly documentId?: string | null;
     name?: string | null;
     numberEmp?: number;
     address?: string | null;
@@ -856,6 +1294,7 @@ export interface JobExtendedModel {
     date?: dayjs.Dayjs;
     recruterName?: string | null;
     isMine?: boolean;
+    docID?: string | null;
 }
 
 export interface UpdateJobsModelRequest {
