@@ -36,6 +36,8 @@ export const ProfileFormPage = (): JSX.Element => {
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
+  const [userEmail, setUserEmail] = useState<string>("");
+
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
   const usersValues = new UsersClient(
@@ -52,12 +54,15 @@ export const ProfileFormPage = (): JSX.Element => {
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
       const uid = await user?.uid;
+      setUserEmail(user?.email ?? "");
+
+      setUserData({ ...userData, email: userEmail });
       setUserData({ ...userData, documentId: uid });
       setDropdownElements(element);
     };
 
     fetchData().catch(console.error);
-  }, []);
+  }, [user, loading]);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {
@@ -116,6 +121,7 @@ export const ProfileFormPage = (): JSX.Element => {
                     onChange={(e) =>
                       setUserData({ ...userData, email: e.target.value })
                     }
+                    defaultValue={userEmail}
                     placeholder="Email"
                   />
                 </div>
@@ -261,12 +267,15 @@ export const ProfileFormPage = (): JSX.Element => {
                 <button
                   className="btn-primary"
                   onClick={async () => {
-                    const uid = await user?.uid;
+                    const uid = user?.uid;
+                    const email = user?.email;
+                    userData.email = email;
+                    setUserData({ ...userData, email: email });
                     setUserData({ ...userData, documentId: uid });
                     const response = await usersValues.usersPOST({
                       userData: userData,
                     });
-                    if (response) navigate("/editUsers");
+                    if (response) navigate("/profilePage1");
                   }}
                 >
                   Save

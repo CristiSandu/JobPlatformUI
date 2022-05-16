@@ -27,6 +27,7 @@ export const EditUserPage = ({
   initialsElements,
 }: ElementsListParams): JSX.Element => {
   const [elementsList, setElementsList] = useState<User[]>();
+  const [initialUsersList, setInitialUsersList] = useState<User[]>();
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
@@ -46,6 +47,7 @@ export const EditUserPage = ({
       const usersList = await usersValues.usersAll("All");
 
       setElementsList(usersList);
+      setInitialUsersList(usersList);
       setDropdownElements(elementDropdown);
     };
 
@@ -57,16 +59,18 @@ export const EditUserPage = ({
       setElementsList(initialsElements);
       return;
     }
-    const elements = initialsElements.filter((elem) => elem.domain === element);
+    const elements = initialUsersList?.filter(
+      (elem) => elem.domain === element
+    );
     setElementsList(elements);
   }
 
   function onClickFilter(filterName: string): void {
     if (filterName === "All") {
-      setElementsList(initialsElements);
+      setElementsList(initialUsersList);
       return;
     }
-    const elements = initialsElements.filter(
+    const elements = initialUsersList?.filter(
       (elem) => elem.type === filterName
     );
     setElementsList(elements);
@@ -74,7 +78,7 @@ export const EditUserPage = ({
 
   let elementsRendered = elementsList?.map((element: User) => (
     <UserCardElement
-      domain={element.type}
+      domain={element.domain}
       email={element.email}
       gender={element.gender}
       name={element.name}
@@ -99,13 +103,13 @@ export const EditUserPage = ({
               <div className="grid grid-cols-3 gap-4">
                 <button
                   className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("employee")}
+                  onClick={() => onClickFilter("Candidate")}
                 >
                   employee
                 </button>
                 <button
                   className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("recruiters")}
+                  onClick={() => onClickFilter("Recruiter")}
                 >
                   recruiters
                 </button>

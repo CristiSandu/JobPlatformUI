@@ -44,11 +44,8 @@ const signIn = async (email: string, password: string) => {
 const signUp = async (name: string, email: string, password: string) => {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password);
-        const user = res.user;
-        await setDoc(doc(db, "Users", user.uid), {
-            name: name,
-            email: email
-        });
+        localStorage.setItem('JWT', await res.user.getIdToken());
+
     } catch (err: any) {
         console.error(err);
         alert(err.message);
@@ -81,8 +78,8 @@ const updateUserInfo = async (user: User | null | undefined, userData: any) => {
 };
 
 
-const signOut = () => {
-    firebaseSignOut(auth);
+const signOut = async () => {
+    await firebaseSignOut(auth);
 };
 
 export {

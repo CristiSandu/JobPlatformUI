@@ -4,6 +4,7 @@ import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobCardElement from "../components/JobCardElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
 
 export type UserCardParameter = {
   domain: string;
@@ -48,7 +49,8 @@ export const CheckOffersPage = ({
 
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
-      process.env.REACT_APP_UI_SERVICE
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
     );
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
