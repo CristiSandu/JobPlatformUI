@@ -116,12 +116,6 @@ export const ProfileFormPage = (): JSX.Element => {
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Type"
-                    // ["Recruiter", "Candidate"]
-                    //   export interface DomainModel {
-                    //     readonly documentId?: string | null;
-                    //     name?: string | null;
-                    // }
-                    //
                     elements={[{ name: "Recruiter" }, { name: "Candidate" }]}
                   />
                 </div>
