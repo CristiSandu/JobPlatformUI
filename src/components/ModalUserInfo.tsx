@@ -2,12 +2,12 @@ import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import { JobUserCardParameter } from "./JobUserCardElement";
-import { UserProfileData } from "../pages/ProfileFormPage";
 import ValidationSwitch from "./ValidationSwitch";
 import { useNavigate } from "react-router-dom";
+import { User } from "../api/ui-service-client";
 
 export type ModalInformationParam = {
-  userInfo: UserProfileData | null;
+  userInfo: User | null;
   jobInfo: JobUserCardParameter | null;
   isAdmin: boolean;
 };

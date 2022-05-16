@@ -3,7 +3,12 @@ import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import UserCardElement from "../components/UserCardElement";
 import { UserProfileData } from "./ProfileFormPage";
-import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import {
+  DomainModel,
+  DropdownClient,
+  User,
+  UsersClient,
+} from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 
 export type UserCardParameter = {
@@ -21,8 +26,7 @@ export type ElementsListParams = {
 export const EditUserPage = ({
   initialsElements,
 }: ElementsListParams): JSX.Element => {
-  const [elementsList, setElementsList] =
-    useState<UserProfileData[]>(initialsElements);
+  const [elementsList, setElementsList] = useState<User[]>();
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
@@ -32,9 +36,17 @@ export const EditUserPage = ({
       AxiosHelpers.axiosClient
     );
 
+    const usersValues = new UsersClient(
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
+    );
+
     const fetchData = async () => {
-      const element = await dropdownsValues.domainsAll();
-      setDropdownElements(element);
+      const elementDropdown = await dropdownsValues.domainsAll();
+      const usersList = await usersValues.usersAll("All");
+
+      setElementsList(usersList);
+      setDropdownElements(elementDropdown);
     };
 
     fetchData().catch(console.error);
@@ -60,9 +72,9 @@ export const EditUserPage = ({
     setElementsList(elements);
   }
 
-  let elementsRendered = elementsList.map((element: UserProfileData) => (
+  let elementsRendered = elementsList?.map((element: User) => (
     <UserCardElement
-      domain={element.domain}
+      domain={element.type}
       email={element.email}
       gender={element.gender}
       name={element.name}

@@ -1,4 +1,4 @@
-import { UserProfileData } from "../pages/ProfileFormPage";
+import { User } from "../api/ui-service-client";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
 
@@ -11,28 +11,28 @@ export type UserCardParameter = {
   domain: string;
 };
 
-export default function UserCardElement(userinfo: UserProfileData) {
+export default function UserCardElement(userInfo: User) {
   return (
     <>
       <div
         className="flex static rounded-md bg-CardGray px-4 py-2 space-x-5 shadow-md hover:cursor-pointer"
-        onClick={() => console.log("taeaeradfd")}
+        onClick={() => {}}
       >
         <ProfilePicture
           height="80"
           width="80"
-          isMasculine={userinfo.gender !== "F"}
+          isMasculine={userInfo.gender !== "F"}
         />
         <div className="grow self-center space-y-1 items-center">
-          <div className="title-primary">{userinfo.name}</div>
-          <div className="text-sm">{userinfo.email}</div>
+          <div className="title-primary">{userInfo.name}</div>
+          <div className="text-sm">{userInfo.email}</div>
         </div>
         <div className="grid grid-cols-1 items-center">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-            {userinfo.domain}
+            {userInfo.domain}
           </div>
         </div>
-        <ModalUserInfo userInfo={userinfo} isAdmin={false} jobInfo={null} />
+        <ModalUserInfo userInfo={userInfo} isAdmin={false} jobInfo={null} />
       </div>
     </>
   );
