@@ -3,10 +3,15 @@ import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import ProfilePicture from "../components/ProfilePicture";
-import { auth, updateUserInfo } from "../provider/firebase";
+import { auth } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import {
+  DomainModel,
+  DropdownClient,
+  User,
+  UsersClient,
+} from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 
 export type UserProfileData = {
@@ -27,11 +32,16 @@ export const ProfileFormPage = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
 
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState<User>({});
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  const usersValues = new UsersClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
 
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
@@ -41,6 +51,8 @@ export const ProfileFormPage = (): JSX.Element => {
 
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
+      const uid = await user?.uid;
+      setUserData({ ...userData, documentId: uid });
       setDropdownElements(element);
     };
 
@@ -248,9 +260,13 @@ export const ProfileFormPage = (): JSX.Element => {
               <div className="grid grid-cols-3 gap-4 px-4 pt-8">
                 <button
                   className="btn-primary"
-                  onClick={() => {
-                    updateUserInfo(user, userData);
-                    navigate("/editUsers");
+                  onClick={async () => {
+                    const uid = await user?.uid;
+                    setUserData({ ...userData, documentId: uid });
+                    const response = await usersValues.usersPOST({
+                      userData: userData,
+                    });
+                    if (response) navigate("/editUsers");
                   }}
                 >
                   Save

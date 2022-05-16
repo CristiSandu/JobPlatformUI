@@ -59,33 +59,14 @@ const signUp = async (name: string, email: string, password: string) => {
 const signUpWithGoogle = async () => {
     try {
         const res = await signInWithPopup(auth, provider);
-        const user = res.user;
         localStorage.setItem('JWT', await res.user.getIdToken());
 
-        await setDoc(doc(db, "Users", user.uid), {
-            name: res.user.displayName,
-            email: res.user.email,
-        });
     } catch (err: any) {
         console.error(err);
         alert(err.message);
     }
 };
 
-
-// export type UserProfileData = {
-//     email: string;
-//     name: string;
-//     domain: string;
-//     type: string;
-//     gender: string | null;
-//     age: number | null;
-//     location: string;
-//     phone: string;
-//     last_level_grad: string | null;
-//     description: string;
-//     description_last_job: string | null;
-//   };
 
 
 const updateUserInfo = async (user: User | null | undefined, userData: any) => {

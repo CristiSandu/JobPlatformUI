@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import LoginImage from "../Images/login_image.svg";
 import { auth, signIn, signUpWithGoogle } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { UsersClient } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 export const LoginPage = (): JSX.Element => {
   const [email, setEmail] = useState("");
@@ -15,18 +18,24 @@ export const LoginPage = (): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user && isLoginWithGoogle) {
-      navigate("/profileForm");
+    console.log("1", user);
+    if (user) {
       const fetchData = async () => {
         localStorage.setItem("JWT", await user.getIdToken());
+        const usersValues = new UsersClient(
+          process.env.REACT_APP_UI_SERVICE,
+          AxiosHelpers.axiosClient
+        );
+        const usersList = await usersValues.usersAll(user.uid);
+        if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
+          localStorage.setItem("JWT", await user.getIdToken());
+          navigate("/editUsers");
+        } else {
+          localStorage.setItem("JWT", await user.getIdToken());
+          navigate("/profileForm");
+        }
       };
-      fetchData().catch(console.error);
-    }
-    if (user && !isLoginWithGoogle) {
-      navigate("/editUsers");
-      const fetchData = async () => {
-        localStorage.setItem("JWT", await user.getIdToken());
-      };
+
       fetchData().catch(console.error);
     }
   }, [user, loading, error, navigate, isLoginWithGoogle]);
@@ -94,9 +103,7 @@ export const LoginPage = (): JSX.Element => {
             <div
               className="flex items-center space-x-2 justify-center btn-primary cursor-pointer"
               onClick={() => {
-                console.log(signUpWithGoogle());
-                setIsLoginWithGoogle(true);
-                navigate("/profileForm");
+                signUpWithGoogle();
               }}
             >
               <img src={GoogleLogo} alt="React Logo" />
