@@ -25,7 +25,6 @@ export class AxiosHelpers {
             if (!isNullOrUndefined(config.headers)) {
                 // eslint-disable-next-line no-param-reassign
                 config.headers.Authorization = `Bearer ${localStorage.getItem('JWT')}`;
-                console.log(axios.defaults.headers.head.Authorization);
             }
 
             return config;
@@ -34,8 +33,6 @@ export class AxiosHelpers {
         if (errorHandler != null) axiosClient.interceptors.response.use(undefined, errorHandler);
 
         axios.defaults.headers.head.Authorization = `Bearer ${localStorage.getItem('JWT')}`;
-        console.log(axios.defaults.headers.head.Authorization);
-
 
         return axiosClient;
     }

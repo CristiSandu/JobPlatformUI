@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import UserCardElement from "../components/UserCardElement";
 import { UserProfileData } from "./ProfileFormPage";
+import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
 
 export type UserCardParameter = {
   domain: string;
@@ -21,6 +23,22 @@ export const EditUserPage = ({
 }: ElementsListParams): JSX.Element => {
   const [elementsList, setElementsList] =
     useState<UserProfileData[]>(initialsElements);
+
+  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  useEffect(() => {
+    const dropdownsValues = new DropdownClient(
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
+    );
+
+    const fetchData = async () => {
+      const element = await dropdownsValues.domainsAll();
+      setDropdownElements(element);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domain") {
@@ -89,7 +107,7 @@ export const EditUserPage = ({
               <DropdownElement
                 dropdownName="Domain"
                 selectedElementChange={selectedElementChange}
-                elements={["Domain", "IT", "HoReCa", "Construction"]}
+                elements={dropdownElements}
               />
             </div>
             <div className="space-y-5">{elementsRendered}</div>

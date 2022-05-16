@@ -17,9 +17,17 @@ export const LoginPage = (): JSX.Element => {
   useEffect(() => {
     if (user && isLoginWithGoogle) {
       navigate("/profileForm");
+      const fetchData = async () => {
+        localStorage.setItem("JWT", await user.getIdToken());
+      };
+      fetchData().catch(console.error);
     }
     if (user && !isLoginWithGoogle) {
       navigate("/editUsers");
+      const fetchData = async () => {
+        localStorage.setItem("JWT", await user.getIdToken());
+      };
+      fetchData().catch(console.error);
     }
   }, [user, loading, error, navigate, isLoginWithGoogle]);
 

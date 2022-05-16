@@ -26,23 +26,12 @@ export const UserOffersPage = ({
       AxiosHelpers.axiosClient
     );
 
-    console.log("A intrat axios", AxiosHelpers.axiosClient);
-    console.log("A intrat URL", process.env.REACT_APP_UI_SERVICE);
-
-    console.log("A intrat ", dropdownsValues);
-
     const fetchData = async () => {
-      console.log("in fecth data");
-
       const element = await dropdownsValues.domainsAll();
       setDropdownElements(element);
-      console.log("rezultat", element);
     };
 
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
+    fetchData().catch(console.error);
   }, []);
 
   function selectedElementChange(element: string, dropdownName: string): void {

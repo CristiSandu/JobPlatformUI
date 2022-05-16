@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
@@ -6,6 +6,8 @@ import ProfilePicture from "../components/ProfilePicture";
 import { auth, updateUserInfo } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
+import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
 
 export type UserProfileData = {
   email: string;
@@ -28,6 +30,22 @@ export const ProfileFormPage = (): JSX.Element => {
   const [userData, setUserData] = useState({});
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
+
+  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  useEffect(() => {
+    const dropdownsValues = new DropdownClient(
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
+    );
+
+    const fetchData = async () => {
+      const element = await dropdownsValues.domainsAll();
+      setDropdownElements(element);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {
@@ -93,12 +111,18 @@ export const ProfileFormPage = (): JSX.Element => {
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Domain"
-                    elements={["IT", "Construction", "HoReCa"]}
+                    elements={dropdownElements}
                   />
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Type"
-                    elements={["Recruiter", "Candidate"]}
+                    // ["Recruiter", "Candidate"]
+                    //   export interface DomainModel {
+                    //     readonly documentId?: string | null;
+                    //     name?: string | null;
+                    // }
+                    //
+                    elements={[{ name: "Recruiter" }, { name: "Candidate" }]}
                   />
                 </div>
 
@@ -147,7 +171,11 @@ export const ProfileFormPage = (): JSX.Element => {
                       <DropdownElement
                         selectedElementChange={selectedElementChange}
                         dropdownName="Gender"
-                        elements={["M", "F", "NaN"]}
+                        elements={[
+                          { name: "M" },
+                          { name: "F" },
+                          { name: "NaN" },
+                        ]}
                       />
 
                       <input

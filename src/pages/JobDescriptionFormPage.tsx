@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DomainModel, DropdownClient } from "../api/ui-service-client";
 import DropdownElement from "../components/DropdownElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import FormImage from "../Images/form_logo.svg";
+import { AxiosHelpers } from "../util/axios-helper";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
 type BaseJobDescription = {
@@ -13,6 +15,22 @@ export const JobDescriptionFormPage = ({
   initialJobData,
 }: BaseJobDescription): JSX.Element => {
   const [jobData, setJobData] = useState<JobUserCardParameter>(initialJobData);
+
+  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+
+  useEffect(() => {
+    const dropdownsValues = new DropdownClient(
+      process.env.REACT_APP_UI_SERVICE,
+      AxiosHelpers.axiosClient
+    );
+
+    const fetchData = async () => {
+      const element = await dropdownsValues.domainsAll();
+      setDropdownElements(element);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {
@@ -55,7 +73,7 @@ export const JobDescriptionFormPage = ({
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Domain"
-                    elements={["IT", "Construction", "HoReCa"]}
+                    elements={dropdownElements}
                   />
                   <input
                     className="entry-primary "
