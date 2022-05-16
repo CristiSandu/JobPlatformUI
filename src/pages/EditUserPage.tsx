@@ -10,6 +10,7 @@ import {
   UsersClient,
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export type UserCardParameter = {
   domain: string;
@@ -29,6 +30,8 @@ export const EditUserPage = ({
   const [elementsList, setElementsList] = useState<User[]>();
   const [initialUsersList, setInitialUsersList] = useState<User[]>();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
   useEffect(() => {
@@ -43,9 +46,11 @@ export const EditUserPage = ({
     );
 
     const fetchData = async () => {
+      setIsLoading(true);
       const elementDropdown = await dropdownsValues.domainsAll();
       const usersList = await usersValues.usersAll("All");
 
+      setIsLoading(false);
       setElementsList(usersList);
       setInitialUsersList(usersList);
       setDropdownElements(elementDropdown);
@@ -126,7 +131,16 @@ export const EditUserPage = ({
                 elements={dropdownElements}
               />
             </div>
-            <div className="space-y-5">{elementsRendered}</div>
+
+            <div className="space-y-5">
+              {isLoading ? (
+                <div className="grid place-items-center h-96">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                elementsRendered
+              )}
+            </div>
           </div>
         </div>
       </PageFooterHeaderTemplate>

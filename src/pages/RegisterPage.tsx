@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import RegisterImage from "../Images/register_image.svg";
-import { auth, signUp, signInAnon } from "../provider/firebase";
+import { auth, signUp } from "../provider/firebase";
 
 export const RegisterPage = (): JSX.Element => {
   const [email, setEmail] = useState("");

@@ -57,10 +57,7 @@ export const CheckOffersPage = ({
       setDropdownElements(element);
     };
 
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
+    fetchData().catch(console.error);
   }, []);
 
   let elementsRendered = elementsList.map((element: JobUserCardParameter) => (
