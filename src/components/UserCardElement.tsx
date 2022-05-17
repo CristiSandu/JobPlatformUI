@@ -14,7 +14,7 @@ export type UserCardParameter = {
 
 export interface UserCardInterface {
   userInfo: User;
-  deleteUserCall: (UID: string) => void;
+  deleteUserCall?: (UID: string) => void;
 }
 
 export default function UserCardElement({

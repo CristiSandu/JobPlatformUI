@@ -82,19 +82,7 @@ export const JobPageExtended = ({
   ];
 
   let elementsRendered = elementsList.map((element: UserProfileData) => (
-    <UserCardElement
-      domain={element.domain}
-      email={element.email}
-      gender={element.gender}
-      name={element.name}
-      type={element.type}
-      age={element.age}
-      description={element.description}
-      description_last_job={element.description_last_job}
-      last_level_grad={element.last_level_grad}
-      location={element.location}
-      phone={element.phone}
-    />
+    <UserCardElement userInfo={element} />
   ));
   return (
     <PageFooterHeaderTemplate isAdmin={false}>

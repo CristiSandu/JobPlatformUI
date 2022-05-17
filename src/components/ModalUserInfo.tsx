@@ -10,7 +10,7 @@ export type ModalInformationParam = {
   userInfo: User | null;
   jobInfo: JobUserCardParameter | null;
   isAdmin: boolean;
-  deleteUserCall: (UID: string) => void;
+  deleteUserCall?: (UID: string) => void;
 };
 
 export default function ModalUserInfo({
@@ -197,7 +197,8 @@ export default function ModalUserInfo({
                         className="btn-primary bg-RedDelete"
                         type="button"
                         onClick={() => {
-                          deleteUserCall(userInfo?.documentId ?? "");
+                          if (deleteUserCall !== undefined)
+                            deleteUserCall(userInfo?.documentId ?? "");
                           setShowModal(false);
                         }}
                       >
