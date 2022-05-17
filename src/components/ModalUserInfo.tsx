@@ -1,14 +1,13 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import { JobUserCardParameter } from "./JobUserCardElement";
 import ValidationSwitch from "./ValidationSwitch";
 import { useNavigate } from "react-router-dom";
-import { User } from "../api/ui-service-client";
+import { JobExtendedModel, User } from "../api/ui-service-client";
 
 export type ModalInformationParam = {
   userInfo: User | null;
-  jobInfo: JobUserCardParameter | null;
+  jobInfo: JobExtendedModel | null;
   isAdmin: boolean;
   deleteUserCall?: (UID: string) => void;
 };
@@ -93,10 +92,10 @@ export default function ModalUserInfo({
                           {jobInfo?.name}
                         </div>
                         <div className="title-primary text-base font-mono">
-                          {jobInfo?.employer}
+                          {jobInfo?.recruterName}
                         </div>
                         <div className="title-primary text-base font-mono">
-                          Nr:{jobInfo?.applicants}/{jobInfo?.number_of_places}
+                          Nr:{jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
                         </div>
                       </div>
 
@@ -104,12 +103,12 @@ export default function ModalUserInfo({
                         <div className="content-center items-end">
                           <div className="text-sm font-mono">Date</div>
                           <div className="text-sm font-mono">
-                            {jobInfo?.date}
+                            {jobInfo?.date?.toString()}
                           </div>
                         </div>
                         <div className="flex space-x-4 items-center">
                           <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                            {jobInfo?.type}
+                            {jobInfo?.domain}
                           </div>
                         </div>
                       </div>
@@ -184,7 +183,7 @@ export default function ModalUserInfo({
                         {jobInfo?.description}
                       </p>
                       <div className="font-semibold text-2xl font-mono">
-                        Location: {jobInfo?.location}
+                        Location: {jobInfo?.address}
                       </div>
                     </div>
                   </div>
@@ -238,7 +237,7 @@ export default function ModalUserInfo({
                         Cancel
                       </button>
                     </>
-                  ) : jobInfo?.isMyOffer ? (
+                  ) : jobInfo?.isMine ? (
                     <>
                       <button
                         className="btn-primary bg-SecondBlue"

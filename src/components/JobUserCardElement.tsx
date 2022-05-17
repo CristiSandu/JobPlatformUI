@@ -1,5 +1,7 @@
 import ModalUserInfo from "./ModalUserInfo";
 import JobPostLogo from "../Images/job_post_logo.svg";
+import { JobExtendedModel } from "../api/ui-service-client";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 export type JobUserCardParameter = {
   name: string;
@@ -13,8 +15,13 @@ export type JobUserCardParameter = {
   applicants: number;
   isMyOffer?: boolean;
 };
+export interface JobUserCardElementInterface {
+  jobInfo: JobExtendedModel;
+}
 
-export default function JobUserCardElement(jobInfo: JobUserCardParameter) {
+export default function JobUserCardElement({
+  jobInfo,
+}: JobUserCardElementInterface) {
   return (
     <>
       <div
@@ -31,16 +38,18 @@ export default function JobUserCardElement(jobInfo: JobUserCardParameter) {
 
         <div className="grow self-center space-y-0 items-center">
           <div className="title-primary text-MainBlue">{jobInfo.name}</div>
-          <div className="text-base font-semibold">{jobInfo.employer}</div>
-          <div className="text-sm font-semibold">{jobInfo.location}</div>
-          <div className="text-sm font-semibold">{jobInfo.date}</div>
+          <div className="text-base font-semibold">{jobInfo.recruterName}</div>
+          <div className="text-sm font-semibold">{jobInfo.address}</div>
+          <div className="text-sm font-semibold">
+            {jobInfo.date?.toString()}
+          </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-            {jobInfo.type}
+            {jobInfo.domain}
           </div>
 
-          {jobInfo.isMyOffer ? (
+          {jobInfo.isMine ? (
             <div className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
               My Offer
             </div>
@@ -50,12 +59,14 @@ export default function JobUserCardElement(jobInfo: JobUserCardParameter) {
 
           <div
             className={`flex-none rounded bg-WhiteBlue  ${
-              jobInfo.applicants >= jobInfo.number_of_places
+              !isNullOrUndefined(jobInfo?.numberApplicants) &&
+              !isNullOrUndefined(jobInfo?.numberEmp) &&
+              jobInfo?.numberApplicants >= jobInfo?.numberEmp
                 ? "text-SecondBlue border-SecondBlue border-2"
                 : "text-LightBlue "
             }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
           >
-            Nr: {jobInfo.applicants}/{jobInfo.number_of_places}
+            Nr: {jobInfo.numberApplicants}/{jobInfo.numberEmp}
           </div>
         </div>
         <ModalUserInfo userInfo={null} isAdmin={false} jobInfo={jobInfo} />

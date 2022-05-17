@@ -2,7 +2,7 @@ import ModalUserInfo from "./ModalUserInfo";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
-import { JobUserCardParameter } from "./JobUserCardElement";
+import { JobExtendedModel } from "../api/ui-service-client";
 
 export type JobCardParameter = {
   name: string;
@@ -14,7 +14,7 @@ export type JobCardParameter = {
   isValidate: boolean;
 };
 
-export default function JobCardElement(jobInfo: JobUserCardParameter) {
+export default function JobCardElement(jobInfo: JobExtendedModel) {
   return (
     <>
       <div
@@ -31,16 +31,18 @@ export default function JobCardElement(jobInfo: JobUserCardParameter) {
 
         <div className="grow self-center space-y-0 items-center">
           <div className="title-primary text-MainBlue">{jobInfo.name}</div>
-          <div className="text-base font-semibold">{jobInfo.employer}</div>
-          <div className="text-sm font-semibold">{jobInfo.location}</div>
-          <div className="text-sm font-semibold">{jobInfo.date}</div>
+          <div className="text-base font-semibold">{jobInfo.recruterName}</div>
+          <div className="text-sm font-semibold">{jobInfo.address}</div>
+          <div className="text-sm font-semibold">
+            {jobInfo.date?.toString()}
+          </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-            {jobInfo.type}
+            {jobInfo.domain}
           </div>
 
-          {jobInfo.isValidate ? (
+          {jobInfo.isCheck ? (
             <div className="flex rounded bg-WhiteBlue text-LightBlue px-2 py-1 text-center font-bold text-sm items-center h-max w-32">
               <div className="flex-1"> Checked</div>
               <FontAwesomeIcon

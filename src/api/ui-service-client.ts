@@ -1269,9 +1269,10 @@ export interface GetJobsModelRequest {
 }
 
 export interface Job {
-    readonly documentId?: string | null;
+    documentId?: string | null;
     name?: string | null;
     numberEmp?: number;
+    numberApplicants?: number;
     address?: string | null;
     description?: string | null;
     domain?: string | null;
@@ -1282,9 +1283,10 @@ export interface Job {
 }
 
 export interface JobExtendedModel {
-    readonly documentId?: string | null;
+    documentId?: string | null;
     name?: string | null;
     numberEmp?: number;
+    numberApplicants?: number;
     address?: string | null;
     description?: string | null;
     domain?: string | null;

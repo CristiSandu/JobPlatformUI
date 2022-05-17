@@ -5,8 +5,17 @@ import JobUserCardElement, {
   JobUserCardParameter,
 } from "../components/JobUserCardElement";
 import { useNavigate } from "react-router-dom";
-import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import {
+  DomainModel,
+  DropdownClient,
+  JobExtendedModel,
+  JobsClient,
+  UsersClient,
+} from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../provider/firebase";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -15,10 +24,23 @@ export type OffersListParams = {
 export const UserOffersPage = ({
   initialsElements,
 }: OffersListParams): JSX.Element => {
-  const [elementsList, setElementsList] =
-    useState<JobUserCardParameter[]>(initialsElements);
+  const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
+  const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [user, loading, error] = useAuthState(auth);
+
+  const jobsValues = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  const usersValues = new UsersClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
 
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
@@ -27,58 +49,60 @@ export const UserOffersPage = ({
     );
 
     const fetchData = async () => {
-      const element = await dropdownsValues.domainsAll();
-      element.unshift({ name: "Domains" });
+      setIsLoading(true);
 
-      setDropdownElements(element);
+      const uid = user?.uid;
+      if (isNullOrUndefined(uid)) return;
+
+      const elementDropdown = await dropdownsValues.domainsAll();
+      const usersList = await usersValues.usersAll(uid ?? "");
+
+      if (isNullOrUndefined(usersList) || isNullOrUndefined(usersList[0]))
+        return;
+
+      const jobsList = await jobsValues.getJobs({
+        isRecruter: usersList[0].type === "Recruiter",
+        isAdmin: usersList[0].isAdmin,
+        userID: uid,
+      });
+
+      elementDropdown.unshift({ name: "Domain" });
+
+      setIsLoading(false);
+      setElementsList(jobsList);
+      setInitialJobsList(jobsList);
+      setDropdownElements(elementDropdown);
     };
 
     fetchData().catch(console.error);
-  }, []);
+  }, [user, loading]);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domains") {
-      setElementsList(initialsElements);
+      setElementsList(initialJobsList);
       return;
     }
-    const elements = initialsElements.filter((elem) => elem.type === element);
+    const elements = initialJobsList?.filter((elem) => elem.domain === element);
     setElementsList(elements);
   }
 
   function onClickFilter(filterName: string): void {
     if (filterName === "My Offers") {
-      const elements = initialsElements.filter(
-        (elem) => elem.isMyOffer === true
-      );
+      const elements = initialJobsList?.filter((elem) => elem.isMine === true);
       setElementsList(elements);
       return;
     } else if (filterName === "true") {
-      const elements = initialsElements.filter(
-        (elem) => elem.applicants >= elem.number_of_places
-      );
+      const elements = initialJobsList?.filter((elem) => true);
       setElementsList(elements);
     } else {
-      const elements = initialsElements.filter(
-        (elem) => elem.applicants < elem.number_of_places
-      );
+      const elements = initialJobsList?.filter((elem) => true);
       setElementsList(elements);
     }
   }
   const navigate = useNavigate();
 
-  let elementsRendered = elementsList.map((element: JobUserCardParameter) => (
-    <JobUserCardElement
-      applicants={element.applicants}
-      number_of_places={element.number_of_places}
-      isMyOffer={element.isMyOffer}
-      name={element.name}
-      type={element.type}
-      date={element.date}
-      description={element.description}
-      employer={element.employer}
-      location={element.location}
-      isValidate={element.isValidate}
-    />
+  let elementsRendered = elementsList?.map((element: JobExtendedModel) => (
+    <JobUserCardElement jobInfo={element} />
   ));
   return (
     <>
