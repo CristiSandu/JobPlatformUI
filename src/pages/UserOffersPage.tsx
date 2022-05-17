@@ -16,6 +16,7 @@ import { AxiosHelpers } from "../util/axios-helper";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../provider/firebase";
 import { isNullOrUndefined } from "../util/generic-helpers";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -146,7 +147,15 @@ export const UserOffersPage = ({
                 />
               </div>
             </div>
-            <div className="space-y-5">{elementsRendered}</div>
+            <div className="space-y-5">
+              {isLoading ? (
+                <div className="grid place-items-center h-96">
+                  <LoadingSpinner />
+                </div>
+              ) : (
+                elementsRendered
+              )}
+            </div>
           </div>
         </div>
       </PageFooterHeaderTemplate>
