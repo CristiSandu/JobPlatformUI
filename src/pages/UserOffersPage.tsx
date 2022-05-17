@@ -28,6 +28,8 @@ export const UserOffersPage = ({
 
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
+      element.unshift({ name: "Domains" });
+
       setDropdownElements(element);
     };
 

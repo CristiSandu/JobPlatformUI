@@ -10,12 +10,14 @@ export type ModalInformationParam = {
   userInfo: User | null;
   jobInfo: JobUserCardParameter | null;
   isAdmin: boolean;
+  deleteUserCall: (UID: string) => void;
 };
 
 export default function ModalUserInfo({
   userInfo,
   jobInfo,
   isAdmin,
+  deleteUserCall,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
 
@@ -194,14 +196,19 @@ export default function ModalUserInfo({
                       <button
                         className="btn-primary bg-RedDelete"
                         type="button"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          deleteUserCall(userInfo?.documentId ?? "");
+                          setShowModal(false);
+                        }}
                       >
                         Delete
                       </button>
                       <button
                         className="btn-primary"
                         type="button"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          setShowModal(false);
+                        }}
                       >
                         Cancel
                       </button>

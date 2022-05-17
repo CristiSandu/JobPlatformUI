@@ -34,13 +34,13 @@ export const EditUserPage = ({
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
+  const usersValues = new UsersClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
-      process.env.REACT_APP_UI_SERVICE,
-      AxiosHelpers.axiosClient
-    );
-
-    const usersValues = new UsersClient(
       process.env.REACT_APP_UI_SERVICE,
       AxiosHelpers.axiosClient
     );
@@ -49,6 +49,7 @@ export const EditUserPage = ({
       setIsLoading(true);
       const elementDropdown = await dropdownsValues.domainsAll();
       const usersList = await usersValues.usersAll("All");
+      elementDropdown.unshift({ name: "Domain" });
 
       setIsLoading(false);
       setElementsList(usersList);
@@ -70,6 +71,29 @@ export const EditUserPage = ({
     setElementsList(elements);
   }
 
+  function deleteUserCall(UID: string): void {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const isDeleted = await usersValues.usersDELETE(UID);
+      // const [elementsList, setElementsList] = useState<User[]>();
+      // const [initialUsersList, setInitialUsersList] = useState<User[]>();
+      if (isDeleted) {
+        const elements = elementsList?.filter(
+          (elem) => elem.documentId !== UID
+        );
+        const elements2 = initialUsersList?.filter(
+          (elem) => elem.documentId !== UID
+        );
+
+        setElementsList(elements);
+        setInitialUsersList(elements2);
+      }
+      setIsLoading(false);
+    };
+
+    fetchData().catch(console.error);
+  }
+
   function onClickFilter(filterName: string): void {
     if (filterName === "All") {
       setElementsList(initialUsersList);
@@ -82,19 +106,7 @@ export const EditUserPage = ({
   }
 
   let elementsRendered = elementsList?.map((element: User) => (
-    <UserCardElement
-      domain={element.domain}
-      email={element.email}
-      gender={element.gender}
-      name={element.name}
-      type={element.type}
-      age={element.age}
-      description={element.description}
-      description_last_job={element.description_last_job}
-      last_level_grad={element.last_level_grad}
-      location={element.location}
-      phone={element.phone}
-    />
+    <UserCardElement userInfo={element} deleteUserCall={deleteUserCall} />
   ));
   return (
     <>

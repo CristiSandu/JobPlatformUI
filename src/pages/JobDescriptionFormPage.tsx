@@ -26,6 +26,7 @@ export const JobDescriptionFormPage = ({
 
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
+      element.unshift({ name: "Domain" });
       setDropdownElements(element);
     };
 

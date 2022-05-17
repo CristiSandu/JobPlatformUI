@@ -55,6 +55,7 @@ export const ProfileFormPage = (): JSX.Element => {
       const element = await dropdownsValues.domainsAll();
       const uid = await user?.uid;
       setUserEmail(user?.email ?? "");
+      element.unshift({ name: "Domain" });
 
       setUserData({ ...userData, email: userEmail });
       setUserData({ ...userData, documentId: uid });
@@ -134,7 +135,11 @@ export const ProfileFormPage = (): JSX.Element => {
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Type"
-                    elements={[{ name: "Recruiter" }, { name: "Candidate" }]}
+                    elements={[
+                      { name: "Type" },
+                      { name: "Recruiter" },
+                      { name: "Candidate" },
+                    ]}
                   />
                 </div>
 
@@ -184,6 +189,7 @@ export const ProfileFormPage = (): JSX.Element => {
                         selectedElementChange={selectedElementChange}
                         dropdownName="Gender"
                         elements={[
+                          { name: "Gender" },
                           { name: "M" },
                           { name: "F" },
                           { name: "NaN" },

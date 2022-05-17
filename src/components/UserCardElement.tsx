@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import { User } from "../api/ui-service-client";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
@@ -11,7 +12,15 @@ export type UserCardParameter = {
   domain: string;
 };
 
-export default function UserCardElement(userInfo: User) {
+export interface UserCardInterface {
+  userInfo: User;
+  deleteUserCall: (UID: string) => void;
+}
+
+export default function UserCardElement({
+  userInfo,
+  deleteUserCall,
+}: UserCardInterface) {
   return (
     <>
       <div
@@ -32,7 +41,12 @@ export default function UserCardElement(userInfo: User) {
             {userInfo.domain}
           </div>
         </div>
-        <ModalUserInfo userInfo={userInfo} isAdmin={false} jobInfo={null} />
+        <ModalUserInfo
+          userInfo={userInfo}
+          isAdmin={false}
+          jobInfo={null}
+          deleteUserCall={deleteUserCall}
+        />
       </div>
     </>
   );
