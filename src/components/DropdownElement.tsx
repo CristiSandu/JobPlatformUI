@@ -11,15 +11,19 @@ function classNames(...classes: string[]) {
 export type DropdownParameters = {
   dropdownName: string;
   elements?: DomainModel[];
+  preSelectedElement?: string | null | undefined;
   selectedElementChange: (element: string, dropdownName: string) => void;
 };
 
 export default function DropdownElement({
   dropdownName,
   elements,
+  preSelectedElement,
   selectedElementChange,
 }: DropdownParameters) {
-  const [selectedElement, setSelectedElement] = useState<string>(dropdownName);
+  const [selectedElement, setSelectedElement] = useState<
+    string | null | undefined
+  >(preSelectedElement);
 
   const elementsRendered = elements?.map((element: DomainModel) => (
     <Menu.Item>

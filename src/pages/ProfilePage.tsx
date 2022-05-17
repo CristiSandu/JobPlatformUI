@@ -94,7 +94,9 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
           <div className="flex justify-between ">
             <button
               className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/profileForm", { state: userDetails });
+              }}
             >
               <div className="flex-1">Edit</div>
               <FontAwesomeIcon

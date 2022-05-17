@@ -3,6 +3,7 @@ import JobPostLogo from "../Images/job_post_logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 import { JobExtendedModel } from "../api/ui-service-client";
+import dayjs from "dayjs";
 
 export type JobCardParameter = {
   name: string;
@@ -14,7 +15,15 @@ export type JobCardParameter = {
   isValidate: boolean;
 };
 
-export default function JobCardElement(jobInfo: JobExtendedModel) {
+export interface JobCardElementInterface {
+  jobInfo: JobExtendedModel;
+  checkAJobCall?: (jobId: string, value: boolean) => void;
+}
+
+export default function JobCardElement({
+  jobInfo,
+  checkAJobCall,
+}: JobCardElementInterface) {
   return (
     <>
       <div
@@ -34,7 +43,7 @@ export default function JobCardElement(jobInfo: JobExtendedModel) {
           <div className="text-base font-semibold">{jobInfo.recruterName}</div>
           <div className="text-sm font-semibold">{jobInfo.address}</div>
           <div className="text-sm font-semibold">
-            {jobInfo.date?.toString()}
+            {dayjs(jobInfo.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
@@ -60,7 +69,12 @@ export default function JobCardElement(jobInfo: JobExtendedModel) {
             </div>
           )}
         </div>
-        <ModalUserInfo userInfo={null} isAdmin={true} jobInfo={jobInfo} />
+        <ModalUserInfo
+          userInfo={null}
+          isAdmin={true}
+          jobInfo={jobInfo}
+          checkAJobCall={checkAJobCall}
+        />
       </div>
     </>
   );

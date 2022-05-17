@@ -1,7 +1,6 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import { isNullOrUndefined } from './generic-helpers';
-import { StorageUser } from './user';
 
 export class AxiosHelpers {
     public static readonly axiosClient: AxiosInstance = this.createAxiosClient(handleResponseCodes);

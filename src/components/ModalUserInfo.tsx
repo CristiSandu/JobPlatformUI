@@ -4,12 +4,14 @@ import JobPostLogo from "../Images/job_post_logo.svg";
 import ValidationSwitch from "./ValidationSwitch";
 import { useNavigate } from "react-router-dom";
 import { JobExtendedModel, User } from "../api/ui-service-client";
+import dayjs from "dayjs";
 
 export type ModalInformationParam = {
   userInfo: User | null;
   jobInfo: JobExtendedModel | null;
   isAdmin: boolean;
   deleteUserCall?: (UID: string) => void;
+  checkAJobCall?: (jobId: string, value: boolean) => void;
 };
 
 export default function ModalUserInfo({
@@ -17,6 +19,7 @@ export default function ModalUserInfo({
   jobInfo,
   isAdmin,
   deleteUserCall,
+  checkAJobCall,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
 
@@ -103,7 +106,9 @@ export default function ModalUserInfo({
                         <div className="content-center items-end">
                           <div className="text-sm font-mono">Date</div>
                           <div className="text-sm font-mono">
-                            {jobInfo?.date?.toString()}
+                            {dayjs(jobInfo?.date?.toString()).format(
+                              "DD.MM.YYYY"
+                            )}
                           </div>
                         </div>
                         <div className="flex space-x-4 items-center">
@@ -138,7 +143,7 @@ export default function ModalUserInfo({
                         Description: {userInfo?.description}
                       </div>
                     </div>
-                    {true ? (
+                    {!isAdmin ? (
                       <div className="grid grid-cols-3 grid-rows-2">
                         <div />
                         <div />
@@ -218,7 +223,11 @@ export default function ModalUserInfo({
                       <button
                         className="btn-primary bg-GreenCheck"
                         type="button"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => {
+                          if (checkAJobCall !== undefined)
+                            checkAJobCall(jobInfo?.docID ?? "", true);
+                          setShowModal(false);
+                        }}
                       >
                         Check
                       </button>

@@ -31,7 +31,7 @@ export const UserOffersPage = ({
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   const jobsValues = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,

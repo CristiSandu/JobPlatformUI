@@ -5,7 +5,7 @@ import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import ProfilePicture from "../components/ProfilePicture";
 import { auth } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DomainModel,
   DropdownClient,
@@ -13,6 +13,7 @@ import {
   UsersClient,
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 export type UserProfileData = {
   email: string;
@@ -40,6 +41,8 @@ export const ProfileFormPage = (): JSX.Element => {
 
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
+  const location = useLocation();
+
   const usersValues = new UsersClient(
     process.env.REACT_APP_UI_SERVICE,
     AxiosHelpers.axiosClient
@@ -53,12 +56,16 @@ export const ProfileFormPage = (): JSX.Element => {
 
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
-      const uid = await user?.uid;
-      setUserEmail(user?.email ?? "");
-      element.unshift({ name: "Domain" });
+      if (!isNullOrUndefined(location.state)) {
+        setUserData(location.state as User);
+      } else {
+        const uid = user?.uid;
+        setUserEmail(user?.email ?? "");
+        element.unshift({ name: "Domain" });
 
-      setUserData({ ...userData, email: userEmail });
-      setUserData({ ...userData, documentId: uid });
+        setUserData({ ...userData, email: userEmail });
+        setUserData({ ...userData, documentId: uid });
+      }
       setDropdownElements(element);
     };
 
@@ -111,6 +118,7 @@ export const ProfileFormPage = (): JSX.Element => {
                     onChange={(e) =>
                       setUserData({ ...userData, name: e.target.value })
                     }
+                    defaultValue={userData.name ?? ""}
                     placeholder="Full Name"
                   />
                 </div>
@@ -122,7 +130,7 @@ export const ProfileFormPage = (): JSX.Element => {
                     onChange={(e) =>
                       setUserData({ ...userData, email: e.target.value })
                     }
-                    defaultValue={userEmail}
+                    defaultValue={userData.email ?? ""}
                     placeholder="Email"
                   />
                 </div>
@@ -130,11 +138,13 @@ export const ProfileFormPage = (): JSX.Element => {
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Domain"
+                    preSelectedElement={userData.domain}
                     elements={dropdownElements}
                   />
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Type"
+                    preSelectedElement={userData?.type}
                     elements={[
                       { name: "Type" },
                       { name: "Recruiter" },
@@ -153,6 +163,7 @@ export const ProfileFormPage = (): JSX.Element => {
                           setUserData({ ...userData, phone: e.target.value })
                         }
                         name="name"
+                        defaultValue={userData.phone ?? ""}
                         placeholder="Phone"
                       />
                     </div>
@@ -164,6 +175,7 @@ export const ProfileFormPage = (): JSX.Element => {
                           setUserData({ ...userData, location: e.target.value })
                         }
                         name="name"
+                        defaultValue={userData.location ?? ""}
                         placeholder="Location"
                       />
                     </div>
@@ -178,6 +190,7 @@ export const ProfileFormPage = (): JSX.Element => {
                             description: e.target.value,
                           })
                         }
+                        defaultValue={userData.description ?? ""}
                         placeholder="Company Description"
                       />
                     </div>
@@ -187,6 +200,7 @@ export const ProfileFormPage = (): JSX.Element => {
                     <div className="grid grid-cols-2 grid-rows-2 gap-4 w-96">
                       <DropdownElement
                         selectedElementChange={selectedElementChange}
+                        preSelectedElement={userData.gender}
                         dropdownName="Gender"
                         elements={[
                           { name: "Gender" },
@@ -203,6 +217,7 @@ export const ProfileFormPage = (): JSX.Element => {
                         onChange={(e) =>
                           setUserData({ ...userData, phone: e.target.value })
                         }
+                        defaultValue={userData.phone ?? ""}
                         placeholder="Phone"
                       />
 
@@ -213,6 +228,7 @@ export const ProfileFormPage = (): JSX.Element => {
                         onChange={(e) =>
                           setUserData({ ...userData, age: +e.target.value })
                         }
+                        defaultValue={userData.age ?? ""}
                         placeholder="Age"
                       />
                       <input
@@ -222,6 +238,7 @@ export const ProfileFormPage = (): JSX.Element => {
                         onChange={(e) =>
                           setUserData({ ...userData, location: e.target.value })
                         }
+                        defaultValue={userData.location ?? ""}
                         placeholder="Location"
                       />
                     </div>
@@ -237,6 +254,7 @@ export const ProfileFormPage = (): JSX.Element => {
                           })
                         }
                         placeholder="Last level graduate"
+                        defaultValue={userData.last_level_grad ?? ""}
                       />
                     </div>
                     <div>
@@ -250,6 +268,7 @@ export const ProfileFormPage = (): JSX.Element => {
                             description_last_job: e.target.value,
                           })
                         }
+                        defaultValue={userData.description_last_job ?? ""}
                         placeholder="Last job description"
                       />
                     </div>
@@ -263,6 +282,7 @@ export const ProfileFormPage = (): JSX.Element => {
                             description: e.target.value,
                           })
                         }
+                        defaultValue={userData.description ?? ""}
                         placeholder="Description"
                       />
                     </div>

@@ -122,18 +122,20 @@ export const CheckOffersPage = ({
     fetchData().catch(console.error);
   }, []);
 
+  function checkAJobCall(jobId: string, value: boolean): void {
+    const fetchData = async () => {
+      setIsLoading(true);
+      const response = jobsValues.validateJob({ isCheck: value, jobId: jobId });
+      if (!response) alert("Error on Check Job Offer");
+
+      setIsLoading(false);
+    };
+
+    fetchData().catch(console.error);
+  }
+
   let elementsRendered = elementsList?.map((element: JobExtendedModel) => (
-    <JobCardElement
-      numberEmp={element.numberEmp}
-      numberApplicants={element.numberApplicants}
-      name={element.name}
-      domain={element.domain}
-      date={element.date}
-      description={element.description}
-      recruterName={element.recruterName}
-      address={element.address}
-      isCheck={element.isCheck}
-    />
+    <JobCardElement jobInfo={element} checkAJobCall={checkAJobCall} />
   ));
   return (
     <>

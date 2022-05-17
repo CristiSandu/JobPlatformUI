@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut, signInAnonymously, GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
-import { getFirestore, doc, setDoc, updateDoc } from "firebase/firestore"
+import { getFirestore, doc, updateDoc } from "firebase/firestore"
 
 const firebaseConfig = {
     apiKey: "AIzaSyCX9jSxDKsFB2Q4Ecltc8Wb74SP8KE98AE",

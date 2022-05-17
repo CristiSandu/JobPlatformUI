@@ -2,6 +2,7 @@ import ModalUserInfo from "./ModalUserInfo";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import { JobExtendedModel } from "../api/ui-service-client";
 import { isNullOrUndefined } from "../util/generic-helpers";
+import dayjs from "dayjs";
 
 export type JobUserCardParameter = {
   name: string;
@@ -41,7 +42,7 @@ export default function JobUserCardElement({
           <div className="text-base font-semibold">{jobInfo.recruterName}</div>
           <div className="text-sm font-semibold">{jobInfo.address}</div>
           <div className="text-sm font-semibold">
-            {jobInfo.date?.toString()}
+            {dayjs(jobInfo.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
