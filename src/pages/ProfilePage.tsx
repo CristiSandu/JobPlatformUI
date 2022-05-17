@@ -12,12 +12,14 @@ import { useEffect, useState } from "react";
 import { User, UsersClient } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
+import { LoadingSpinner } from "../components/LoadingSpinner";
 
 export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});
   const [user, loading, error] = useAuthState(auth);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
@@ -27,7 +29,9 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
           process.env.REACT_APP_UI_SERVICE,
           AxiosHelpers.axiosClient
         );
+        setIsLoading(true);
         const usersList = await usersValues.usersAll(user.uid);
+        setIsLoading(false);
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
           localStorage.setItem("JWT", await user.getIdToken());
           setUserDetails(usersList[0]);
@@ -45,11 +49,17 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
           {userDetails.isAdmin ? "My Admin Profile" : "My Profile"}
         </span>
 
-        <ProfilePicture
-          height="262"
-          width="262"
-          isMasculine={userDetails.gender !== "F"}
-        />
+        {isLoading ? (
+          <div className="grid place-items-center h-64 w-64">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <ProfilePicture
+            height="262"
+            width="262"
+            isMasculine={userDetails.gender !== "F"}
+          />
+        )}
 
         <div className="items-center space-y-8">
           <div className="grow self-center space-y-1 items-center grid place-items-center">
@@ -65,6 +75,7 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               {userDetails.domain}
             </div>
           </div>
+
           <div className="space-y-3">
             <div>
               <div>Last Level Graduate</div>
@@ -79,6 +90,7 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               <div className="text-xl">{userDetails.description_last_job}</div>
             </div>
           </div>
+
           <div className="flex justify-between ">
             <button
               className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
