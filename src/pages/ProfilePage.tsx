@@ -69,7 +69,9 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
           <div className="flex justify-between items-center">
             <div className="flex content-center items-end">
               <div className="text-3xl font-semibold">{userDetails?.age}</div>
-              <div className="text-sm font-mono">Years</div>
+              <div className="text-sm font-mono">
+                {!isNullOrUndefined(userDetails?.age) && "Years"}
+              </div>
             </div>
             <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-8 w-max">
               {userDetails.domain}

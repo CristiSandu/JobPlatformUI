@@ -80,7 +80,6 @@ export const LoginPage = (): JSX.Element => {
                 onClick={() => {
                   signIn(email, password);
                   setIsLoginWithGoogle(false);
-                  navigate("/profileForm");
                 }}
               >
                 Login

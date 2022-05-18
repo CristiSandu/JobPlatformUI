@@ -16,12 +16,18 @@ export const RegisterPage = (): JSX.Element => {
       alert("Please enter name");
       return;
     }
+
     signUp(name, email, password);
   };
 
   useEffect(() => {
     if (user) {
-      navigate("/profileForm");
+      const fetchData = async () => {
+        localStorage.setItem("JWT", await user.getIdToken());
+        navigate("/profileForm");
+      };
+
+      fetchData().catch(console.error);
     }
   }, [user, loading, error, navigate]);
 

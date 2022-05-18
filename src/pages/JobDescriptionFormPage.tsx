@@ -1,6 +1,13 @@
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { DomainModel, DropdownClient } from "../api/ui-service-client";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  DomainModel,
+  DropdownClient,
+  Job,
+  JobsClient,
+  User,
+} from "../api/ui-service-client";
 import DropdownElement from "../components/DropdownElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import FormImage from "../Images/form_logo.svg";
@@ -14,21 +21,31 @@ type BaseJobDescription = {
 export const JobDescriptionFormPage = ({
   initialJobData,
 }: BaseJobDescription): JSX.Element => {
-  const [jobData, setJobData] = useState<JobUserCardParameter>(initialJobData);
-
+  const [jobData, setJobData] = useState<Job>({});
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+  const [userData, setUserData] = useState<User>();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const jobInstance = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  const dropdownsValues = new DropdownClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
 
   useEffect(() => {
-    const dropdownsValues = new DropdownClient(
-      process.env.REACT_APP_UI_SERVICE,
-      AxiosHelpers.axiosClient
-    );
-
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
       element.unshift({ name: "Domain" });
       setDropdownElements(element);
     };
+
+    setUserData(location.state as User);
 
     fetchData().catch(console.error);
   }, []);
@@ -36,12 +53,10 @@ export const JobDescriptionFormPage = ({
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {
       case "Domain":
-        setJobData({ ...jobData, type: element });
+        setJobData({ ...jobData, domain: element });
         break;
     }
   }
-
-  const navigate = useNavigate();
 
   return (
     <>
@@ -83,7 +98,7 @@ export const JobDescriptionFormPage = ({
                     onChange={(e) =>
                       setJobData({
                         ...jobData,
-                        number_of_places: +e.target.value,
+                        numberEmp: +e.target.value,
                       })
                     }
                     placeholder="Number"
@@ -107,7 +122,7 @@ export const JobDescriptionFormPage = ({
                     className="entry-primary w-96"
                     type="text"
                     onChange={(e) =>
-                      setJobData({ ...jobData, location: e.target.value })
+                      setJobData({ ...jobData, address: e.target.value })
                     }
                     name="name"
                     placeholder="Location"
@@ -115,10 +130,32 @@ export const JobDescriptionFormPage = ({
                 </div>
               </form>
               <div className="flex justify-between">
-                <div className="text-xl">{initialJobData.employer}</div>
-                <div className="text-xl">{initialJobData.date}</div>
+                <div className="text-xl">{userData?.name}</div>
+                <div className="text-xl">
+                  {dayjs(Date.now()).format("DD.MM.YYYY")}
+                </div>
               </div>
               <div className="grid grid-cols-3 gap-4 px-4 pt-8">
+                <button
+                  className="btn-primary"
+                  onClick={async () => {
+                    console.log(jobData);
+                    jobData.documentId = "default";
+                    jobData.numberApplicants = 0;
+                    jobData.isCheck = false;
+                    jobData.isExpired = false;
+                    jobData.recruterID = userData?.documentId;
+                    jobData.date = dayjs(Date.now());
+                    const response = await jobInstance.jobsPOST({
+                      jobData: jobData,
+                    });
+                    if (response) navigate(-1);
+                    else alert("Error on Save, Retry");
+                  }}
+                >
+                  Save
+                </button>
+                <div />
                 <button
                   className="btn-primary"
                   onClick={() => {
@@ -126,10 +163,8 @@ export const JobDescriptionFormPage = ({
                     navigate(-1);
                   }}
                 >
-                  Save
+                  Cancel
                 </button>
-                <div />
-                <button className="btn-primary">Cancel</button>
               </div>
             </div>
           </div>

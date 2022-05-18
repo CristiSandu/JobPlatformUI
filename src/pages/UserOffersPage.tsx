@@ -10,6 +10,7 @@ import {
   DropdownClient,
   JobExtendedModel,
   JobsClient,
+  User,
   UsersClient,
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
@@ -28,8 +29,12 @@ export const UserOffersPage = ({
   const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
   const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 
+  const [userData, setUserData] = useState<User>();
+
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [isRecruiter, setIsRecruiter] = useState<boolean>(false);
 
   const [user, loading] = useAuthState(auth);
 
@@ -61,13 +66,21 @@ export const UserOffersPage = ({
       if (isNullOrUndefined(usersList) || isNullOrUndefined(usersList[0]))
         return;
 
+      localStorage.setItem(
+        "userType",
+        (usersList[0].type === "Recruiter").toString()
+      );
+      setIsRecruiter(usersList[0].type === "Recruiter");
+
+      setUserData(usersList[0]);
+
       const jobsList = await jobsValues.getJobs({
         isRecruter: usersList[0].type === "Recruiter",
         isAdmin: usersList[0].isAdmin,
         userID: uid,
       });
 
-      elementDropdown.unshift({ name: "Domain" });
+      elementDropdown.unshift({ name: "Domains" });
 
       setIsLoading(false);
       setElementsList(jobsList);
@@ -93,10 +106,20 @@ export const UserOffersPage = ({
       setElementsList(elements);
       return;
     } else if (filterName === "true") {
-      const elements = initialJobsList?.filter((elem) => true);
+      const elements = initialJobsList?.filter(
+        (elem) =>
+          !isNullOrUndefined(elem.numberEmp) &&
+          !isNullOrUndefined(elem.numberApplicants) &&
+          elem.numberEmp <= elem.numberApplicants
+      );
       setElementsList(elements);
     } else {
-      const elements = initialJobsList?.filter((elem) => true);
+      const elements = initialJobsList?.filter(
+        (elem) =>
+          !isNullOrUndefined(elem.numberEmp) &&
+          !isNullOrUndefined(elem.numberApplicants) &&
+          elem.numberEmp > elem.numberApplicants
+      );
       setElementsList(elements);
     }
   }
@@ -110,43 +133,61 @@ export const UserOffersPage = ({
       <PageFooterHeaderTemplate isAdmin={false}>
         <div className="pt-8 w-full">
           <div className="space-y-12 scroll">
-            <div className="space-y-6">
-              <button
-                className="btn-primary text-2xl w-full focus:bg-LightBlue"
-                onClick={() => {
-                  navigate("/jobDataForm");
-                }}
-              >
-                + Add A Offer
-              </button>
+            {!isRecruiter && (
               <div className="flex justify-between">
-                <div className="grid grid-cols-3 gap-4">
-                  <button
-                    className="btn-primary focus:bg-LightBlue"
-                    onClick={() => onClickFilter("false")}
-                  >
-                    Not Full
-                  </button>
-                  <button
-                    className="btn-primary focus:bg-LightBlue"
-                    onClick={() => onClickFilter("true")}
-                  >
-                    Full
-                  </button>
-                  <button
-                    className="btn-primary focus:bg-LightBlue"
-                    onClick={() => onClickFilter("My Offers")}
-                  >
-                    My Offers
-                  </button>
-                </div>
+                <input
+                  className="entry-primary w-96"
+                  type="text"
+                  name="search"
+                  onChange={(e) => {}}
+                  placeholder="Search ..."
+                />
                 <DropdownElement
                   dropdownName="Domains"
                   selectedElementChange={selectedElementChange}
                   elements={dropdownElements}
                 />
               </div>
-            </div>
+            )}
+            {isRecruiter && (
+              <div className="space-y-6">
+                <button
+                  className="btn-primary text-2xl w-full focus:bg-LightBlue"
+                  onClick={() => {
+                    navigate("/jobDataForm", { state: userData });
+                  }}
+                >
+                  + Add A Offer
+                </button>
+                <div className="flex justify-between">
+                  <div className="grid grid-cols-3 gap-4">
+                    <button
+                      className="btn-primary focus:bg-LightBlue"
+                      onClick={() => onClickFilter("false")}
+                    >
+                      Not Full
+                    </button>
+                    <button
+                      className="btn-primary focus:bg-LightBlue"
+                      onClick={() => onClickFilter("true")}
+                    >
+                      Full
+                    </button>
+                    <button
+                      className="btn-primary focus:bg-LightBlue"
+                      onClick={() => onClickFilter("My Offers")}
+                    >
+                      My Offers
+                    </button>
+                  </div>
+                  <DropdownElement
+                    dropdownName="Domains"
+                    selectedElementChange={selectedElementChange}
+                    elements={dropdownElements}
+                  />
+                </div>
+              </div>
+            )}
             <div className="space-y-5">
               {isLoading ? (
                 <div className="grid place-items-center h-96">

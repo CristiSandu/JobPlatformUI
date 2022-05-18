@@ -241,6 +241,11 @@ export interface IJobsClient {
      * @return Success
      */
     jobsDELETE(id: string): Promise<boolean>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    jobStatus(body: ChangeJobStatusModelRequest | undefined): Promise<boolean>;
 }
 
 export class JobsClient implements IJobsClient {
@@ -635,6 +640,64 @@ export class JobsClient implements IJobsClient {
     }
 
     protected processJobsDELETE(response: AxiosResponse): Promise<boolean> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<boolean>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    jobStatus(body: ChangeJobStatusModelRequest | undefined , abortController?: AbortController | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/Jobs/JobStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processJobStatus(_response);
+        });
+    }
+
+    protected processJobStatus(response: AxiosResponse): Promise<boolean> {
         const status = response?.status;
         if (response == null)
             return Promise.resolve<boolean>(null as any);
@@ -1250,6 +1313,15 @@ export interface ApplyToJobsModelRequest {
     angajatorId?: string | null;
     candidateId?: string | null;
     readonly recruterJobId?: string | null;
+}
+
+export interface ChangeJobStatusModelRequest {
+    jobId?: string | null;
+    angajatorId?: string | null;
+    candidateId?: string | null;
+    readonly recruterJobId?: string | null;
+    readonly candidateJobId?: string | null;
+    jobStatus?: number;
 }
 
 export interface DomainModel {

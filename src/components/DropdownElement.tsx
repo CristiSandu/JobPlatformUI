@@ -3,6 +3,7 @@ import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { DomainModel } from "../api/ui-service-client";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -23,7 +24,7 @@ export default function DropdownElement({
 }: DropdownParameters) {
   const [selectedElement, setSelectedElement] = useState<
     string | null | undefined
-  >(preSelectedElement);
+  >(!isNullOrUndefined(preSelectedElement) ? preSelectedElement : dropdownName);
 
   const elementsRendered = elements?.map((element: DomainModel) => (
     <Menu.Item>
