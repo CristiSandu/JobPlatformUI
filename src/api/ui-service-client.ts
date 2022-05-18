@@ -216,6 +216,21 @@ export interface IJobsClient {
      * @param body (optional) 
      * @return Success
      */
+    getCandidateJobs(body: GetCandidateJobsModelRequest | undefined): Promise<CandidateJobsExtendedModel[]>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getRecruiterJobs(body: GetRecruiterJobsModelRequest | undefined): Promise<RecruterJobs[]>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getRecruiterJobsById(body: GetRecruiterJobsByIdModelRequest | undefined): Promise<RecruterJobs[]>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     jobsPOST(body: AddJobsModelRequest | undefined): Promise<boolean>;
     /**
      * @param body (optional) 
@@ -314,6 +329,180 @@ export class JobsClient implements IJobsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<JobExtendedModel[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getCandidateJobs(body: GetCandidateJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<CandidateJobsExtendedModel[]> {
+        let url_ = this.baseUrl + "/api/Jobs/GetCandidateJobs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetCandidateJobs(_response);
+        });
+    }
+
+    protected processGetCandidateJobs(response: AxiosResponse): Promise<CandidateJobsExtendedModel[]> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<CandidateJobsExtendedModel[]>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<CandidateJobsExtendedModel[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CandidateJobsExtendedModel[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getRecruiterJobs(body: GetRecruiterJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<RecruterJobs[]> {
+        let url_ = this.baseUrl + "/api/Jobs/GetRecruiterJobs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetRecruiterJobs(_response);
+        });
+    }
+
+    protected processGetRecruiterJobs(response: AxiosResponse): Promise<RecruterJobs[]> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<RecruterJobs[]>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RecruterJobs[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RecruterJobs[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getRecruiterJobsById(body: GetRecruiterJobsByIdModelRequest | undefined , abortController?: AbortController | undefined): Promise<RecruterJobs[]> {
+        let url_ = this.baseUrl + "/api/Jobs/GetRecruiterJobsById";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processGetRecruiterJobsById(_response);
+        });
+    }
+
+    protected processGetRecruiterJobsById(response: AxiosResponse): Promise<RecruterJobs[]> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<RecruterJobs[]>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RecruterJobs[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RecruterJobs[]>(null as any);
     }
 
     /**
@@ -1315,6 +1504,27 @@ export interface ApplyToJobsModelRequest {
     readonly recruterJobId?: string | null;
 }
 
+export interface CandidateJobs {
+    readonly documentId?: string | null;
+    candidateID?: string | null;
+    jobID?: string | null;
+    status?: number;
+    candidate?: User;
+    applyDate?: dayjs.Dayjs;
+    lastStatusDate?: dayjs.Dayjs;
+}
+
+export interface CandidateJobsExtendedModel {
+    readonly documentId?: string | null;
+    candidateID?: string | null;
+    jobID?: string | null;
+    status?: number;
+    candidate?: User;
+    applyDate?: dayjs.Dayjs;
+    lastStatusDate?: dayjs.Dayjs;
+    jobDetails?: Job;
+}
+
 export interface ChangeJobStatusModelRequest {
     jobId?: string | null;
     angajatorId?: string | null;
@@ -1334,9 +1544,23 @@ export interface ExpirationModelRequest {
     jobId?: string | null;
 }
 
+export interface GetCandidateJobsModelRequest {
+    userID?: string | null;
+}
+
 export interface GetJobsModelRequest {
     isRecruter?: boolean;
     isAdmin?: boolean;
+    userID?: string | null;
+}
+
+export interface GetRecruiterJobsByIdModelRequest {
+    angajatorID?: string | null;
+    jobID?: string | null;
+    readonly documentID?: string | null;
+}
+
+export interface GetRecruiterJobsModelRequest {
     userID?: string | null;
 }
 
@@ -1368,7 +1592,16 @@ export interface JobExtendedModel {
     date?: dayjs.Dayjs;
     recruterName?: string | null;
     isMine?: boolean;
+    isApplied?: boolean;
     docID?: string | null;
+}
+
+export interface RecruterJobs {
+    readonly documentId?: string | null;
+    jobId?: string | null;
+    angajatorID?: string | null;
+    job?: Job;
+    candidateList?: CandidateJobs[] | null;
 }
 
 export interface UpdateJobsModelRequest {

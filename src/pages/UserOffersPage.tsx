@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import JobUserCardElement, {
@@ -125,9 +125,17 @@ export const UserOffersPage = ({
   }
   const navigate = useNavigate();
 
-  let elementsRendered = elementsList?.map((element: JobExtendedModel) => (
+  const elementsRendered = useRef<JSX.Element[]>();
+
+  elementsRendered.current = elementsList?.map((element: JobExtendedModel) => (
     <JobUserCardElement jobInfo={element} />
   ));
+  useEffect(() => {
+    elementsRendered.current = elementsList?.map(
+      (element: JobExtendedModel) => <JobUserCardElement jobInfo={element} />
+    );
+  }, [elementsList]);
+
   return (
     <>
       <PageFooterHeaderTemplate isAdmin={false}>
@@ -136,10 +144,19 @@ export const UserOffersPage = ({
             {!isRecruiter && (
               <div className="flex justify-between">
                 <input
-                  className="entry-primary w-96"
+                  className="entry-primary shadow-md w-96"
                   type="text"
                   name="search"
-                  onChange={(e) => {}}
+                  onChange={(e) => {
+                    if (e.target.value === "") {
+                      setElementsList(initialJobsList);
+                    } else {
+                      const elements = initialJobsList?.filter((x) =>
+                        x.name?.includes(e.target.value)
+                      );
+                      setElementsList(elements);
+                    }
+                  }}
                   placeholder="Search ..."
                 />
                 <DropdownElement
@@ -194,7 +211,7 @@ export const UserOffersPage = ({
                   <LoadingSpinner />
                 </div>
               ) : (
-                elementsRendered
+                elementsRendered.current
               )}
             </div>
           </div>
