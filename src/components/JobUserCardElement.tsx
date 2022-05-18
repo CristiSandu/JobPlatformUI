@@ -1,6 +1,10 @@
 import ModalUserInfo from "./ModalUserInfo";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import { JobExtendedModel } from "../api/ui-service-client";
+import {
+  CandidateJobsExtendedModel,
+  Job,
+  JobExtendedModel,
+} from "../api/ui-service-client";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import dayjs from "dayjs";
 
@@ -17,11 +21,13 @@ export type JobUserCardParameter = {
   isMyOffer?: boolean;
 };
 export interface JobUserCardElementInterface {
-  jobInfo: JobExtendedModel;
+  jobInfo?: JobExtendedModel;
+  jobInfoExtended?: CandidateJobsExtendedModel;
 }
 
 export default function JobUserCardElement({
   jobInfo,
+  jobInfoExtended,
 }: JobUserCardElementInterface) {
   return (
     <>
@@ -38,19 +44,21 @@ export default function JobUserCardElement({
         />
 
         <div className="grow self-center space-y-0 items-center">
-          <div className="title-primary text-MainBlue">{jobInfo.name}</div>
-          <div className="text-base font-semibold">{jobInfo.recruterName}</div>
-          <div className="text-sm font-semibold">{jobInfo.address}</div>
+          <div className="title-primary text-MainBlue">{jobInfo?.name}</div>
+          <div className="text-base font-semibold">
+            {jobInfo?.recruterName ?? ""}
+          </div>
+          <div className="text-sm font-semibold">{jobInfo?.address}</div>
           <div className="text-sm font-semibold">
-            {dayjs(jobInfo.date?.toString()).format("DD.MM.YYYY")}
+            {dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-            {jobInfo.domain}
+            {jobInfo?.domain}
           </div>
 
-          {jobInfo.isMine ? (
+          {!isNullOrUndefined(jobInfo?.isMine) || jobInfo?.isMine ? (
             <div className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
               My Offer
             </div>
@@ -67,7 +75,7 @@ export default function JobUserCardElement({
                 : "text-LightBlue "
             }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
           >
-            Nr: {jobInfo.numberApplicants}/{jobInfo.numberEmp}
+            Nr: {jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
           </div>
         </div>
         <ModalUserInfo userInfo={null} isAdmin={false} jobInfo={jobInfo} />

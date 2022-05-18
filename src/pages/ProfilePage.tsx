@@ -9,7 +9,12 @@ import { auth, signOut } from "../provider/firebase";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
-import { User, UsersClient } from "../api/ui-service-client";
+import {
+  CandidateJobsExtendedModel,
+  JobsClient,
+  User,
+  UsersClient,
+} from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -18,19 +23,33 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});
+  const [userJobs, setUserJobs] = useState<CandidateJobsExtendedModel[]>([]);
+
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const usersValues = new UsersClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  const candidateJobs = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (user) {
       const fetchData = async () => {
         localStorage.setItem("JWT", await user.getIdToken());
-        const usersValues = new UsersClient(
-          process.env.REACT_APP_UI_SERVICE,
-          AxiosHelpers.axiosClient
-        );
         setIsLoading(true);
         const usersList = await usersValues.usersAll(user.uid);
+        const jobsList = await candidateJobs.getCandidateJobs({
+          userID: user.uid,
+        });
+        setUserJobs(jobsList);
         setIsLoading(false);
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
           localStorage.setItem("JWT", await user.getIdToken());
@@ -93,7 +112,7 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
             </div>
           </div>
 
-          <div className="flex justify-between ">
+          <div className="flex justify-between">
             <button
               className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
               onClick={() => {
@@ -120,6 +139,7 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               />
             </button>
           </div>
+          <div className="flex justify-between"></div>
         </div>
       </div>
     </div>

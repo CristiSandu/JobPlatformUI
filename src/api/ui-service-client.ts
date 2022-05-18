@@ -1575,6 +1575,7 @@ export interface Job {
     isCheck?: boolean;
     isExpired?: boolean;
     recruterID?: string | null;
+    recruterName?: string | null;
     date?: dayjs.Dayjs;
 }
 
@@ -1589,8 +1590,8 @@ export interface JobExtendedModel {
     isCheck?: boolean;
     isExpired?: boolean;
     recruterID?: string | null;
-    date?: dayjs.Dayjs;
     recruterName?: string | null;
+    date?: dayjs.Dayjs;
     isMine?: boolean;
     isApplied?: boolean;
     docID?: string | null;
