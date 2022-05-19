@@ -11,7 +11,6 @@ export type UserCardParameter = {
   age: string;
   domain: string;
 };
-
 export interface UserCardInterface {
   userInfo: User;
   buttonsType: ButtonsType;
