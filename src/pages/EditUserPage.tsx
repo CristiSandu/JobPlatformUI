@@ -11,6 +11,7 @@ import {
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ButtonsType } from "../util/constants";
 
 export type UserCardParameter = {
   domain: string;
@@ -106,7 +107,11 @@ export const EditUserPage = ({
   }
 
   let elementsRendered = elementsList?.map((element: User) => (
-    <UserCardElement userInfo={element} deleteUserCall={deleteUserCall} />
+    <UserCardElement
+      userInfo={element}
+      deleteUserCall={deleteUserCall}
+      buttonsType={ButtonsType.AdminUserButtons}
+    />
   ));
   return (
     <>

@@ -18,6 +18,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../provider/firebase";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ButtonsType } from "../util/constants";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -128,11 +129,27 @@ export const UserOffersPage = ({
   const elementsRendered = useRef<JSX.Element[]>();
 
   elementsRendered.current = elementsList?.map((element: JobExtendedModel) => (
-    <JobUserCardElement jobInfo={element} />
+    <JobUserCardElement
+      jobInfo={element}
+      buttonsType={
+        element.isApplied
+          ? ButtonsType.DefaultCancel
+          : ButtonsType.UserJobApplyButton
+      }
+    />
   ));
   useEffect(() => {
     elementsRendered.current = elementsList?.map(
-      (element: JobExtendedModel) => <JobUserCardElement jobInfo={element} />
+      (element: JobExtendedModel) => (
+        <JobUserCardElement
+          jobInfo={element}
+          buttonsType={
+            element.isApplied
+              ? ButtonsType.DefaultCancel
+              : ButtonsType.UserJobApplyButton
+          }
+        />
+      )
     );
   }, [elementsList]);
 

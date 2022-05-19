@@ -18,12 +18,17 @@ import {
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import JobUserCardElement from "../components/JobUserCardElement";
+import { ButtonsType } from "../util/constants";
 
 export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});
   const [userJobs, setUserJobs] = useState<CandidateJobsExtendedModel[]>([]);
+  const [initialUserJobs, setInitialUserJobs] = useState<
+    CandidateJobsExtendedModel[]
+  >([]);
 
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -40,18 +45,41 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
 
   useEffect(() => {}, []);
 
+  function onClickFilter(filterName: string): void {
+    if (filterName === "On Hold") {
+      const elements = initialUserJobs?.filter((elem) => elem.status === 0);
+      setUserJobs(elements);
+      return;
+    } else if (filterName === "Accepted") {
+      const elements = initialUserJobs?.filter((elem) => elem.status === 1);
+      setUserJobs(elements);
+      return;
+    } else if (filterName === "Rejected") {
+      const elements = initialUserJobs?.filter((elem) => elem.status === 2);
+      setUserJobs(elements);
+      return;
+    } else {
+      setUserJobs(initialUserJobs);
+      return;
+    }
+  }
+
   useEffect(() => {
     if (user) {
       const fetchData = async () => {
         localStorage.setItem("JWT", await user.getIdToken());
         setIsLoading(true);
         const usersList = await usersValues.usersAll(user.uid);
-        const jobsList = await candidateJobs.getCandidateJobs({
-          userID: user.uid,
-        });
-        setUserJobs(jobsList);
+
         setIsLoading(false);
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
+          if (usersList[0].type === "Candidate") {
+            const jobsList = await candidateJobs.getCandidateJobs({
+              userID: user.uid,
+            });
+            setUserJobs(jobsList);
+            setInitialUserJobs(jobsList);
+          }
           localStorage.setItem("JWT", await user.getIdToken());
           setUserDetails(usersList[0]);
         }
@@ -60,6 +88,13 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
       fetchData().catch(console.error);
     }
   }, [user, loading, error, navigate]);
+
+  const jobCards = userJobs.map((element: CandidateJobsExtendedModel) => (
+    <JobUserCardElement
+      jobInfoExtended={element}
+      buttonsType={ButtonsType.DefaultCancel}
+    />
+  ));
 
   return (
     <div className="pt-8 h-screen">
@@ -111,7 +146,43 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               <div className="text-xl">{userDetails.description_last_job}</div>
             </div>
           </div>
-
+          {initialUserJobs.length !== 0 && (
+            <div className="flex justify-center space-x-8">
+              <button
+                className="btn-primary focus:bg-LightBlue"
+                onClick={() => {
+                  onClickFilter("On Hold");
+                }}
+              >
+                On Hold
+              </button>
+              <button
+                className="btn-primary focus:bg-LightBlue"
+                onClick={() => {
+                  onClickFilter("Accepted");
+                }}
+              >
+                Accepted
+              </button>
+              <button
+                className="btn-primary focus:bg-LightBlue"
+                onClick={() => {
+                  onClickFilter("Rejected");
+                }}
+              >
+                Rejected
+              </button>
+              <button
+                className="btn-primary focus:bg-LightBlue"
+                onClick={() => {
+                  onClickFilter("All");
+                }}
+              >
+                All
+              </button>
+            </div>
+          )}
+          <div className="flex justify-between">{jobCards}</div>
           <div className="flex justify-between">
             <button
               className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
@@ -139,7 +210,6 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               />
             </button>
           </div>
-          <div className="flex justify-between"></div>
         </div>
       </div>
     </div>

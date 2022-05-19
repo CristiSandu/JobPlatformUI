@@ -28,6 +28,7 @@ export const LoginPage = (): JSX.Element => {
         );
         const usersList = await usersValues.usersAll(user.uid);
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
+          localStorage.setItem("userInfo", JSON.stringify(usersList[0]));
           localStorage.setItem("JWT", await user.getIdToken());
           if (usersList[0].isAdmin) navigate("/editUsers");
           else navigate("/profilePage1");

@@ -4,6 +4,7 @@ import { JobUserCardParameter } from "../components/JobUserCardElement";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import UserCardElement from "../components/UserCardElement";
 import { UserProfileData } from "./ProfileFormPage";
+import { ButtonsType } from "../util/constants";
 
 export type JobPageExtendedParams = {
   jobInfo: JobUserCardParameter;
@@ -82,7 +83,10 @@ export const JobPageExtended = ({
   ];
 
   let elementsRendered = elementsList.map((element: UserProfileData) => (
-    <UserCardElement userInfo={element} />
+    <UserCardElement
+      userInfo={element}
+      buttonsType={ButtonsType.DefaultCancel}
+    />
   ));
   return (
     <PageFooterHeaderTemplate isAdmin={false}>

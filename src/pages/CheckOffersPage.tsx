@@ -8,13 +8,14 @@ import {
   DropdownClient,
   JobExtendedModel,
   JobsClient,
-  UsersClient,
+  User,
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
-import { auth, signIn, signUpWithGoogle } from "../provider/firebase";
+import { auth } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ButtonsType } from "../util/constants";
 
 export type UserCardParameter = {
   domain: string;
@@ -35,15 +36,12 @@ export const CheckOffersPage = ({
   const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
   const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 
+  const [userInfo, setUserInfo] = useState<User>();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, loading, error] = useAuthState(auth);
 
   const jobsValues = new JobsClient(
-    process.env.REACT_APP_UI_SERVICE,
-    AxiosHelpers.axiosClient
-  );
-
-  const usersValues = new UsersClient(
     process.env.REACT_APP_UI_SERVICE,
     AxiosHelpers.axiosClient
   );
@@ -60,12 +58,15 @@ export const CheckOffersPage = ({
       const uid = user?.uid;
       if (isNullOrUndefined(uid)) return;
       const elementDropdown = await dropdownsValues.domainsAll();
-      const usersList = await usersValues.usersAll(uid ?? "");
-      if (isNullOrUndefined(usersList) || isNullOrUndefined(usersList[0]))
-        return;
+
+      let newObject = window.localStorage.getItem("userInfo");
+      let newobj = !isNullOrUndefined(newObject) ? newObject : "";
+      const userinfo: User = JSON.parse(newobj);
+      setUserInfo(userinfo);
+
       const jobsList = await jobsValues.getJobs({
-        isRecruter: usersList[0].type === "Recruiter",
-        isAdmin: usersList[0].isAdmin,
+        isRecruter: userinfo.type === "Recruiter",
+        isAdmin: userinfo.isAdmin,
         userID: uid,
       });
 
@@ -135,7 +136,11 @@ export const CheckOffersPage = ({
   }
 
   let elementsRendered = elementsList?.map((element: JobExtendedModel) => (
-    <JobCardElement jobInfo={element} checkAJobCall={checkAJobCall} />
+    <JobCardElement
+      jobInfo={element}
+      checkAJobCall={checkAJobCall}
+      buttonsType={ButtonsType.AdminJobButtons}
+    />
   ));
   return (
     <>

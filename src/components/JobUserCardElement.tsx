@@ -7,6 +7,8 @@ import {
 } from "../api/ui-service-client";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { ButtonsType } from "../util/constants";
 
 export type JobUserCardParameter = {
   name: string;
@@ -23,12 +25,44 @@ export type JobUserCardParameter = {
 export interface JobUserCardElementInterface {
   jobInfo?: JobExtendedModel;
   jobInfoExtended?: CandidateJobsExtendedModel;
+  buttonsType: ButtonsType;
 }
 
 export default function JobUserCardElement({
   jobInfo,
   jobInfoExtended,
+  buttonsType,
 }: JobUserCardElementInterface) {
+  const [labelValue, setLabelValue] = useState<string>();
+  const [colorLabel, setColorLabel] = useState<string>();
+
+  var utc = require("dayjs/plugin/utc");
+  dayjs.extend(utc);
+
+  useEffect(() => {
+    if (!isNullOrUndefined(jobInfoExtended)) {
+      switch (jobInfoExtended.status) {
+        case 0: {
+          setLabelValue("On hold");
+          setColorLabel("text-YellowWaiting border-YellowWaiting");
+          break;
+        }
+        case 1: {
+          setLabelValue("Accepted");
+          setColorLabel("text-GreenCheck border-GreenCheck");
+
+          break;
+        }
+        case 2: {
+          setLabelValue("Rejected");
+          setColorLabel("text-RedDelete border-RedDelete");
+
+          break;
+        }
+      }
+    }
+  }, [jobInfoExtended]);
+
   return (
     <>
       <div
@@ -44,41 +78,76 @@ export default function JobUserCardElement({
         />
 
         <div className="grow self-center space-y-0 items-center">
-          <div className="title-primary text-MainBlue">{jobInfo?.name}</div>
-          <div className="text-base font-semibold">
-            {jobInfo?.recruterName ?? ""}
+          <div className="title-primary text-MainBlue">
+            {jobInfo?.name || jobInfoExtended?.jobDetails?.name}
           </div>
-          <div className="text-sm font-semibold">{jobInfo?.address}</div>
+          <div className="text-base font-semibold">
+            {jobInfo?.recruterName || jobInfoExtended?.jobDetails?.recruterName}
+          </div>
           <div className="text-sm font-semibold">
-            {dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY")}
+            {jobInfo?.address || jobInfoExtended?.jobDetails?.address}
+          </div>
+          <div className="text-sm font-semibold">
+            {dayjs(jobInfoExtended?.jobDetails?.date?.toString()).format(
+              "DD.MM.YYYY"
+            ) || dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-            {jobInfo?.domain}
+            {jobInfo?.domain || jobInfoExtended?.jobDetails?.domain}
           </div>
 
-          {!isNullOrUndefined(jobInfo?.isMine) || jobInfo?.isMine ? (
-            <div className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-              My Offer
+          {(!isNullOrUndefined(jobInfo?.isMine) && jobInfo?.isMine) ||
+          (!isNullOrUndefined(jobInfo?.isApplied) && !jobInfo?.isApplied) ? (
+            <div
+              className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32"
+              onClick={() => {}}
+            >
+              {!jobInfo?.isApplied ? "Apply" : jobInfo?.isMine && "My Offer"}
+            </div>
+          ) : !isNullOrUndefined(jobInfoExtended?.status) ? (
+            <div
+              className={`flex-none rounded bg-LightBlue ${colorLabel} border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
+            >
+              {labelValue}
             </div>
           ) : (
             <div />
           )}
 
-          <div
-            className={`flex-none rounded bg-WhiteBlue  ${
-              !isNullOrUndefined(jobInfo?.numberApplicants) &&
-              !isNullOrUndefined(jobInfo?.numberEmp) &&
-              jobInfo?.numberApplicants >= jobInfo?.numberEmp
-                ? "text-SecondBlue border-SecondBlue border-2"
-                : "text-LightBlue "
-            }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
-          >
-            Nr: {jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
-          </div>
+          {!isNullOrUndefined(jobInfo) ? (
+            <div
+              className={`flex-none rounded bg-WhiteBlue  ${
+                !isNullOrUndefined(jobInfo) &&
+                !isNullOrUndefined(jobInfo?.numberEmp) &&
+                !isNullOrUndefined(jobInfo?.numberApplicants) &&
+                jobInfo?.numberApplicants >= jobInfo?.numberEmp
+                  ? "text-SecondBlue border-SecondBlue border-2"
+                  : "text-LightBlue "
+              }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
+            >
+              Nr: {jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
+            </div>
+          ) : (
+            <div
+              className={`flex-none rounded bg-WhiteBlue  ${"text-SecondBlue border-SecondBlue border-2"}  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
+            >
+              {!isNullOrUndefined(jobInfoExtended?.lastStatusDate) &&
+                dayjs(jobInfoExtended?.lastStatusDate.toString()).format(
+                  "DD.MM.YYYY"
+                )}
+            </div>
+          )}
         </div>
-        <ModalUserInfo userInfo={null} isAdmin={false} jobInfo={jobInfo} />
+        {!isNullOrUndefined(jobInfo) && (
+          <ModalUserInfo
+            userInfo={null}
+            jobInfo={jobInfo === undefined ? null : jobInfo}
+            isAdmin={false}
+            buttonsType={buttonsType}
+          />
+        )}
       </div>
     </>
   );

@@ -1,15 +1,20 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import ValidationSwitch from "./ValidationSwitch";
 import { useNavigate } from "react-router-dom";
 import { JobExtendedModel, User } from "../api/ui-service-client";
-import dayjs from "dayjs";
+import UserInfoInModal from "./UserInfoInModal";
+import JobInfoInModal from "./JobInfoInModal";
+import MainModalContent from "./MainModalContent";
+import { isNullOrUndefined } from "../util/generic-helpers";
+import ButtonsModalLayout from "./ButtonsModalLayout";
+import { ButtonsType } from "../util/constants";
 
 export type ModalInformationParam = {
   userInfo: User | null;
   jobInfo: JobExtendedModel | null;
   isAdmin: boolean;
+  buttonsType: ButtonsType;
   deleteUserCall?: (UID: string) => void;
   checkAJobCall?: (jobId: string, value: boolean) => void;
 };
@@ -17,16 +22,23 @@ export type ModalInformationParam = {
 export default function ModalUserInfo({
   userInfo,
   jobInfo,
+  buttonsType,
   isAdmin,
   deleteUserCall,
   checkAJobCall,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
 
-  const navigate = useNavigate();
+  let newObject = window.localStorage.getItem("userInfo");
+  let newobj = !isNullOrUndefined(newObject) ? newObject : "";
+  const userinfo: User = JSON.parse(newobj);
 
   function validationChange(position: number): void {
     console.log(position);
+  }
+
+  function closeModalCall(position: boolean): void {
+    setShowModal(position);
   }
 
   return (
@@ -61,237 +73,27 @@ export default function ModalUserInfo({
                   )}
 
                   {userInfo !== null ? (
-                    <div className="space-y-8">
-                      <div className="space-y-2">
-                        <div className="title-primary text-4xl font-semibold">
-                          {userInfo?.name}
-                        </div>
-                        <div className="title-primary text-base font-mono">
-                          {userInfo?.email}
-                        </div>
-                      </div>
-
-                      <div className="flex space-x-12">
-                        <div className="flex content-center items-end">
-                          <div className="text-3xl font-semibold">
-                            {userInfo?.age}
-                          </div>
-                          <div className="text-sm font-mono">Years</div>
-                        </div>
-                        <div className="flex space-x-4 items-center">
-                          <div className="rounded bg-MainBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                            {userInfo?.type}
-                          </div>
-                          <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                            {userInfo?.domain}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <UserInfoInModal userInfo={userInfo} />
                   ) : (
-                    <div className="space-y-1">
-                      <div>
-                        <div className="title-primary text-4xl font-semibold">
-                          {jobInfo?.name}
-                        </div>
-                        <div className="title-primary text-base font-mono">
-                          {jobInfo?.recruterName}
-                        </div>
-                        <div className="title-primary text-base font-mono">
-                          Nr:{jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
-                        </div>
-                      </div>
-
-                      <div className="flex space-x-12">
-                        <div className="content-center items-end">
-                          <div className="text-sm font-mono">Date</div>
-                          <div className="text-sm font-mono">
-                            {dayjs(jobInfo?.date?.toString()).format(
-                              "DD.MM.YYYY"
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex space-x-4 items-center">
-                          <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                            {jobInfo?.domain}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <JobInfoInModal jobInfo={jobInfo} />
                   )}
                 </div>
                 {/*body*/}
-                {userInfo !== null ? (
-                  <div className="relative p-6 flex-auto">
-                    <div className="space-y-4">
-                      <div className="font-semibold text-xl font-mono">
-                        Last Level Graduate
-                      </div>
-                      <div className="text-4xl">
-                        {userInfo?.last_level_grad}
-                      </div>
-                      <div className="text-4xl">
-                        Location : {userInfo?.location}
-                      </div>
-                      <div className="text-4xl">
-                        Last job description: {userInfo?.description_last_job}
-                      </div>
-                      <div className="text-4xl">
-                        Phone Number: {userInfo?.phone}
-                      </div>
-                      <div className="text-4xl">
-                        Description: {userInfo?.description}
-                      </div>
-                    </div>
-                    {!isAdmin ? (
-                      <div className="grid grid-cols-3 grid-rows-2">
-                        <div />
-                        <div />
-                        <div />
-                        <div />
-                        <div />
-                        <ValidationSwitch validationChange={validationChange} />
-                      </div>
-                    ) : (
-                      <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                        I always felt like I could do anything. That’s the main
-                        thing people are controlled by! Thoughts- their
-                        perception of themselves! They're slowed down by their
-                        perception of themselves. If you're taught you can’t do
-                        anything, you won’t do anything. I was taught I could do
-                        everything. I always felt like I could do anything.
-                        That’s the main thing people are controlled by!
-                        Thoughts- their perception of themselves! They're slowed
-                        down by their perception of themselves. If you're taught
-                        you can’t do anything, you won’t do anything. I was
-                        taught I could do everything. I always felt like I could
-                        do anything. That’s the main thing people are controlled
-                        by! Thoughts- their perception of themselves! They're
-                        slowed down by their perception of themselves. If you're
-                        taught you can’t do anything, you won’t do anything. I
-                        was taught I could do everything. I always felt like I
-                        could do anything. That’s the main thing people are
-                        controlled by! Thoughts- their perception of themselves!
-                        They're slowed down by their perception of themselves.
-                        If you're taught you can’t do anything, you won’t do
-                        anything. I was taught I could do everything.
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="relative p-6 space-y-8 flex-auto">
-                    <div>
-                      <div className="font-semibold text-2xl font-mono">
-                        Job Description
-                      </div>
-                      <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                        {jobInfo?.description}
-                      </p>
-                      <div className="font-semibold text-2xl font-mono">
-                        Location: {jobInfo?.address}
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <MainModalContent
+                  isRecruiter={userinfo.type === "Recruiter"}
+                  jobInfo={jobInfo}
+                  userInfo={userInfo}
+                  validationChange={validationChange}
+                />
                 {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b space-x-4">
-                  {userInfo !== null ? (
-                    <>
-                      <button
-                        className="btn-primary bg-RedDelete"
-                        type="button"
-                        onClick={() => {
-                          if (deleteUserCall !== undefined)
-                            deleteUserCall(userInfo?.documentId ?? "");
-                          setShowModal(false);
-                        }}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="btn-primary"
-                        type="button"
-                        onClick={() => {
-                          setShowModal(false);
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : isAdmin ? (
-                    <>
-                      <button
-                        className="btn-primary bg-GreenCheck"
-                        type="button"
-                        onClick={() => {
-                          if (checkAJobCall !== undefined)
-                            checkAJobCall(jobInfo?.docID ?? "", true);
-                          setShowModal(false);
-                        }}
-                      >
-                        Check
-                      </button>
-                      <button
-                        className="btn-primary bg-RedDelete"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="btn-primary"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : jobInfo?.isMine ? (
-                    <>
-                      <button
-                        className="btn-primary bg-SecondBlue"
-                        type="button"
-                        onClick={() => {
-                          setShowModal(false);
-                          navigate("/profilePage2");
-                        }}
-                      >
-                        Extended Page
-                      </button>
-                      <button
-                        className="btn-primary bg-SecondBlue"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Expired
-                      </button>
-                      <button
-                        className="btn-primary bg-RedDelete"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Delete
-                      </button>
-                      <button
-                        className="btn-primary"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="btn-primary"
-                        type="button"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  )}
-                </div>
+                <ButtonsModalLayout
+                  buttonsType={buttonsType}
+                  closeModalCall={closeModalCall}
+                  jobInfo={jobInfo}
+                  userInfo={userInfo}
+                  checkAJobCall={checkAJobCall}
+                  deleteUserCall={deleteUserCall}
+                />
               </div>
             </div>
           </div>

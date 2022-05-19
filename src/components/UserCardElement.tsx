@@ -1,5 +1,5 @@
-import { userInfo } from "os";
 import { User } from "../api/ui-service-client";
+import { ButtonsType } from "../util/constants";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
 
@@ -14,11 +14,14 @@ export type UserCardParameter = {
 
 export interface UserCardInterface {
   userInfo: User;
+  buttonsType: ButtonsType;
+
   deleteUserCall?: (UID: string) => void;
 }
 
 export default function UserCardElement({
   userInfo,
+  buttonsType,
   deleteUserCall,
 }: UserCardInterface) {
   return (
@@ -43,6 +46,7 @@ export default function UserCardElement({
         </div>
         <ModalUserInfo
           userInfo={userInfo}
+          buttonsType={buttonsType}
           isAdmin={false}
           jobInfo={null}
           deleteUserCall={deleteUserCall}

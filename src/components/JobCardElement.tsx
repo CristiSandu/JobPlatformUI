@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faRectangleXmark } from "@fortawesome/free-solid-svg-icons";
 import { JobExtendedModel } from "../api/ui-service-client";
 import dayjs from "dayjs";
+import { ButtonsType } from "../util/constants";
 
 export type JobCardParameter = {
   name: string;
@@ -17,11 +18,13 @@ export type JobCardParameter = {
 
 export interface JobCardElementInterface {
   jobInfo: JobExtendedModel;
+  buttonsType: ButtonsType;
   checkAJobCall?: (jobId: string, value: boolean) => void;
 }
 
 export default function JobCardElement({
   jobInfo,
+  buttonsType,
   checkAJobCall,
 }: JobCardElementInterface) {
   return (
@@ -71,6 +74,7 @@ export default function JobCardElement({
         </div>
         <ModalUserInfo
           userInfo={null}
+          buttonsType={buttonsType}
           isAdmin={true}
           jobInfo={jobInfo}
           checkAJobCall={checkAJobCall}
