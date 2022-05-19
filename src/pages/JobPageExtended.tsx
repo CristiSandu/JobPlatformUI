@@ -3,8 +3,17 @@ import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import JobPostLogo from "../Images/job_post_logo.svg";
 import UserCardElement from "../components/UserCardElement";
-import { UserProfileData } from "./ProfileFormPage";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, FromEnum, PassingDataTo } from "../util/constants";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { isNullOrUndefined } from "../util/generic-helpers";
+import {
+  CandidateJobs,
+  JobsClient,
+  RecruterJobs,
+} from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
+import dayjs from "dayjs";
 
 export type JobPageExtendedParams = {
   jobInfo: JobUserCardParameter;
@@ -13,85 +22,56 @@ export type JobPageExtendedParams = {
 export const JobPageExtended = ({
   jobInfo,
 }: JobPageExtendedParams): JSX.Element => {
-  const elementsList: UserProfileData[] = [
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: 32,
-      description: "description",
-      description_last_job: "Inginer Programator (.NET with React)",
+  const [isFromProfile, setIsFromProfile] = useState<FromEnum>();
+  const [recruiterJobsList, setRecruiterJobsList] = useState<RecruterJobs>();
 
-      last_level_grad: "UPB",
-      location: "Bucharest, Romania",
-      phone: "0725635489",
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: 32,
-      description: "description",
-      description_last_job: "asdasdasds",
-      last_level_grad: "UPB",
-      location: "Bucharest, Romania",
-      phone: "0725635489",
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: 32,
-      description: "description",
-      description_last_job: "asdasdasds",
-      last_level_grad: "UPB",
-      location: "Bucharest, Romania",
-      phone: "0725635489",
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: 32,
-      description: "description",
-      description_last_job: "asdasdasds",
-      last_level_grad: "UPB",
-      location: "Bucharest, Romania",
-      phone: "0725635489",
-      name: "Sandu Ilie Cristian",
-    },
-    {
-      domain: "HoReCa",
-      email: "ilie.cristian.sandu@gmail.com",
-      gender: "M",
-      type: "employee",
-      age: 32,
-      description: "description",
-      description_last_job: "asdasdasds",
-      last_level_grad: "UPB",
-      location: "Bucharest, Romania",
-      phone: "0725635489",
-      name: "Sandu Ilie Cristian",
-    },
-  ];
+  const location = useLocation();
 
-  let elementsRendered = elementsList.map((element: UserProfileData) => (
-    <UserCardElement
-      userInfo={element}
-      buttonsType={ButtonsType.DefaultCancel}
-    />
-  ));
+  const jobData = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isNullOrUndefined(location.state)) {
+        const dataFromNav: PassingDataTo = location.state as PassingDataTo;
+        setIsFromProfile(dataFromNav.isFrom);
+
+        if (dataFromNav.isFrom === FromEnum.FromMainJobs) {
+          const recruiterList = await jobData.getRecruiterJobsById({
+            angajatorID: dataFromNav.employerId,
+            jobID: dataFromNav.jobId,
+          });
+          if (
+            !isNullOrUndefined(recruiterList) &&
+            !isNullOrUndefined(recruiterList[0])
+          ) {
+            setRecruiterJobsList(recruiterList[0]);
+          }
+        }
+        if (dataFromNav.isFrom === FromEnum.FromUserProfile) {
+        }
+      }
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+
+  let elementsRendered = recruiterJobsList?.candidateList?.map(
+    (element: CandidateJobs) => (
+      <UserCardElement
+        userInfo={
+          !isNullOrUndefined(element.candidate) ? element.candidate : {}
+        }
+        buttonsType={ButtonsType.DefaultCancel}
+      />
+    )
+  );
   return (
     <PageFooterHeaderTemplate isAdmin={false}>
       <div className="pt-8 w-full">
-        <div className="space-y-12 scroll">
+        <div className="space-y-8 scroll">
           <div className="grid grid-cols-4 gap-4">
             <button className="btn-primary bg-SecondBlue focus:bg-LightBlue">
               Update
@@ -115,39 +95,41 @@ export const JobPageExtended = ({
             <div className="space-y-1">
               <div>
                 <div className="title-primary text-4xl font-semibold">
-                  {jobInfo?.name}
+                  {recruiterJobsList?.job?.name}
                 </div>
                 <div className="title-primary text-base font-mono">
-                  {jobInfo?.employer}
+                  {recruiterJobsList?.job?.recruterName}
                 </div>
                 <div className="title-primary text-base font-mono">
-                  Nr:{jobInfo?.applicants}/{jobInfo?.number_of_places}
+                  Nr:{recruiterJobsList?.job?.numberEmp}
                 </div>
               </div>
 
               <div className="flex space-x-12">
                 <div className="content-center items-end">
                   <div className="text-sm font-mono">Date</div>
-                  <div className="text-sm font-mono">{jobInfo?.date}</div>
+                  <div className="text-sm font-mono">
+                    {dayjs(recruiterJobsList?.job?.date).format("DD.MM.YYYY")}
+                  </div>
                 </div>
                 <div className="flex space-x-4 items-center">
                   <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                    {jobInfo?.type}
+                    {recruiterJobsList?.job?.domain}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="relative p-6 space-y-8 flex-auto">
+          <div className="relative pr-6 pt-4 space-y-8 flex-auto">
             <div>
               <div className="font-semibold text-2xl font-mono">
                 Job Description
               </div>
               <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                {jobInfo?.description}
+                {recruiterJobsList?.job?.description}
               </p>
               <div className="font-semibold text-2xl font-mono">
-                Location: {jobInfo?.location}
+                Location: {recruiterJobsList?.job?.address}
               </div>
             </div>
           </div>

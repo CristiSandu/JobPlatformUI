@@ -11,7 +11,6 @@ import {
   JobExtendedModel,
   JobsClient,
   User,
-  UsersClient,
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -44,11 +43,6 @@ export const UserOffersPage = ({
     AxiosHelpers.axiosClient
   );
 
-  const usersValues = new UsersClient(
-    process.env.REACT_APP_UI_SERVICE,
-    AxiosHelpers.axiosClient
-  );
-
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
       process.env.REACT_APP_UI_SERVICE,
@@ -58,27 +52,20 @@ export const UserOffersPage = ({
     const fetchData = async () => {
       setIsLoading(true);
 
-      const uid = user?.uid;
-      if (isNullOrUndefined(uid)) return;
-
       const elementDropdown = await dropdownsValues.domainsAll();
-      const usersList = await usersValues.usersAll(uid ?? "");
 
-      if (isNullOrUndefined(usersList) || isNullOrUndefined(usersList[0]))
-        return;
+      let newObject = window.localStorage.getItem("userInfo");
+      let newobj = !isNullOrUndefined(newObject) ? newObject : "";
+      const userinfo: User = JSON.parse(newobj);
 
-      localStorage.setItem(
-        "userType",
-        (usersList[0].type === "Recruiter").toString()
-      );
-      setIsRecruiter(usersList[0].type === "Recruiter");
+      setIsRecruiter(userinfo?.type === "Recruiter");
 
-      setUserData(usersList[0]);
+      setUserData(userinfo);
 
       const jobsList = await jobsValues.getJobs({
-        isRecruter: usersList[0].type === "Recruiter",
-        isAdmin: usersList[0].isAdmin,
-        userID: uid,
+        isRecruter: userinfo.type === "Recruiter",
+        isAdmin: userinfo.isAdmin,
+        userID: userinfo.documentId,
       });
 
       elementDropdown.unshift({ name: "Domains" });
@@ -132,9 +119,11 @@ export const UserOffersPage = ({
     <JobUserCardElement
       jobInfo={element}
       buttonsType={
-        element.isApplied
-          ? ButtonsType.DefaultCancel
-          : ButtonsType.UserJobApplyButton
+        !element.isApplied && userData?.type === "Candidate"
+          ? ButtonsType.UserJobApplyButton
+          : element.isMine && userData?.type === "Recruiter"
+          ? ButtonsType.RecruiterJobButtons
+          : ButtonsType.DefaultCancel
       }
     />
   ));
@@ -144,9 +133,11 @@ export const UserOffersPage = ({
         <JobUserCardElement
           jobInfo={element}
           buttonsType={
-            element.isApplied
-              ? ButtonsType.DefaultCancel
-              : ButtonsType.UserJobApplyButton
+            !element.isApplied && userData?.type === "Candidate"
+              ? ButtonsType.UserJobApplyButton
+              : element.isMine && userData?.type === "Recruiter"
+              ? ButtonsType.RecruiterJobButtons
+              : ButtonsType.DefaultCancel
           }
         />
       )

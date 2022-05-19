@@ -4,6 +4,7 @@ import {
   CandidateJobsExtendedModel,
   Job,
   JobExtendedModel,
+  RecruterJobs,
 } from "../api/ui-service-client";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import dayjs from "dayjs";
@@ -25,12 +26,14 @@ export type JobUserCardParameter = {
 export interface JobUserCardElementInterface {
   jobInfo?: JobExtendedModel;
   jobInfoExtended?: CandidateJobsExtendedModel;
+  jobInfoRecruter?: RecruterJobs;
   buttonsType: ButtonsType;
 }
 
 export default function JobUserCardElement({
   jobInfo,
   jobInfoExtended,
+  jobInfoRecruter,
   buttonsType,
 }: JobUserCardElementInterface) {
   const [labelValue, setLabelValue] = useState<string>();
@@ -64,7 +67,7 @@ export default function JobUserCardElement({
   }, [jobInfoExtended]);
 
   return (
-    <>
+    <div className="grow px-4">
       <div
         className="flex static rounded-md bg-CardGray px-4 py-2 space-x-5 shadow-md hover:cursor-pointer"
         onClick={() => console.log("taeaeradfd")}
@@ -104,7 +107,7 @@ export default function JobUserCardElement({
               className="flex-none rounded bg-LightBlue text-GreenCheck border-GreenCheck border-2 px-4 py-1 text-center font-bold text-sm items-center h-max w-32"
               onClick={() => {}}
             >
-              {!jobInfo?.isApplied ? "Apply" : jobInfo?.isMine && "My Offer"}
+              {jobInfo?.isMine ? "My Offer" : !jobInfo?.isApplied && "Apply"}
             </div>
           ) : !isNullOrUndefined(jobInfoExtended?.status) ? (
             <div
@@ -143,12 +146,13 @@ export default function JobUserCardElement({
         {!isNullOrUndefined(jobInfo) && (
           <ModalUserInfo
             userInfo={null}
+            status={-1}
             jobInfo={jobInfo === undefined ? null : jobInfo}
             isAdmin={false}
             buttonsType={buttonsType}
           />
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import {
   CandidateJobsExtendedModel,
   JobsClient,
+  RecruterJobs,
   User,
   UsersClient,
 } from "../api/ui-service-client";
@@ -19,12 +20,19 @@ import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import JobUserCardElement from "../components/JobUserCardElement";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, UserType } from "../util/constants";
 
 export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});
+  const [userJobsRecruter, setUserJobsRecruter] = useState<RecruterJobs[]>([]);
+  const [initialUserJobsRecruter, setInitialUserJobsRecruter] = useState<
+    RecruterJobs[]
+  >([]);
+
+  const [userTypeValue, setUserTypeValue] = useState<UserType>();
+
   const [userJobs, setUserJobs] = useState<CandidateJobsExtendedModel[]>([]);
   const [initialUserJobs, setInitialUserJobs] = useState<
     CandidateJobsExtendedModel[]
@@ -77,8 +85,17 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
             const jobsList = await candidateJobs.getCandidateJobs({
               userID: user.uid,
             });
+            setUserTypeValue(UserType.User);
             setUserJobs(jobsList);
             setInitialUserJobs(jobsList);
+          } else if (usersList[0].type === "Recruiter") {
+            const jobsList = await candidateJobs.getRecruiterJobs({
+              userID: user.uid,
+            });
+            setUserTypeValue(UserType.Recruiter);
+
+            setUserJobsRecruter(jobsList);
+            setInitialUserJobsRecruter(jobsList);
           }
           localStorage.setItem("JWT", await user.getIdToken());
           setUserDetails(usersList[0]);
@@ -96,26 +113,35 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
     />
   ));
 
+  const jobCardsRecruter = userJobsRecruter.map((element: RecruterJobs) => (
+    <JobUserCardElement
+      jobInfo={element.job}
+      buttonsType={ButtonsType.DefaultCancel}
+    />
+  ));
+
   return (
     <div className="pt-8 h-screen">
-      <div className="space-y-12 grid place-items-center">
-        <span className="font-sans text-3xl font-semibold pb-12">
+      <div className="space-y-12 content-center">
+        <span className="font-sans text-3xl font-semibold pb-12 grid place-items-center">
           {userDetails.isAdmin ? "My Admin Profile" : "My Profile"}
         </span>
 
         {isLoading ? (
-          <div className="grid place-items-center h-64 w-64">
+          <div className="grid place-items-center">
             <LoadingSpinner />
           </div>
         ) : (
-          <ProfilePicture
-            height="262"
-            width="262"
-            isMasculine={userDetails.gender !== "F"}
-          />
+          <div className="grid place-items-center">
+            <ProfilePicture
+              height="262"
+              width="262"
+              isMasculine={userDetails.gender !== "F"}
+            />
+          </div>
         )}
 
-        <div className="items-center space-y-8">
+        <div className="flex-col items-center space-y-8">
           <div className="grow self-center space-y-1 items-center grid place-items-center">
             <div className="title-primary text-2xl">{userDetails.name}</div>
             <div className="text-sm">{userDetails.email}</div>
@@ -127,24 +153,30 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
                 {!isNullOrUndefined(userDetails?.age) && "Years"}
               </div>
             </div>
-            <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-8 w-max">
+            <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 text-center font-bold text-xl items-center h-8 w-max">
               {userDetails.domain}
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 ">
+            {userTypeValue === UserType.User && (
+              <div>
+                <div>Last Level Graduate</div>
+                <div className="text-xl">{userDetails.last_level_grad}</div>
+              </div>
+            )}
             <div>
-              <div>Last Level Graduate</div>
-              <div className="text-xl">{userDetails.last_level_grad}</div>
-            </div>
-            <div>
-              <div>Description</div>
+              {userTypeValue === UserType.User && <div>Description</div>}
               <div className="text-xl w-96">{userDetails.description}</div>
             </div>
-            <div>
-              <div>Last Job Description</div>
-              <div className="text-xl">{userDetails.description_last_job}</div>
-            </div>
+            {userTypeValue === UserType.User && (
+              <div>
+                <div>Last Job Description</div>
+                <div className="text-xl">
+                  {userDetails.description_last_job}
+                </div>
+              </div>
+            )}
           </div>
           {initialUserJobs.length !== 0 && (
             <div className="flex justify-center space-x-8">
@@ -182,7 +214,9 @@ export const ProfilePage = ({ userInfo }: UserPageParams): JSX.Element => {
               </button>
             </div>
           )}
-          <div className="flex justify-between">{jobCards}</div>
+          <div className="flex-col space-y-4">
+            {jobCards.length === 0 ? jobCardsRecruter : jobCards}
+          </div>
           <div className="flex justify-between">
             <button
               className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"

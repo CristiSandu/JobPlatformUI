@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { JobExtendedModel, User } from "../api/ui-service-client";
-import { ButtonsType } from "../util/constants";
+import { JobExtendedModel, JobsClient, User } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
+import { ButtonsType, FromEnum } from "../util/constants";
+import { isNullOrUndefined } from "../util/generic-helpers";
 
 export interface ButtonsModalLayoutInterface {
   userInfo: User | null;
@@ -22,6 +24,11 @@ export default function ButtonsModalLayout({
 }: ButtonsModalLayoutInterface) {
   const navigate = useNavigate();
   const [buttonRow, setButtonRow] = useState<JSX.Element>();
+
+  const jobData = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
 
   useEffect(() => {
     switch (buttonsType) {
@@ -90,7 +97,13 @@ export default function ButtonsModalLayout({
               type="button"
               onClick={() => {
                 closeModalCall(false);
-                navigate("/profilePage2");
+                navigate("/profilePage2", {
+                  state: {
+                    jobId: jobInfo?.docID,
+                    employerId: jobInfo?.recruterID,
+                    isFrom: FromEnum.FromMainJobs,
+                  },
+                });
               }}
             >
               Extended Page
@@ -138,14 +151,30 @@ export default function ButtonsModalLayout({
             <button
               className="btn-primary bg-SecondBlue"
               type="button"
-              onClick={() => closeModalCall(false)}
+              onClick={async () => {
+                let newObject = window.localStorage.getItem("userInfo");
+                let newobj = !isNullOrUndefined(newObject) ? newObject : "";
+                const userinfo: User = JSON.parse(newobj);
+
+                const respons = await jobData.applyToAJob({
+                  angajatorId: jobInfo?.recruterID,
+                  jobId: jobInfo?.docID,
+                  candidateId: userinfo.documentId,
+                });
+
+                if (respons) {
+                  closeModalCall(false);
+                }
+              }}
             >
               Apply
             </button>
             <button
               className="btn-primary"
               type="button"
-              onClick={() => closeModalCall(false)}
+              onClick={() => {
+                closeModalCall(false);
+              }}
             >
               Cancel
             </button>

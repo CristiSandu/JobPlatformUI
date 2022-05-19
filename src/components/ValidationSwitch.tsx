@@ -6,13 +6,15 @@ function classNames(...classes: string[]) {
 }
 
 export type ValidationSwitchParams = {
+  status: number;
   validationChange: (position: number) => void;
 };
 
 export default function ValidationSwitch({
+  status,
   validationChange,
 }: ValidationSwitchParams) {
-  const [selectedElement, setSelectedElement] = useState<number>(1);
+  const [selectedElement, setSelectedElement] = useState<number>(status);
   const [selectedMessage, setSelectedMessage] = useState<string>("On Hold");
 
   function validationPress(position: number): void {

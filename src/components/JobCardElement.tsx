@@ -74,6 +74,7 @@ export default function JobCardElement({
         </div>
         <ModalUserInfo
           userInfo={null}
+          status={-1}
           buttonsType={buttonsType}
           isAdmin={true}
           jobInfo={jobInfo}

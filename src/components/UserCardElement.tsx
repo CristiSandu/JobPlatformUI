@@ -1,4 +1,5 @@
-import { User } from "../api/ui-service-client";
+import { useState } from "react";
+import { CandidateJobs, User } from "../api/ui-service-client";
 import { ButtonsType } from "../util/constants";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
@@ -12,7 +13,8 @@ export type UserCardParameter = {
   domain: string;
 };
 export interface UserCardInterface {
-  userInfo: User;
+  userInfo?: User;
+  userInfoExt?: CandidateJobs;
   buttonsType: ButtonsType;
 
   deleteUserCall?: (UID: string) => void;
@@ -20,9 +22,17 @@ export interface UserCardInterface {
 
 export default function UserCardElement({
   userInfo,
+  userInfoExt,
   buttonsType,
   deleteUserCall,
 }: UserCardInterface) {
+  const [userData, setUserData] = useState<User>(
+    userInfo !== undefined
+      ? userInfo
+      : userInfoExt?.candidate !== undefined
+      ? userInfoExt?.candidate
+      : {}
+  );
   return (
     <>
       <div
@@ -32,19 +42,20 @@ export default function UserCardElement({
         <ProfilePicture
           height="80"
           width="80"
-          isMasculine={userInfo.gender !== "F"}
+          isMasculine={userData.gender !== "F"}
         />
         <div className="grow self-center space-y-1 items-center">
-          <div className="title-primary">{userInfo.name}</div>
-          <div className="text-sm">{userInfo.email}</div>
+          <div className="title-primary">{userData.name}</div>
+          <div className="text-sm">{userData.email}</div>
         </div>
         <div className="grid grid-cols-1 items-center">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-            {userInfo.domain}
+            {userData.domain}
           </div>
         </div>
         <ModalUserInfo
-          userInfo={userInfo}
+          userInfo={userData}
+          status={userInfoExt?.status !== undefined ? userInfoExt.status : 1}
           buttonsType={buttonsType}
           isAdmin={false}
           jobInfo={null}

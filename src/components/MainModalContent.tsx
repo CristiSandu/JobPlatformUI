@@ -3,6 +3,7 @@ import ValidationSwitch from "./ValidationSwitch";
 
 export interface MainModalContentInterface {
   jobInfo: JobExtendedModel | null;
+  status: number;
   userInfo: User | null;
   isRecruiter: boolean;
   validationChange: (position: number) => void;
@@ -10,6 +11,7 @@ export interface MainModalContentInterface {
 
 export default function MainModalContent({
   jobInfo,
+  status,
   userInfo,
   isRecruiter,
   validationChange,
@@ -37,7 +39,10 @@ export default function MainModalContent({
               <div />
               <div />
               <div />
-              <ValidationSwitch validationChange={validationChange} />
+              <ValidationSwitch
+                status={status}
+                validationChange={validationChange}
+              />
             </div>
           )}
         </div>

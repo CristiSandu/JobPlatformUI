@@ -1,7 +1,6 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import { useNavigate } from "react-router-dom";
 import { JobExtendedModel, User } from "../api/ui-service-client";
 import UserInfoInModal from "./UserInfoInModal";
 import JobInfoInModal from "./JobInfoInModal";
@@ -13,6 +12,7 @@ import { ButtonsType } from "../util/constants";
 export type ModalInformationParam = {
   userInfo: User | null;
   jobInfo: JobExtendedModel | null;
+  status: number;
   isAdmin: boolean;
   buttonsType: ButtonsType;
   deleteUserCall?: (UID: string) => void;
@@ -22,6 +22,7 @@ export type ModalInformationParam = {
 export default function ModalUserInfo({
   userInfo,
   jobInfo,
+  status,
   buttonsType,
   isAdmin,
   deleteUserCall,
@@ -81,6 +82,7 @@ export default function ModalUserInfo({
                 {/*body*/}
                 <MainModalContent
                   isRecruiter={userinfo.type === "Recruiter"}
+                  status={status}
                   jobInfo={jobInfo}
                   userInfo={userInfo}
                   validationChange={validationChange}
