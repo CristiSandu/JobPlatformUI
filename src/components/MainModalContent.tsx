@@ -33,16 +33,15 @@ export default function MainModalContent({
             <div className="text-4xl">Description: {userInfo?.description}</div>
           </div>
           {isRecruiter && (
-            <div className="grid grid-cols-3 grid-rows-2">
+            <div className="grid grid-cols-3">
               <div />
               <div />
-              <div />
-              <div />
-              <div />
-              <ValidationSwitch
-                status={status}
-                validationChange={validationChange}
-              />
+              <div className="flex-col justify-between">
+                <ValidationSwitch
+                  status={status}
+                  validationChange={validationChange}
+                />
+              </div>
             </div>
           )}
         </div>

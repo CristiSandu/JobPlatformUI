@@ -61,8 +61,16 @@ export const JobPageExtended = ({
   let elementsRendered = recruiterJobsList?.candidateList?.map(
     (element: CandidateJobs) => (
       <UserCardElement
-        userInfo={
-          !isNullOrUndefined(element.candidate) ? element.candidate : {}
+        userInfoExt={!isNullOrUndefined(element) ? element : {}}
+        recruterId={
+          !isNullOrUndefined(recruiterJobsList.angajatorID)
+            ? recruiterJobsList.angajatorID
+            : ""
+        }
+        jobId={
+          !isNullOrUndefined(recruiterJobsList.jobId)
+            ? recruiterJobsList.jobId
+            : ""
         }
         buttonsType={ButtonsType.DefaultCancel}
       />

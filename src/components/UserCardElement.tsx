@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { CandidateJobs, User } from "../api/ui-service-client";
+import { useNavigate } from "react-router-dom";
+import { CandidateJobs, JobsClient, User } from "../api/ui-service-client";
+import { AxiosHelpers } from "../util/axios-helper";
 import { ButtonsType } from "../util/constants";
 import ModalUserInfo from "./ModalUserInfo";
 import ProfilePicture from "./ProfilePicture";
@@ -16,7 +18,8 @@ export interface UserCardInterface {
   userInfo?: User;
   userInfoExt?: CandidateJobs;
   buttonsType: ButtonsType;
-
+  recruterId?: string;
+  jobId?: string;
   deleteUserCall?: (UID: string) => void;
 }
 
@@ -24,6 +27,8 @@ export default function UserCardElement({
   userInfo,
   userInfoExt,
   buttonsType,
+  recruterId,
+  jobId,
   deleteUserCall,
 }: UserCardInterface) {
   const [userData, setUserData] = useState<User>(
@@ -33,6 +38,36 @@ export default function UserCardElement({
       ? userInfoExt?.candidate
       : {}
   );
+
+  const jobInstance = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  function validationChange(position: number): void {
+    const fetchData = async () => {
+      if (
+        userInfoExt !== undefined &&
+        recruterId !== undefined &&
+        jobId !== undefined
+      ) {
+        const respos: boolean = await jobInstance.jobStatus({
+          angajatorId: recruterId,
+          candidateId: userInfoExt.candidateID,
+          jobId: jobId,
+          jobStatus: position,
+        });
+
+        if (!respos) {
+          alert("Error! \nCan't change status right now!");
+        } else {
+          alert("Success! \nStatus changed!");
+        }
+      }
+    };
+
+    fetchData().catch(console.error);
+  }
   return (
     <>
       <div
@@ -55,8 +90,9 @@ export default function UserCardElement({
         </div>
         <ModalUserInfo
           userInfo={userData}
-          status={userInfoExt?.status !== undefined ? userInfoExt.status : 1}
+          status={userInfoExt?.status !== undefined ? userInfoExt.status : 0}
           buttonsType={buttonsType}
+          validationChange={validationChange}
           isAdmin={false}
           jobInfo={null}
           deleteUserCall={deleteUserCall}

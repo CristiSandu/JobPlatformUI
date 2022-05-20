@@ -160,7 +160,9 @@ export const UserOffersPage = ({
                       setElementsList(initialJobsList);
                     } else {
                       const elements = initialJobsList?.filter((x) =>
-                        x.name?.includes(e.target.value)
+                        x.name
+                          ?.toLowerCase()
+                          .includes(e.target.value.toLowerCase())
                       );
                       setElementsList(elements);
                     }
@@ -194,7 +196,9 @@ export const UserOffersPage = ({
                     </button>
                     <button
                       className="btn-primary focus:bg-LightBlue"
-                      onClick={() => onClickFilter("true")}
+                      onClick={() => {
+                        onClickFilter("true");
+                      }}
                     >
                       Full
                     </button>

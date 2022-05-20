@@ -146,7 +146,8 @@ export const JobDescriptionFormPage = ({
                     jobData.isExpired = false;
                     jobData.recruterID = userData?.documentId;
                     jobData.date = dayjs(Date.now());
-                    const response = await jobInstance.jobsPOST({
+                    jobData.recruterName = userData?.name;
+                    const response: boolean = await jobInstance.jobsPOST({
                       jobData: jobData,
                     });
                     if (response) navigate(-1);

@@ -16,6 +16,7 @@ export type ModalInformationParam = {
   isAdmin: boolean;
   buttonsType: ButtonsType;
   deleteUserCall?: (UID: string) => void;
+  validationChange?: (position: number) => void;
   checkAJobCall?: (jobId: string, value: boolean) => void;
 };
 
@@ -26,6 +27,7 @@ export default function ModalUserInfo({
   buttonsType,
   isAdmin,
   deleteUserCall,
+  validationChange,
   checkAJobCall,
 }: ModalInformationParam) {
   const [showModal, setShowModal] = React.useState(false);
@@ -33,10 +35,6 @@ export default function ModalUserInfo({
   let newObject = window.localStorage.getItem("userInfo");
   let newobj = !isNullOrUndefined(newObject) ? newObject : "";
   const userinfo: User = JSON.parse(newobj);
-
-  function validationChange(position: number): void {
-    console.log(position);
-  }
 
   function closeModalCall(position: boolean): void {
     setShowModal(position);
@@ -85,7 +83,9 @@ export default function ModalUserInfo({
                   status={status}
                   jobInfo={jobInfo}
                   userInfo={userInfo}
-                  validationChange={validationChange}
+                  validationChange={
+                    validationChange !== undefined ? validationChange : () => {}
+                  }
                 />
                 {/*footer*/}
                 <ButtonsModalLayout

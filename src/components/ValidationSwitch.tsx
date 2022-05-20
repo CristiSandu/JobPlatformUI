@@ -15,15 +15,17 @@ export default function ValidationSwitch({
   validationChange,
 }: ValidationSwitchParams) {
   const [selectedElement, setSelectedElement] = useState<number>(status);
-  const [selectedMessage, setSelectedMessage] = useState<string>("On Hold");
+  const [selectedMessage, setSelectedMessage] = useState<string>(
+    status !== 2 ? (status !== 1 ? "On Hold" : "Accepted") : "Rejected"
+  );
 
   function validationPress(position: number): void {
     switch (position) {
       case 0:
-        setSelectedMessage("Accepted");
+        setSelectedMessage("On Hold");
         break;
       case 1:
-        setSelectedMessage("On Hold");
+        setSelectedMessage("Accepted");
         break;
       case 2:
         setSelectedMessage("Rejected");
@@ -34,26 +36,26 @@ export default function ValidationSwitch({
   }
 
   return (
-    <div className="justify-between space-y-2">
+    <div className="grow justify-between space-y-2 w-56">
       <div className="flex justify-between items-center h-9 border-4 border-LightBlue gb-WhiteBlue rounded-2xl p-2">
         <div
           className={`h-6 w-6 rounded-full  ${
-            selectedElement === 0
+            selectedElement === 1
               ? "bg-GreenCheck"
               : "bg-CardGray hover:bg-GreenCheck"
           } `}
           onClick={() => {
-            validationPress(0);
+            validationPress(1);
           }}
         ></div>
         <div
           className={`h-6 w-6 rounded-full  ${
-            selectedElement === 1
+            selectedElement === 0
               ? "bg-YellowWaiting"
               : "bg-CardGray hover:bg-YellowWaiting"
           } `}
           onClick={() => {
-            validationPress(1);
+            validationPress(0);
           }}
         ></div>
         <div
@@ -69,7 +71,7 @@ export default function ValidationSwitch({
       </div>
       <p
         className={`${
-          selectedElement === 1
+          selectedElement === 0
             ? "text-YellowWaiting"
             : selectedElement === 2
             ? "text-RedDelete"
