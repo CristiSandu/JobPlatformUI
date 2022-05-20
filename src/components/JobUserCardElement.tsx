@@ -9,7 +9,8 @@ import {
 import { isNullOrUndefined } from "../util/generic-helpers";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, FromEnum } from "../util/constants";
+import { useNavigate } from "react-router-dom";
 
 export type JobUserCardParameter = {
   name: string;
@@ -39,6 +40,13 @@ export default function JobUserCardElement({
   const [labelValue, setLabelValue] = useState<string>();
   const [colorLabel, setColorLabel] = useState<string>();
 
+  const jobData: Job =
+    jobInfoExtended?.jobDetails !== undefined
+      ? jobInfoExtended?.jobDetails
+      : jobInfoRecruter?.job !== undefined
+      ? jobInfoRecruter?.job
+      : {};
+
   var utc = require("dayjs/plugin/utc");
   dayjs.extend(utc);
 
@@ -66,8 +74,23 @@ export default function JobUserCardElement({
     }
   }, [jobInfoExtended]);
 
+  const navigate = useNavigate();
+
   return (
-    <div className="grow px-4">
+    <div
+      className="grow px-4"
+      onClick={() => {
+        console.log(jobInfoRecruter);
+        if (!isNullOrUndefined(jobInfoRecruter)) {
+          navigate("/profilePage2", {
+            state: {
+              jobDetail: jobInfoRecruter,
+              isFrom: FromEnum.FromUserProfile,
+            },
+          });
+        }
+      }}
+    >
       <div
         className="flex static rounded-md bg-CardGray px-4 py-2 space-x-5 shadow-md hover:cursor-pointer"
         onClick={() => console.log("taeaeradfd")}
@@ -82,24 +105,22 @@ export default function JobUserCardElement({
 
         <div className="grow self-center space-y-0 items-center">
           <div className="title-primary text-MainBlue">
-            {jobInfo?.name || jobInfoExtended?.jobDetails?.name}
+            {jobInfo?.name || jobData.name}
           </div>
           <div className="text-base font-semibold">
-            {jobInfo?.recruterName || jobInfoExtended?.jobDetails?.recruterName}
+            {jobInfo?.recruterName || jobData.recruterName}
           </div>
           <div className="text-sm font-semibold">
-            {jobInfo?.address || jobInfoExtended?.jobDetails?.address}
+            {jobInfo?.address || jobData.address}
           </div>
           <div className="text-sm font-semibold">
             {dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY") ||
-              dayjs(jobInfoExtended?.jobDetails?.date?.toString()).format(
-                "DD.MM.YYYY"
-              )}
+              dayjs(jobData.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
           <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 py-1 text-center font-bold text-sm items-center h-max w-32">
-            {jobInfo?.domain || jobInfoExtended?.jobDetails?.domain}
+            {jobInfo?.domain || jobData.domain}
           </div>
 
           {(!isNullOrUndefined(jobInfo?.isMine) && jobInfo?.isMine) ||
@@ -120,18 +141,23 @@ export default function JobUserCardElement({
             <div />
           )}
 
-          {!isNullOrUndefined(jobInfo) ? (
+          {!isNullOrUndefined(jobInfo) || !isNullOrUndefined(jobData) ? (
             <div
               className={`flex-none rounded bg-WhiteBlue  ${
-                !isNullOrUndefined(jobInfo) &&
-                !isNullOrUndefined(jobInfo?.numberEmp) &&
-                !isNullOrUndefined(jobInfo?.numberApplicants) &&
-                jobInfo?.numberApplicants >= jobInfo?.numberEmp
+                (!isNullOrUndefined(jobInfo) &&
+                  !isNullOrUndefined(jobInfo?.numberEmp) &&
+                  !isNullOrUndefined(jobInfo?.numberApplicants) &&
+                  jobInfo?.numberApplicants >= jobInfo?.numberEmp) ||
+                (!isNullOrUndefined(jobData) &&
+                  !isNullOrUndefined(jobData.numberEmp) &&
+                  !isNullOrUndefined(jobData.numberApplicants) &&
+                  jobData.numberApplicants >= jobData.numberEmp)
                   ? "text-SecondBlue border-SecondBlue border-2"
                   : "text-LightBlue "
               }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
             >
-              Nr: {jobInfo?.numberApplicants}/{jobInfo?.numberEmp}
+              Nr: {jobInfo?.numberApplicants || jobData.numberApplicants}/
+              {jobInfo?.numberEmp || jobData.numberEmp}
             </div>
           ) : (
             <div

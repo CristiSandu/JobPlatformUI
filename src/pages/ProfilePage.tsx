@@ -119,7 +119,7 @@ export const ProfilePage = ({
 
   const jobCardsRecruter = userJobsRecruter.map((element: RecruterJobs) => (
     <JobUserCardElement
-      jobInfo={element.job}
+      jobInfoRecruter={element}
       buttonsType={ButtonsType.DefaultCancel}
     />
   ));

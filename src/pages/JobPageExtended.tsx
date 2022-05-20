@@ -74,6 +74,10 @@ export const JobPageExtended = ({
           }
         }
         if (dataFromNav.isFrom === FromEnum.FromUserProfile) {
+          setRecruiterJobsList(dataFromNav.jobDetail);
+          if (dataFromNav.jobDetail?.job?.isExpired !== undefined) {
+            setIsJobExpired(dataFromNav.jobDetail?.job?.isExpired);
+          }
         }
       }
     };

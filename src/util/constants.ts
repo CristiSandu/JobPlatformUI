@@ -1,3 +1,4 @@
+import { RecruterJobs } from "../api/ui-service-client";
 
 export enum ButtonsType {
     AdminUserButtons = 0,
@@ -13,8 +14,9 @@ export enum FromEnum {
 }
 
 export interface PassingDataTo {
-    jobId: string | null;
-    employerId: string | null;
+    jobId?: string | null;
+    employerId?: string | null;
+    jobDetail?: RecruterJobs;
     isFrom: FromEnum,
 }
 

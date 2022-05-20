@@ -31,13 +31,12 @@ export default function UserCardElement({
   jobId,
   deleteUserCall,
 }: UserCardInterface) {
-  const [userData, setUserData] = useState<User>(
+  const userData: User =
     userInfo !== undefined
       ? userInfo
       : userInfoExt?.candidate !== undefined
       ? userInfoExt?.candidate
-      : {}
-  );
+      : {};
 
   const jobInstance = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,

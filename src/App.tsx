@@ -518,9 +518,7 @@ function App() {
           ></Route>
           <Route
             path="/profilePageAdmin"
-            element={
-              <ProfilePageTemplate userInfo={userInfo} isRecruiter={0} />
-            }
+            element={<ProfilePage userInfo={userInfo} isRecruiter={0} />}
           ></Route>
           <Route
             path="/profilePage"
