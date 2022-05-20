@@ -18,6 +18,7 @@ import { auth } from "../provider/firebase";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ButtonsType } from "../util/constants";
+import NoDataImage from "../Images/no_data_logo.svg";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -222,8 +223,23 @@ export const UserOffersPage = ({
                 <div className="grid place-items-center h-96">
                   <LoadingSpinner />
                 </div>
-              ) : (
+              ) : elementsList?.length !== 0 ? (
                 elementsRendered.current
+              ) : (
+                <div className="flex justify-center items-center">
+                  <div className="grid place-items-center space-y-10">
+                    <img
+                      className="z-0"
+                      src={NoDataImage}
+                      height={308}
+                      width={316}
+                      alt="No Data Logo"
+                    />
+                    <p className="title-primary text-MainBlue font-bold text-3xl rounded">
+                      No Data
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
           </div>

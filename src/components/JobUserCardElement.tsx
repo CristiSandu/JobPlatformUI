@@ -156,7 +156,7 @@ export default function JobUserCardElement({
                   : "text-LightBlue "
               }  px-4 py-1 text-center font-bold text-sm items-center h-max w-32`}
             >
-              Nr: {jobInfo?.numberApplicants || jobData.numberApplicants}/
+              Nr: {jobInfo?.numberApplicants || jobData.numberApplicants || 0}/
               {jobInfo?.numberEmp || jobData.numberEmp}
             </div>
           ) : (

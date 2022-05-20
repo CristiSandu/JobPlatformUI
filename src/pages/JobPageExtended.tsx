@@ -7,7 +7,7 @@ import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 
 import UserCardElement from "../components/UserCardElement";
 import { ButtonsType, FromEnum, PassingDataTo } from "../util/constants";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import {
@@ -17,6 +17,7 @@ import {
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import dayjs from "dayjs";
+import NoDataImage from "../Images/no_data_logo.svg";
 
 export type JobPageExtendedParams = {
   jobInfo: JobUserCardParameter;
@@ -31,6 +32,7 @@ export const JobPageExtended = ({
   const [isJobExpired, setIsJobExpired] = useState<boolean>(false);
 
   const location = useLocation();
+  const navigator = useNavigate();
 
   const jobData = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,
@@ -147,9 +149,20 @@ export const JobPageExtended = ({
             >
               Delete
             </button>
-            <button className="btn-primary focus:bg-LightBlue">Back</button>
+            <button
+              className="btn-primary focus:bg-LightBlue"
+              onClick={() => {
+                if (isFromProfile === FromEnum.FromMainJobs) {
+                  navigator("/profilePage1");
+                } else {
+                  navigator(-1);
+                }
+              }}
+            >
+              Back
+            </button>
           </div>
-          <div className="flex items-start justify-between p-5 pr-8 border-b border-solid border-slate-200 rounded-t">
+          <div className="flex justify-between pt-5 pl-5 pb-2 pr-0 border-b border-solid border-slate-200 rounded-t">
             <img
               className="z-0"
               src={JobPostLogo}
@@ -157,8 +170,8 @@ export const JobPageExtended = ({
               width="207"
               alt="React Logo"
             />
-            <div className="space-y-1">
-              <div>
+            <div className="space-y-2 justify-between">
+              <div className="space-y-1">
                 <div className="title-primary text-4xl font-semibold">
                   {recruiterJobsList?.job?.name}
                 </div>
@@ -170,17 +183,15 @@ export const JobPageExtended = ({
                 </div>
               </div>
 
-              <div className="flex space-x-12">
+              <div className="flex space-x-12 items-center justify-between">
                 <div className="content-center items-end">
                   <div className="text-sm font-mono">Date</div>
                   <div className="text-sm font-mono">
                     {dayjs(recruiterJobsList?.job?.date).format("DD.MM.YYYY")}
                   </div>
                 </div>
-                <div className="flex space-x-4 items-center">
-                  <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
-                    {recruiterJobsList?.job?.domain}
-                  </div>
+                <div className="rounded bg-LightBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">
+                  {recruiterJobsList?.job?.domain}
                 </div>
               </div>
               {isJobExpired && (
@@ -206,7 +217,21 @@ export const JobPageExtended = ({
               </div>
             </div>
           </div>
-          <div className="space-y-5">{elementsRendered}</div>
+
+          {elementsRendered?.length !== 0 ? (
+            <div className="space-y-5">{elementsRendered}</div>
+          ) : (
+            <div>
+              <img
+                className="z-0"
+                src={NoDataImage}
+                height={308}
+                width={316}
+                alt="No Data Logo"
+              />
+              <p>No Data</p>
+            </div>
+          )}
         </div>
       </div>
     </PageFooterHeaderTemplate>
