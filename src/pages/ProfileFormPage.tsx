@@ -301,13 +301,22 @@ export const ProfileFormPage = (): JSX.Element => {
                     const response = await usersValues.usersPOST({
                       userData: userData,
                     });
-                    if (response) navigate("/profilePage1");
+                    if (response) {
+                      navigate("/profilePage1");
+                    }
                   }}
                 >
                   Save
                 </button>
                 <div />
-                <button className="btn-primary">Cancel</button>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

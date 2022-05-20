@@ -12,6 +12,8 @@ export interface ButtonsModalLayoutInterface {
   checkAJobCall?: (jobId: string, value: boolean) => void;
   closeModalCall: (isOpen: boolean) => void;
   deleteUserCall?: (UID: string) => void;
+  expireHandler?: () => void;
+  deleteOffers?: () => void;
 }
 
 export default function ButtonsModalLayout({
@@ -20,6 +22,8 @@ export default function ButtonsModalLayout({
   buttonsType,
   checkAJobCall,
   closeModalCall,
+  expireHandler,
+  deleteOffers,
   deleteUserCall,
 }: ButtonsModalLayoutInterface) {
   const navigate = useNavigate();
@@ -111,14 +115,24 @@ export default function ButtonsModalLayout({
             <button
               className="btn-primary bg-SecondBlue"
               type="button"
-              onClick={() => closeModalCall(false)}
+              onClick={() => {
+                if (!isNullOrUndefined(expireHandler)) {
+                  expireHandler();
+                  closeModalCall(false);
+                }
+              }}
             >
               Expired
             </button>
             <button
               className="btn-primary bg-RedDelete"
               type="button"
-              onClick={() => closeModalCall(false)}
+              onClick={() => {
+                if (!isNullOrUndefined(deleteOffers)) {
+                  deleteOffers();
+                  closeModalCall(false);
+                }
+              }}
             >
               Delete
             </button>

@@ -1592,8 +1592,8 @@ export interface JobExtendedModel {
     recruterID?: string | null;
     recruterName?: string | null;
     date?: dayjs.Dayjs;
-    isMine?: boolean;
-    isApplied?: boolean;
+    isMine?: boolean | null;
+    isApplied?: boolean | null;
     docID?: string | null;
 }
 

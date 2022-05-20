@@ -2,6 +2,9 @@
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import JobPostLogo from "../Images/job_post_logo.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
+
 import UserCardElement from "../components/UserCardElement";
 import { ButtonsType, FromEnum, PassingDataTo } from "../util/constants";
 import { useLocation } from "react-router-dom";
@@ -25,12 +28,29 @@ export const JobPageExtended = ({
   const [isFromProfile, setIsFromProfile] = useState<FromEnum>();
   const [recruiterJobsList, setRecruiterJobsList] = useState<RecruterJobs>();
 
+  const [isJobExpired, setIsJobExpired] = useState<boolean>(false);
+
   const location = useLocation();
 
   const jobData = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,
     AxiosHelpers.axiosClient
   );
+
+  async function expireHandler(jobId: string): Promise<boolean> {
+    const response = await jobData.expireJob({
+      isExpired: true,
+      jobId: jobId,
+    });
+
+    return response;
+  }
+
+  async function deleteOffers(jobId: string): Promise<boolean> {
+    const response = await jobData.jobsDELETE(jobId);
+
+    return response;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +68,9 @@ export const JobPageExtended = ({
             !isNullOrUndefined(recruiterList[0])
           ) {
             setRecruiterJobsList(recruiterList[0]);
+            if (recruiterList[0].job?.isExpired !== undefined) {
+              setIsJobExpired(recruiterList[0].job?.isExpired);
+            }
           }
         }
         if (dataFromNav.isFrom === FromEnum.FromUserProfile) {
@@ -84,10 +107,40 @@ export const JobPageExtended = ({
             <button className="btn-primary bg-SecondBlue focus:bg-LightBlue">
               Update
             </button>
-            <button className="btn-primary bg-SecondBlue focus:bg-LightBlue">
+            <button
+              className="btn-primary bg-SecondBlue focus:bg-LightBlue"
+              onClick={async () => {
+                if (
+                  !isNullOrUndefined(recruiterJobsList?.jobId) &&
+                  recruiterJobsList?.jobId !== undefined
+                )
+                  if (!(await expireHandler(recruiterJobsList?.jobId))) {
+                    alert("Error! \nCan't expire this offer!");
+                  } else {
+                    if (recruiterJobsList.job?.isExpired !== undefined) {
+                      setIsJobExpired(true);
+                    }
+                    alert("Success! \nThis job has expired");
+                  }
+              }}
+            >
               Expired
             </button>
-            <button className="btn-primary bg-RedDelete focus:bg-LightBlue">
+            <button
+              className="btn-primary bg-RedDelete focus:bg-LightBlue"
+              onClick={async () => {
+                if (
+                  !isNullOrUndefined(recruiterJobsList?.jobId) &&
+                  recruiterJobsList?.jobId !== undefined
+                ) {
+                  if (!(await deleteOffers(recruiterJobsList?.jobId))) {
+                    alert("Error! \nCan't delete this offer!");
+                  } else {
+                    alert("Success! \nThis job has been deleted successfully");
+                  }
+                }
+              }}
+            >
               Delete
             </button>
             <button className="btn-primary focus:bg-LightBlue">Back</button>
@@ -126,6 +179,14 @@ export const JobPageExtended = ({
                   </div>
                 </div>
               </div>
+              {isJobExpired && (
+                <div className="relative">
+                  <FontAwesomeIcon
+                    icon={faCalendarXmark}
+                    className="h-6 w-6 absolute font-bold top-2 right-0 text-RedDelete"
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className="relative pr-6 pt-4 space-y-8 flex-auto">

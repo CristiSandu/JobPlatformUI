@@ -1,13 +1,14 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import JobPostLogo from "../Images/job_post_logo.svg";
-import { JobExtendedModel, User } from "../api/ui-service-client";
+import { JobExtendedModel, JobsClient, User } from "../api/ui-service-client";
 import UserInfoInModal from "./UserInfoInModal";
 import JobInfoInModal from "./JobInfoInModal";
 import MainModalContent from "./MainModalContent";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import ButtonsModalLayout from "./ButtonsModalLayout";
 import { ButtonsType } from "../util/constants";
+import { AxiosHelpers } from "../util/axios-helper";
 
 export type ModalInformationParam = {
   userInfo: User | null;
@@ -38,6 +39,43 @@ export default function ModalUserInfo({
 
   function closeModalCall(position: boolean): void {
     setShowModal(position);
+  }
+
+  const jobData = new JobsClient(
+    process.env.REACT_APP_UI_SERVICE,
+    AxiosHelpers.axiosClient
+  );
+
+  function expireHandler(): void {
+    const fetchData = async () => {
+      const response = await jobData.expireJob({
+        isExpired: true,
+        jobId: jobInfo?.docID,
+      });
+
+      if (!response) {
+        alert("Error\n Can't expire this offer");
+      } else {
+        alert("Success\n Offer expired");
+      }
+    };
+
+    fetchData().catch(console.error);
+  }
+
+  function deleteOffers(): void {
+    const fetchData = async () => {
+      if (!isNullOrUndefined(jobInfo?.docID) && jobInfo?.docID !== undefined) {
+        const response = await jobData.jobsDELETE(jobInfo?.docID);
+        if (!response) {
+          alert("Error\nCan't delete this offer");
+        } else {
+          alert("Success\nOffer deleted");
+        }
+      }
+    };
+
+    fetchData().catch(console.error);
   }
 
   return (
@@ -91,6 +129,8 @@ export default function ModalUserInfo({
                 <ButtonsModalLayout
                   buttonsType={buttonsType}
                   closeModalCall={closeModalCall}
+                  deleteOffers={deleteOffers}
+                  expireHandler={expireHandler}
                   jobInfo={jobInfo}
                   userInfo={userInfo}
                   checkAJobCall={checkAJobCall}

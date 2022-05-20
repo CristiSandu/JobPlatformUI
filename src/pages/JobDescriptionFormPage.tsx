@@ -106,7 +106,7 @@ export const JobDescriptionFormPage = ({
                 </div>
                 <div>
                   <textarea
-                    className="entry-primary w-96 "
+                    className="entry-primary w-96 h-56"
                     name="name"
                     onChange={(e) =>
                       setJobData({
@@ -150,8 +150,11 @@ export const JobDescriptionFormPage = ({
                     const response: boolean = await jobInstance.jobsPOST({
                       jobData: jobData,
                     });
-                    if (response) navigate(-1);
-                    else alert("Error on Save, Retry");
+                    if (response) {
+                      navigate("/profilePage1");
+                    } else {
+                      alert("Error on Save, Retry");
+                    }
                   }}
                 >
                   Save
@@ -160,7 +163,6 @@ export const JobDescriptionFormPage = ({
                 <button
                   className="btn-primary"
                   onClick={() => {
-                    console.log(jobData);
                     navigate(-1);
                   }}
                 >

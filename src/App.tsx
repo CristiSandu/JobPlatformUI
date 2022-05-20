@@ -11,6 +11,7 @@ import {
 } from "./pages/JobPageExtended";
 import { LoginPage } from "./pages/LoginPage";
 import { ProfileFormPage, UserProfileData } from "./pages/ProfileFormPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { ProfilePageTemplate } from "./pages/ProfilePageTemplate";
 import { RegisterPage } from "./pages/RegisterPage";
 import { UserOffersPage } from "./pages/UserOffersPage";
@@ -523,9 +524,7 @@ function App() {
           ></Route>
           <Route
             path="/profilePage"
-            element={
-              <ProfilePageTemplate userInfo={userInfo} isRecruiter={1} />
-            }
+            element={<ProfilePage userInfo={userInfo} isRecruiter={1} />}
           ></Route>
           <Route
             path="/profilePage1"
