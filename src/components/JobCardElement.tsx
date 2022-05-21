@@ -31,7 +31,7 @@ export default function JobCardElement({
     <>
       <div
         className="flex static rounded-md bg-CardGray px-4 py-2 space-x-5 shadow-md hover:cursor-pointer"
-        onClick={() => console.log("taeaeradfd")}
+        onClick={() => {}}
       >
         <img
           className="z-0"

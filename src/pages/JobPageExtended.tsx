@@ -6,7 +6,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 
 import UserCardElement from "../components/UserCardElement";
-import { ButtonsType, FromEnum, PassingDataTo } from "../util/constants";
+import {
+  ButtonsType,
+  FromEnum,
+  PassingDataTo,
+  RoutesList,
+} from "../util/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { isNullOrUndefined } from "../util/generic-helpers";
@@ -148,7 +153,7 @@ export const JobPageExtended = (): JSX.Element => {
               className="btn-primary focus:bg-LightBlue"
               onClick={() => {
                 if (isFromProfile === FromEnum.FromMainJobs) {
-                  navigator("/profilePage1");
+                  navigator(RoutesList.HomePage);
                 } else {
                   navigator(-1);
                 }

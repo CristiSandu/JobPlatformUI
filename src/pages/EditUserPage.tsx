@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import UserCardElement from "../components/UserCardElement";
-import { UserProfileData } from "./ProfileFormPage";
 import {
-  DomainModel,
   DomainModelExtended,
   DropdownClient,
   User,

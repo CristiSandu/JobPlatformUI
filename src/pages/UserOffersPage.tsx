@@ -18,7 +18,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../provider/firebase";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, RoutesList } from "../util/constants";
 import NoDataImage from "../Images/no_data_logo.svg";
 import NoDataComponent from "../components/NoDataComponent";
 
@@ -179,7 +179,7 @@ export const UserOffersPage = (): JSX.Element => {
                 <button
                   className="btn-primary text-2xl w-full focus:bg-LightBlue"
                   onClick={() => {
-                    navigate("/jobDataForm", { state: userData });
+                    navigate(RoutesList.AddJobForm, { state: userData });
                   }}
                 >
                   + Add A Offer

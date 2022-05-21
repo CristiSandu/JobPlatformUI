@@ -12,6 +12,7 @@ import DropdownElement from "../components/DropdownElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import FormImage from "../Images/form_logo.svg";
 import { AxiosHelpers } from "../util/axios-helper";
+import { RoutesList } from "../util/constants";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
 export const JobDescriptionFormPage = (): JSX.Element => {
@@ -133,7 +134,6 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                 <button
                   className="btn-primary"
                   onClick={async () => {
-                    console.log(jobData);
                     jobData.documentId = "default";
                     jobData.numberApplicants = 0;
                     jobData.isCheck = false;
@@ -145,7 +145,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                       jobData: jobData,
                     });
                     if (response) {
-                      navigate("/profilePage1");
+                      navigate(RoutesList.HomePage);
                     } else {
                       alert("Error on Save, Retry");
                     }

@@ -25,3 +25,16 @@ export enum UserType {
     Recruiter = 1,
     User = 2,
 }
+
+export const RoutesList = {
+    Login: "/",
+    Register: "/register",
+    RegisterExtended: "/registerExtended",
+    UserAdmin: "/manageUsers",
+    JobsAdmin: "/manageJobs",
+    ProfilePageAdmin: "/profilePageAdmin",
+    ProfilePage: "/profilePage",
+    HomePage: "/homePage",
+    JobPageExtended: "/jobPage",
+    AddJobForm: "/addJob"
+}

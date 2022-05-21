@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { NavLink } from "react-router-dom";
+import { RoutesList } from "../util/constants";
 
 export type SideNavBarProps = { isUserAuthorized: boolean; isAdmin: boolean };
 
@@ -19,7 +20,7 @@ export const SideNavBar = ({
   return (
     <div className="fixed top-0 bottom-0 z-20 bg-MainBlue w-20 pt-3 ">
       <div className="w-20 h-20 p-6 box-border">
-        <NavLink end to={!isAdmin ? "/profilePage1" : "/editUsers"}>
+        <NavLink end to={!isAdmin ? RoutesList.HomePage : RoutesList.UserAdmin}>
           <FontAwesomeIcon icon={faBars} className="h-10 w-10 text-white" />
         </NavLink>
       </div>
@@ -31,9 +32,9 @@ export const SideNavBar = ({
           <>
             <NavLink
               end
-              to={"/editUsers"}
+              to={RoutesList.UserAdmin}
               className={`h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 ${
-                window.location.pathname === "/editUsers"
+                window.location.pathname === RoutesList.UserAdmin
                   ? "border-LightBlue"
                   : "border-MainBlue"
               }  box-border border-interaction bg-MainBlue`}
@@ -41,7 +42,7 @@ export const SideNavBar = ({
               <FontAwesomeIcon
                 icon={faUsersGear}
                 className={`h-10 w-10  ${
-                  window.location.pathname === "/editUsers"
+                  window.location.pathname === RoutesList.UserAdmin
                     ? "text-LightBlue"
                     : "text-white"
                 }`}
@@ -50,9 +51,9 @@ export const SideNavBar = ({
 
             <NavLink
               end
-              to={"/checkOffers"}
+              to={RoutesList.JobsAdmin}
               className={`h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 ${
-                window.location.pathname === "/checkOffers"
+                window.location.pathname === RoutesList.JobsAdmin
                   ? "border-LightBlue"
                   : "border-MainBlue"
               }  box-border border-interaction bg-MainBlue`}
@@ -60,7 +61,7 @@ export const SideNavBar = ({
               <FontAwesomeIcon
                 icon={faClipboardList}
                 className={`h-10 w-10  ${
-                  window.location.pathname === "/checkOffers"
+                  window.location.pathname === RoutesList.JobsAdmin
                     ? "text-LightBlue"
                     : "text-white"
                 }`}
@@ -69,9 +70,9 @@ export const SideNavBar = ({
 
             <NavLink
               end
-              to={"/profilePageAdmin"}
+              to={RoutesList.ProfilePageAdmin}
               className={`h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 ${
-                window.location.pathname === "/profilePageAdmin"
+                window.location.pathname === RoutesList.ProfilePageAdmin
                   ? "border-LightBlue"
                   : "border-MainBlue"
               }  box-border border-interaction bg-MainBlue`}
@@ -80,7 +81,7 @@ export const SideNavBar = ({
                 <FontAwesomeIcon
                   icon={faUser}
                   className={`h-10 w-10  ${
-                    window.location.pathname === "/profilePageAdmin"
+                    window.location.pathname === RoutesList.ProfilePageAdmin
                       ? "text-LightBlue"
                       : "text-white"
                   }`}
@@ -92,9 +93,9 @@ export const SideNavBar = ({
           <>
             <NavLink
               end
-              to={"/profilePage1"}
+              to={RoutesList.HomePage}
               className={`h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 ${
-                window.location.pathname === "/profilePage1"
+                window.location.pathname === RoutesList.HomePage
                   ? "border-LightBlue"
                   : "border-MainBlue"
               }  box-border border-interaction bg-MainBlue`}
@@ -102,7 +103,7 @@ export const SideNavBar = ({
               <FontAwesomeIcon
                 icon={faBriefcase}
                 className={`h-10 w-10  ${
-                  window.location.pathname === "/profilePage1"
+                  window.location.pathname === RoutesList.HomePage
                     ? "text-LightBlue"
                     : "text-white"
                 }`}
@@ -111,9 +112,9 @@ export const SideNavBar = ({
 
             <NavLink
               end
-              to={"/profilePage"}
+              to={RoutesList.ProfilePage}
               className={`h-16 flex items-center justify-center min-w-full border-b-0 border-solid border-t-0 border-l-4 border-r-0 ${
-                window.location.pathname === "/profilePage"
+                window.location.pathname === RoutesList.ProfilePage
                   ? "border-LightBlue"
                   : "border-MainBlue"
               }  box-border border-interaction bg-MainBlue`}
@@ -121,7 +122,7 @@ export const SideNavBar = ({
               <FontAwesomeIcon
                 icon={faUser}
                 className={`h-10 w-10  ${
-                  window.location.pathname === "/profilePage"
+                  window.location.pathname === RoutesList.ProfilePage
                     ? "text-LightBlue"
                     : "text-white"
                 }`}

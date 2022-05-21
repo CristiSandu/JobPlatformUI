@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { JobExtendedModel, JobsClient, User } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
-import { ButtonsType, FromEnum } from "../util/constants";
+import { ButtonsType, FromEnum, RoutesList } from "../util/constants";
 import { isNullOrUndefined } from "../util/generic-helpers";
 
 export interface ButtonsModalLayoutInterface {
@@ -101,7 +101,7 @@ export default function ButtonsModalLayout({
               type="button"
               onClick={() => {
                 closeModalCall(false);
-                navigate("/profilePage2", {
+                navigate(RoutesList.JobPageExtended, {
                   state: {
                     jobId: jobInfo?.docID,
                     employerId: jobInfo?.recruterID,

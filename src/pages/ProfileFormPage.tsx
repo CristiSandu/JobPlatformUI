@@ -14,6 +14,7 @@ import {
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
+import { RoutesList } from "../util/constants";
 
 export type UserProfileData = {
   email: string;
@@ -302,7 +303,7 @@ export const ProfileFormPage = (): JSX.Element => {
                       userData: userData,
                     });
                     if (response) {
-                      navigate("/profilePage1");
+                      navigate(RoutesList.HomePage);
                     }
                   }}
                 >

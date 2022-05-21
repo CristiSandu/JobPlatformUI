@@ -7,6 +7,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { UsersClient } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
+import { RoutesList } from "../util/constants";
 
 export const LoginPage = (): JSX.Element => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,6 @@ export const LoginPage = (): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("1", user);
     if (user) {
       const fetchData = async () => {
         localStorage.setItem("JWT", await user.getIdToken());
@@ -30,11 +30,11 @@ export const LoginPage = (): JSX.Element => {
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
           localStorage.setItem("userInfo", JSON.stringify(usersList[0]));
           localStorage.setItem("JWT", await user.getIdToken());
-          if (usersList[0].isAdmin) navigate("/editUsers");
-          else navigate("/profilePage1");
+          if (usersList[0].isAdmin) navigate(RoutesList.UserAdmin);
+          else navigate(RoutesList.HomePage);
         } else {
           localStorage.setItem("JWT", await user.getIdToken());
-          navigate("/profileForm");
+          navigate(RoutesList.RegisterExtended);
         }
       };
 
@@ -88,7 +88,7 @@ export const LoginPage = (): JSX.Element => {
               <button
                 className="btn-primary"
                 onClick={() => {
-                  navigate("/register");
+                  navigate(RoutesList.Register);
                 }}
               >
                 Register

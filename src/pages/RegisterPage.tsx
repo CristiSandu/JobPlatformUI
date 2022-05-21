@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import RegisterImage from "../Images/register_image.svg";
 import { auth, signUp } from "../provider/firebase";
+import { RoutesList } from "../util/constants";
 
 export const RegisterPage = (): JSX.Element => {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ export const RegisterPage = (): JSX.Element => {
     if (user) {
       const fetchData = async () => {
         localStorage.setItem("JWT", await user.getIdToken());
-        navigate("/profileForm");
+        navigate(RoutesList.RegisterExtended);
       };
 
       fetchData().catch(console.error);
@@ -77,7 +78,9 @@ export const RegisterPage = (): JSX.Element => {
               <button className="btn-primary" onClick={register}>
                 Register
               </button>
-              <button className="btn-primary">Cancel</button>
+              <button className="btn-primary" onClick={() => navigate(-1)}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>

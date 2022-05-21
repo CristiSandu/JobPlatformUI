@@ -9,7 +9,7 @@ import {
 import { isNullOrUndefined } from "../util/generic-helpers";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { ButtonsType, FromEnum } from "../util/constants";
+import { ButtonsType, FromEnum, RoutesList } from "../util/constants";
 import { useNavigate } from "react-router-dom";
 
 export type JobUserCardParameter = {
@@ -80,9 +80,8 @@ export default function JobUserCardElement({
     <div
       className="grow px-4"
       onClick={() => {
-        console.log(jobInfoRecruter);
         if (!isNullOrUndefined(jobInfoRecruter)) {
-          navigate("/profilePage2", {
+          navigate(RoutesList.JobPageExtended, {
             state: {
               jobDetail: jobInfoRecruter,
               isFrom: FromEnum.FromUserProfile,
@@ -93,7 +92,7 @@ export default function JobUserCardElement({
     >
       <div
         className="flex static rounded-md bg-CardGray px-4 py-2 space-x-5 shadow-md hover:cursor-pointer"
-        onClick={() => console.log("taeaeradfd")}
+        onClick={() => {}}
       >
         <img
           className="z-0"

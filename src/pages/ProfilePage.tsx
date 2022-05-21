@@ -20,7 +20,7 @@ import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import JobUserCardElement from "../components/JobUserCardElement";
-import { ButtonsType, UserType } from "../util/constants";
+import { ButtonsType, RoutesList, UserType } from "../util/constants";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
 export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
@@ -223,7 +223,7 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
               <button
                 className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
                 onClick={() => {
-                  navigate("/profileForm", { state: userDetails });
+                  navigate(RoutesList.RegisterExtended, { state: userDetails });
                 }}
               >
                 <div className="flex-1">Edit</div>

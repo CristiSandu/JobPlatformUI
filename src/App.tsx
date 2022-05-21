@@ -9,6 +9,7 @@ import { ProfileFormPage } from "./pages/ProfileFormPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { UserOffersPage } from "./pages/UserOffersPage";
+import { RoutesList } from "./util/constants";
 
 function App() {
   return (
@@ -16,22 +17,34 @@ function App() {
       <div className="app">
         <Routes>
           <Route path="/" element={<LoginPage />}></Route>
-          <Route path="/register" element={<RegisterPage />}></Route>
-          <Route path="/profileForm" element={<ProfileFormPage />}></Route>
-          <Route path="/editUsers" element={<EditUserPage />}></Route>
-          <Route path="/checkOffers" element={<CheckOffersPage />}></Route>
+          <Route path={RoutesList.Register} element={<RegisterPage />}></Route>
           <Route
-            path="/profilePageAdmin"
+            path={RoutesList.RegisterExtended}
+            element={<ProfileFormPage />}
+          ></Route>
+          <Route path={RoutesList.UserAdmin} element={<EditUserPage />}></Route>
+          <Route
+            path={RoutesList.JobsAdmin}
+            element={<CheckOffersPage />}
+          ></Route>
+          <Route
+            path={RoutesList.ProfilePageAdmin}
             element={<ProfilePage isRecruiter={0} />}
           ></Route>
           <Route
-            path="/profilePage"
+            path={RoutesList.ProfilePage}
             element={<ProfilePage isRecruiter={1} />}
           ></Route>
-          <Route path="/profilePage1" element={<UserOffersPage />}></Route>
-          <Route path="/profilePage2" element={<JobPageExtended />}></Route>
           <Route
-            path="/jobDataForm"
+            path={RoutesList.HomePage}
+            element={<UserOffersPage />}
+          ></Route>
+          <Route
+            path={RoutesList.JobPageExtended}
+            element={<JobPageExtended />}
+          ></Route>
+          <Route
+            path={RoutesList.AddJobForm}
             element={<JobDescriptionFormPage />}
           ></Route>
         </Routes>
