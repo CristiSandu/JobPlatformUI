@@ -23,10 +23,7 @@ import JobUserCardElement from "../components/JobUserCardElement";
 import { ButtonsType, UserType } from "../util/constants";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
-export const ProfilePage = ({
-  userInfo,
-  isRecruiter,
-}: UserPageParams): JSX.Element => {
+export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});

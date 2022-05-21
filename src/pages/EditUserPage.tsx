@@ -25,12 +25,7 @@ export type UserCardParameter = {
   name: string;
 };
 
-export type ElementsListParams = {
-  initialsElements: UserProfileData[];
-};
-export const EditUserPage = ({
-  initialsElements,
-}: ElementsListParams): JSX.Element => {
+export const EditUserPage = (): JSX.Element => {
   const [elementsList, setElementsList] = useState<User[]>();
   const [initialUsersList, setInitialUsersList] = useState<User[]>();
 
@@ -67,7 +62,7 @@ export const EditUserPage = ({
 
   function selectedElementChange(element: string, dropdownName: string): void {
     if (element === "Domain") {
-      setElementsList(initialsElements);
+      setElementsList(initialUsersList);
       return;
     }
     const elements = initialUsersList?.filter(

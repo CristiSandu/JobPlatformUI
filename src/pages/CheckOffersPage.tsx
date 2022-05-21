@@ -29,13 +29,7 @@ export type UserCardParameter = {
   name: string;
 };
 
-export type ElementsListParams = {
-  initialsElements: JobUserCardParameter[];
-};
-
-export const CheckOffersPage = ({
-  initialsElements,
-}: ElementsListParams): JSX.Element => {
+export const CheckOffersPage = (): JSX.Element => {
   const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
   const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 

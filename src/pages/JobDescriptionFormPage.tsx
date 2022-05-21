@@ -14,13 +14,7 @@ import FormImage from "../Images/form_logo.svg";
 import { AxiosHelpers } from "../util/axios-helper";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
-type BaseJobDescription = {
-  initialJobData: JobUserCardParameter;
-};
-
-export const JobDescriptionFormPage = ({
-  initialJobData,
-}: BaseJobDescription): JSX.Element => {
+export const JobDescriptionFormPage = (): JSX.Element => {
   const [jobData, setJobData] = useState<Job>({});
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
   const [userData, setUserData] = useState<User>();

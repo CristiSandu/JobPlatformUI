@@ -22,13 +22,7 @@ import { ButtonsType } from "../util/constants";
 import NoDataImage from "../Images/no_data_logo.svg";
 import NoDataComponent from "../components/NoDataComponent";
 
-export type OffersListParams = {
-  initialsElements: JobUserCardParameter[];
-};
-
-export const UserOffersPage = ({
-  initialsElements,
-}: OffersListParams): JSX.Element => {
+export const UserOffersPage = (): JSX.Element => {
   const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
   const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 

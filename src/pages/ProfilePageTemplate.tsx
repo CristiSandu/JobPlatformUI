@@ -3,7 +3,7 @@ import { ProfilePage } from "./ProfilePage";
 import { UserCardParameter } from "../components/UserCardElement";
 
 export type UserPageParams = {
-  userInfo: UserCardParameter;
+  userInfo?: UserCardParameter;
   isRecruiter: number;
 };
 

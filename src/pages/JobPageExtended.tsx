@@ -20,13 +20,7 @@ import dayjs from "dayjs";
 import NoDataImage from "../Images/no_data_logo.svg";
 import NoDataComponent from "../components/NoDataComponent";
 
-export type JobPageExtendedParams = {
-  jobInfo: JobUserCardParameter;
-};
-
-export const JobPageExtended = ({
-  jobInfo,
-}: JobPageExtendedParams): JSX.Element => {
+export const JobPageExtended = (): JSX.Element => {
   const [isFromProfile, setIsFromProfile] = useState<FromEnum>();
   const [recruiterJobsList, setRecruiterJobsList] = useState<RecruterJobs>();
 
