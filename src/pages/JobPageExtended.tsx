@@ -18,6 +18,7 @@ import {
 import { AxiosHelpers } from "../util/axios-helper";
 import dayjs from "dayjs";
 import NoDataImage from "../Images/no_data_logo.svg";
+import NoDataComponent from "../components/NoDataComponent";
 
 export type JobPageExtendedParams = {
   jobInfo: JobUserCardParameter;
@@ -221,16 +222,11 @@ export const JobPageExtended = ({
           {elementsRendered?.length !== 0 ? (
             <div className="space-y-5">{elementsRendered}</div>
           ) : (
-            <div>
-              <img
-                className="z-0"
-                src={NoDataImage}
-                height={308}
-                width={316}
-                alt="No Data Logo"
-              />
-              <p>No Data</p>
-            </div>
+            <NoDataComponent
+              imageName={NoDataImage}
+              height={"top-1/2 py-12 left-1/3"}
+              text="No user has applied yet"
+            />
           )}
         </div>
       </div>

@@ -19,18 +19,38 @@ export default function MainModalContent({
   return (
     <>
       {userInfo !== null ? (
-        <div className="relative p-6 flex-auto">
-          <div className="space-y-4">
-            <div className="font-semibold text-xl font-mono">
-              Last Level Graduate
+        <div className="relative py-6 flex-auto">
+          <div className="space-y-3 pb-4">
+            <div className="-space-y-1">
+              <p className="px-6 font-semibold text-xl font-mono">
+                Last Level Graduate
+              </p>
+              <div className="px-6 text-4xl">{userInfo?.last_level_grad}</div>
             </div>
-            <div className="text-4xl">{userInfo?.last_level_grad}</div>
-            <div className="text-4xl">Location : {userInfo?.location}</div>
-            <div className="text-4xl">
-              Last job description: {userInfo?.description_last_job}
+            <div className="-space-y-1 border-solid border-slate-200 ">
+              <p className="px-6 font-semibold text-xl font-mono">Location</p>
+              <div className="px-6 text-4xl">{userInfo?.location}</div>
             </div>
-            <div className="text-4xl">Phone Number: {userInfo?.phone}</div>
-            <div className="text-4xl">Description: {userInfo?.description}</div>
+            <div className="-space-y-1 border-solid border-slate-200 ">
+              <p className="px-6 font-semibold text-xl font-mono">
+                Last job description
+              </p>
+              <div className="px-6 text-4xl">
+                {userInfo?.description_last_job}
+              </div>
+            </div>
+            <div className="-space-y-1 border-solid border-slate-200 ">
+              <p className="px-6 font-semibold text-xl font-mono">
+                Phone Number
+              </p>
+              <div className="px-6 text-4xl">{userInfo?.phone}</div>
+            </div>
+            <div className="-space-y-1 pb-4 border-solid border-slate-200 ">
+              <p className="px-6 font-semibold text-xl font-mono">
+                Description
+              </p>
+              <div className="px-6 text-4xl">{userInfo?.description}</div>
+            </div>
           </div>
           {isRecruiter && (
             <div className="grid grid-cols-3">

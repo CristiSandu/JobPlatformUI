@@ -5,6 +5,7 @@ import UserCardElement from "../components/UserCardElement";
 import { UserProfileData } from "./ProfileFormPage";
 import {
   DomainModel,
+  DomainModelExtended,
   DropdownClient,
   User,
   UsersClient,
@@ -12,6 +13,8 @@ import {
 import { AxiosHelpers } from "../util/axios-helper";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ButtonsType } from "../util/constants";
+import NoDataComponent from "../components/NoDataComponent";
+import NoDataImage from "../Images/no_data_logo.svg";
 
 export type UserCardParameter = {
   domain: string;
@@ -33,7 +36,8 @@ export const EditUserPage = ({
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+  const [dropdownElements, setDropdownElements] =
+    useState<DomainModelExtended[]>();
 
   const usersValues = new UsersClient(
     process.env.REACT_APP_UI_SERVICE,
@@ -48,7 +52,7 @@ export const EditUserPage = ({
 
     const fetchData = async () => {
       setIsLoading(true);
-      const elementDropdown = await dropdownsValues.domainsAll();
+      const elementDropdown = await dropdownsValues.domainsAndNumbers(true);
       const usersList = await usersValues.usersAll("All");
       elementDropdown.unshift({ name: "Domain" });
 
@@ -116,7 +120,7 @@ export const EditUserPage = ({
   return (
     <>
       <PageFooterHeaderTemplate isAdmin={true}>
-        <div className="pt-8 w-full">
+        <div className="pt-8 w-full h-screen">
           <div className="space-y-12 scroll">
             <span className="font-sans text-3xl font-semibold pb-12">
               Users
@@ -145,7 +149,7 @@ export const EditUserPage = ({
               <DropdownElement
                 dropdownName="Domain"
                 selectedElementChange={selectedElementChange}
-                elements={dropdownElements}
+                elementsWithCount={dropdownElements}
               />
             </div>
 
@@ -154,8 +158,14 @@ export const EditUserPage = ({
                 <div className="grid place-items-center h-96">
                   <LoadingSpinner />
                 </div>
+              ) : elementsRendered?.length !== 0 ? (
+                <div className="space-y-5">{elementsRendered}</div>
               ) : (
-                elementsRendered
+                <NoDataComponent
+                  imageName={NoDataImage}
+                  height={"top-60 left-1/3"}
+                  text="No Data"
+                />
               )}
             </div>
           </div>

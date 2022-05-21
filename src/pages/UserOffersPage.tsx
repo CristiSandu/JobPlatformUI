@@ -7,6 +7,7 @@ import JobUserCardElement, {
 import { useNavigate } from "react-router-dom";
 import {
   DomainModel,
+  DomainModelExtended,
   DropdownClient,
   JobExtendedModel,
   JobsClient,
@@ -19,6 +20,7 @@ import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ButtonsType } from "../util/constants";
 import NoDataImage from "../Images/no_data_logo.svg";
+import NoDataComponent from "../components/NoDataComponent";
 
 export type OffersListParams = {
   initialsElements: JobUserCardParameter[];
@@ -32,7 +34,8 @@ export const UserOffersPage = ({
 
   const [userData, setUserData] = useState<User>();
 
-  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+  const [dropdownElements, setDropdownElements] =
+    useState<DomainModelExtended[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [isRecruiter, setIsRecruiter] = useState<boolean>(false);
@@ -53,7 +56,7 @@ export const UserOffersPage = ({
     const fetchData = async () => {
       setIsLoading(true);
 
-      const elementDropdown = await dropdownsValues.domainsAll();
+      const elementDropdown = await dropdownsValues.domainsAndNumbers(false);
 
       let newObject = window.localStorage.getItem("userInfo");
       let newobj = !isNullOrUndefined(newObject) ? newObject : "";
@@ -149,7 +152,7 @@ export const UserOffersPage = ({
     <>
       <PageFooterHeaderTemplate isAdmin={false}>
         <div className="pt-8 w-full">
-          <div className="space-y-12 scroll">
+          <div className="space-y-12 h-screen">
             {!isRecruiter && (
               <div className="flex justify-between">
                 <input
@@ -213,7 +216,7 @@ export const UserOffersPage = ({
                   <DropdownElement
                     dropdownName="Domains"
                     selectedElementChange={selectedElementChange}
-                    elements={dropdownElements}
+                    elementsWithCount={dropdownElements}
                   />
                 </div>
               </div>
@@ -226,20 +229,11 @@ export const UserOffersPage = ({
               ) : elementsList?.length !== 0 ? (
                 elementsRendered.current
               ) : (
-                <div className="flex justify-center items-center">
-                  <div className="grid place-items-center space-y-10">
-                    <img
-                      className="z-0"
-                      src={NoDataImage}
-                      height={308}
-                      width={316}
-                      alt="No Data Logo"
-                    />
-                    <p className="title-primary text-MainBlue font-bold text-3xl rounded">
-                      No Data
-                    </p>
-                  </div>
-                </div>
+                <NoDataComponent
+                  imageName={NoDataImage}
+                  height={"top-60 left-1/3"}
+                  text="No Data"
+                />
               )}
             </div>
           </div>

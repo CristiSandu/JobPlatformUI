@@ -25,6 +25,10 @@ export interface IDropdownClient {
     /**
      * @return Success
      */
+    domainsAndNumbers(type: boolean): Promise<DomainModelExtended[]>;
+    /**
+     * @return Success
+     */
     domainsDELETE(id: string): Promise<boolean>;
 }
 
@@ -147,6 +151,62 @@ export class DropdownClient implements IDropdownClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    domainsAndNumbers(type: boolean , abortController?: AbortController | undefined): Promise<DomainModelExtended[]> {
+        let url_ = this.baseUrl + "/api/Dropdown/DomainsAndNumbers/{type}";
+        if (type === undefined || type === null)
+            throw new Error("The parameter 'type' must be defined.");
+        url_ = url_.replace("{type}", encodeURIComponent("" + type));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processDomainsAndNumbers(_response);
+        });
+    }
+
+    protected processDomainsAndNumbers(response: AxiosResponse): Promise<DomainModelExtended[]> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<DomainModelExtended[]>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<DomainModelExtended[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<DomainModelExtended[]>(null as any);
     }
 
     /**
@@ -1537,6 +1597,12 @@ export interface ChangeJobStatusModelRequest {
 export interface DomainModel {
     readonly documentId?: string | null;
     name?: string | null;
+}
+
+export interface DomainModelExtended {
+    readonly documentId?: string | null;
+    name?: string | null;
+    count?: number;
 }
 
 export interface ExpirationModelRequest {

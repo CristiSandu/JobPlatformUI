@@ -5,6 +5,7 @@ import JobCardElement from "../components/JobCardElement";
 import { JobUserCardParameter } from "../components/JobUserCardElement";
 import {
   DomainModel,
+  DomainModelExtended,
   DropdownClient,
   JobExtendedModel,
   JobsClient,
@@ -16,6 +17,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ButtonsType } from "../util/constants";
+import NoDataComponent from "../components/NoDataComponent";
+import NoDataImage from "../Images/no_data_logo.svg";
 
 export type UserCardParameter = {
   domain: string;
@@ -57,7 +60,7 @@ export const CheckOffersPage = ({
 
       const uid = user?.uid;
       if (isNullOrUndefined(uid)) return;
-      const elementDropdown = await dropdownsValues.domainsAll();
+      const elementDropdown = await dropdownsValues.domainsAndNumbers(false);
 
       let newObject = window.localStorage.getItem("userInfo");
       let newobj = !isNullOrUndefined(newObject) ? newObject : "";
@@ -106,7 +109,8 @@ export const CheckOffersPage = ({
     setElementsList(elements);
   }
 
-  const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
+  const [dropdownElements, setDropdownElements] =
+    useState<DomainModelExtended[]>();
 
   useEffect(() => {
     const dropdownsValues = new DropdownClient(
@@ -145,7 +149,7 @@ export const CheckOffersPage = ({
   return (
     <>
       <PageFooterHeaderTemplate isAdmin={true}>
-        <div className="pt-8 w-full">
+        <div className="pt-8 w-full h-screen">
           <div className="space-y-12 scroll">
             <span className="font-sans text-3xl font-semibold pb-12">
               Offers
@@ -174,7 +178,7 @@ export const CheckOffersPage = ({
               <DropdownElement
                 dropdownName="Domains"
                 selectedElementChange={selectedElementChange}
-                elements={dropdownElements}
+                elementsWithCount={dropdownElements}
               />
             </div>
             <div className="space-y-5">
@@ -182,8 +186,14 @@ export const CheckOffersPage = ({
                 <div className="grid place-items-center h-96">
                   <LoadingSpinner />
                 </div>
+              ) : elementsRendered?.length !== 0 ? (
+                <div className="space-y-5">{elementsRendered}</div>
               ) : (
-                elementsRendered
+                <NoDataComponent
+                  imageName={NoDataImage}
+                  height={"top-60 left-1/3"}
+                  text="No Data"
+                />
               )}
             </div>
           </div>

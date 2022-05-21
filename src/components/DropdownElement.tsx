@@ -2,7 +2,7 @@
 import { Fragment, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-import { DomainModel } from "../api/ui-service-client";
+import { DomainModel, DomainModelExtended } from "../api/ui-service-client";
 import { isNullOrUndefined } from "../util/generic-helpers";
 
 function classNames(...classes: string[]) {
@@ -12,6 +12,7 @@ function classNames(...classes: string[]) {
 export type DropdownParameters = {
   dropdownName: string;
   elements?: DomainModel[];
+  elementsWithCount?: DomainModelExtended[];
   preSelectedElement?: string | null | undefined;
   selectedElementChange: (element: string, dropdownName: string) => void;
 };
@@ -19,6 +20,7 @@ export type DropdownParameters = {
 export default function DropdownElement({
   dropdownName,
   elements,
+  elementsWithCount,
   preSelectedElement,
   selectedElementChange,
 }: DropdownParameters) {
@@ -45,6 +47,32 @@ export default function DropdownElement({
       )}
     </Menu.Item>
   ));
+
+  const elementsRenderedCount = elementsWithCount?.map(
+    (element: DomainModelExtended) => (
+      <Menu.Item>
+        {({ active }) => (
+          <a
+            href="#1"
+            className={classNames(
+              active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+              "px-4 py-2 text-sm block"
+            )}
+            onClick={() => {
+              setSelectedElement(element.name ?? "Domains");
+              selectedElementChange(element.name ?? "Domains", dropdownName);
+            }}
+          >
+            <div className="flex justify-between">
+              <div>{element.name}</div>
+              <div>{element.count}</div>
+            </div>
+          </a>
+        )}
+      </Menu.Item>
+    )
+  );
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -67,7 +95,9 @@ export default function DropdownElement({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg z-10 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="py-1">{elementsRendered}</div>
+          <div className="py-1">
+            {elements !== undefined ? elementsRendered : elementsRenderedCount}
+          </div>
         </Menu.Items>
       </Transition>
     </Menu>
