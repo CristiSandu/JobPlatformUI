@@ -14,7 +14,7 @@ import {
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
-import { RoutesList } from "../util/constants";
+import { RoutesList, UserTypeConst } from "../util/constants";
 
 export type UserProfileData = {
   email: string;
@@ -148,13 +148,13 @@ export const ProfileFormPage = (): JSX.Element => {
                     preSelectedElement={userData?.type}
                     elements={[
                       { name: "Type" },
-                      { name: "Recruiter" },
-                      { name: "Candidate" },
+                      { name: UserTypeConst.Recruiter },
+                      { name: UserTypeConst.Candidate },
                     ]}
                   />
                 </div>
 
-                {selectedType === "Recruiter" ? (
+                {selectedType === UserTypeConst.Recruiter ? (
                   <div className="space-y-4">
                     <div>
                       <input
@@ -313,7 +313,7 @@ export const ProfileFormPage = (): JSX.Element => {
                 <button
                   className="btn-primary"
                   onClick={() => {
-                    navigate(-1);
+                    navigate(RoutesList.Back);
                   }}
                 >
                   Cancel

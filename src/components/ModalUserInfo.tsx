@@ -7,7 +7,7 @@ import JobInfoInModal from "./JobInfoInModal";
 import MainModalContent from "./MainModalContent";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import ButtonsModalLayout from "./ButtonsModalLayout";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, UserTypeConst } from "../util/constants";
 import { AxiosHelpers } from "../util/axios-helper";
 
 export type ModalInformationParam = {
@@ -117,7 +117,7 @@ export default function ModalUserInfo({
                 </div>
                 {/*body*/}
                 <MainModalContent
-                  isRecruiter={userinfo.type === "Recruiter"}
+                  isRecruiter={userinfo.type === UserTypeConst.Recruiter}
                   status={status}
                   jobInfo={jobInfo}
                   userInfo={userInfo}

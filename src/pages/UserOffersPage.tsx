@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import DropdownElement from "../components/DropdownElement";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
-import JobUserCardElement, {
-  JobUserCardParameter,
-} from "../components/JobUserCardElement";
+import JobUserCardElement from "../components/JobUserCardElement";
 import { useNavigate } from "react-router-dom";
 import {
-  DomainModel,
   DomainModelExtended,
   DropdownClient,
   JobExtendedModel,
@@ -18,7 +15,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../provider/firebase";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
-import { ButtonsType, RoutesList } from "../util/constants";
+import { ButtonsType, RoutesList, UserTypeConst } from "../util/constants";
 import NoDataImage from "../Images/no_data_logo.svg";
 import NoDataComponent from "../components/NoDataComponent";
 
@@ -56,12 +53,12 @@ export const UserOffersPage = (): JSX.Element => {
       let newobj = !isNullOrUndefined(newObject) ? newObject : "";
       const userinfo: User = JSON.parse(newobj);
 
-      setIsRecruiter(userinfo?.type === "Recruiter");
+      setIsRecruiter(userinfo?.type === UserTypeConst.Recruiter);
 
       setUserData(userinfo);
 
       const jobsList = await jobsValues.getJobs({
-        isRecruter: userinfo.type === "Recruiter",
+        isRecruter: userinfo.type === UserTypeConst.Recruiter,
         isAdmin: userinfo.isAdmin,
         userID: userinfo.documentId,
       });
@@ -117,9 +114,9 @@ export const UserOffersPage = (): JSX.Element => {
     <JobUserCardElement
       jobInfo={element}
       buttonsType={
-        !element.isApplied && userData?.type === "Candidate"
+        !element.isApplied && userData?.type === UserTypeConst.Candidate
           ? ButtonsType.UserJobApplyButton
-          : element.isMine && userData?.type === "Recruiter"
+          : element.isMine && userData?.type === UserTypeConst.Recruiter
           ? ButtonsType.RecruiterJobButtons
           : ButtonsType.DefaultCancel
       }
@@ -131,9 +128,9 @@ export const UserOffersPage = (): JSX.Element => {
         <JobUserCardElement
           jobInfo={element}
           buttonsType={
-            !element.isApplied && userData?.type === "Candidate"
+            !element.isApplied && userData?.type === UserTypeConst.Candidate
               ? ButtonsType.UserJobApplyButton
-              : element.isMine && userData?.type === "Recruiter"
+              : element.isMine && userData?.type === UserTypeConst.Recruiter
               ? ButtonsType.RecruiterJobButtons
               : ButtonsType.DefaultCancel
           }
@@ -145,93 +142,95 @@ export const UserOffersPage = (): JSX.Element => {
   return (
     <>
       <PageFooterHeaderTemplate isAdmin={false}>
-        <div className="pt-8 w-full">
-          <div className="space-y-12 h-screen">
-            {!isRecruiter && (
-              <div className="flex justify-between">
-                <input
-                  className="entry-primary shadow-md w-96"
-                  type="text"
-                  name="search"
-                  onChange={(e) => {
-                    if (e.target.value === "") {
-                      setElementsList(initialJobsList);
-                    } else {
-                      const elements = initialJobsList?.filter((x) =>
-                        x.name
-                          ?.toLowerCase()
-                          .includes(e.target.value.toLowerCase())
-                      );
-                      setElementsList(elements);
-                    }
-                  }}
-                  placeholder="Search ..."
-                />
-                <DropdownElement
-                  dropdownName="Domains"
-                  selectedElementChange={selectedElementChange}
-                  elements={dropdownElements}
-                />
-              </div>
-            )}
-            {isRecruiter && (
-              <div className="space-y-6">
-                <button
-                  className="btn-primary text-2xl w-full focus:bg-LightBlue"
-                  onClick={() => {
-                    navigate(RoutesList.AddJobForm, { state: userData });
-                  }}
-                >
-                  + Add A Offer
-                </button>
+        {isLoading ? (
+          <div className="space-y-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="pt-8 w-full">
+            <div className="space-y-12 h-screen">
+              {!isRecruiter && (
                 <div className="flex justify-between">
-                  <div className="grid grid-cols-3 gap-4">
-                    <button
-                      className="btn-primary focus:bg-LightBlue"
-                      onClick={() => onClickFilter("false")}
-                    >
-                      Not Full
-                    </button>
-                    <button
-                      className="btn-primary focus:bg-LightBlue"
-                      onClick={() => {
-                        onClickFilter("true");
-                      }}
-                    >
-                      Full
-                    </button>
-                    <button
-                      className="btn-primary focus:bg-LightBlue"
-                      onClick={() => onClickFilter("My Offers")}
-                    >
-                      My Offers
-                    </button>
-                  </div>
+                  <input
+                    className="entry-primary shadow-md w-96"
+                    type="text"
+                    name="search"
+                    onChange={(e) => {
+                      if (e.target.value === "") {
+                        setElementsList(initialJobsList);
+                      } else {
+                        const elements = initialJobsList?.filter((x) =>
+                          x.name
+                            ?.toLowerCase()
+                            .includes(e.target.value.toLowerCase())
+                        );
+                        setElementsList(elements);
+                      }
+                    }}
+                    placeholder="Search ..."
+                  />
                   <DropdownElement
                     dropdownName="Domains"
                     selectedElementChange={selectedElementChange}
-                    elementsWithCount={dropdownElements}
+                    elements={dropdownElements}
                   />
                 </div>
-              </div>
-            )}
-            <div className="space-y-5">
-              {isLoading ? (
-                <div className="grid place-items-center h-96">
-                  <LoadingSpinner />
-                </div>
-              ) : elementsList?.length !== 0 ? (
-                elementsRendered.current
-              ) : (
-                <NoDataComponent
-                  imageName={NoDataImage}
-                  height={"top-60 left-1/3"}
-                  text="No Data"
-                />
               )}
+              {isRecruiter && (
+                <div className="space-y-6">
+                  <button
+                    className="btn-primary text-2xl w-full focus:bg-LightBlue"
+                    onClick={() => {
+                      navigate(RoutesList.AddJobForm, { state: userData });
+                    }}
+                  >
+                    + Add A Offer
+                  </button>
+                  <div className="flex justify-between">
+                    <div className="grid grid-cols-3 gap-4">
+                      <button
+                        className="btn-primary focus:bg-LightBlue"
+                        onClick={() => onClickFilter("false")}
+                      >
+                        Not Full
+                      </button>
+                      <button
+                        className="btn-primary focus:bg-LightBlue"
+                        onClick={() => {
+                          onClickFilter("true");
+                        }}
+                      >
+                        Full
+                      </button>
+                      <button
+                        className="btn-primary focus:bg-LightBlue"
+                        onClick={() => onClickFilter("My Offers")}
+                      >
+                        My Offers
+                      </button>
+                    </div>
+                    <DropdownElement
+                      dropdownName="Domains"
+                      selectedElementChange={selectedElementChange}
+                      elementsWithCount={dropdownElements}
+                    />
+                  </div>
+                </div>
+              )}
+              <div className="space-y-5">
+                {elementsList?.length !== 0 ? (
+                  elementsRendered.current
+                ) : (
+                  <NoDataComponent
+                    imageName={NoDataImage}
+                    height={"top-60 left-1/3"}
+                    text="No Data"
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </PageFooterHeaderTemplate>
     </>
   );

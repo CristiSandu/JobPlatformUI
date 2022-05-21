@@ -9,7 +9,6 @@ import {
   User,
 } from "../api/ui-service-client";
 import DropdownElement from "../components/DropdownElement";
-import { JobUserCardParameter } from "../components/JobUserCardElement";
 import FormImage from "../Images/form_logo.svg";
 import { AxiosHelpers } from "../util/axios-helper";
 import { RoutesList } from "../util/constants";
@@ -157,7 +156,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                 <button
                   className="btn-primary"
                   onClick={() => {
-                    navigate(-1);
+                    navigate(RoutesList.Back);
                   }}
                 >
                   Cancel

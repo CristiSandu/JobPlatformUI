@@ -78,7 +78,10 @@ export const RegisterPage = (): JSX.Element => {
               <button className="btn-primary" onClick={register}>
                 Register
               </button>
-              <button className="btn-primary" onClick={() => navigate(-1)}>
+              <button
+                className="btn-primary"
+                onClick={() => navigate(RoutesList.Back)}
+              >
                 Cancel
               </button>
             </div>

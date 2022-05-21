@@ -10,7 +10,7 @@ import {
 } from "../api/ui-service-client";
 import { AxiosHelpers } from "../util/axios-helper";
 import { LoadingSpinner } from "../components/LoadingSpinner";
-import { ButtonsType } from "../util/constants";
+import { ButtonsType, UserTypeConst } from "../util/constants";
 import NoDataComponent from "../components/NoDataComponent";
 import NoDataImage from "../Images/no_data_logo.svg";
 
@@ -113,56 +113,58 @@ export const EditUserPage = (): JSX.Element => {
   return (
     <>
       <PageFooterHeaderTemplate isAdmin={true}>
-        <div className="pt-8 w-full h-screen">
-          <div className="space-y-12 scroll">
-            <span className="font-sans text-3xl font-semibold pb-12">
-              Users
-            </span>
-            <div className="flex justify-between">
-              <div className="grid grid-cols-3 gap-4">
-                <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("Candidate")}
-                >
-                  employee
-                </button>
-                <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("Recruiter")}
-                >
-                  recruiters
-                </button>
-                <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => onClickFilter("All")}
-                >
-                  All
-                </button>
-              </div>
-              <DropdownElement
-                dropdownName="Domain"
-                selectedElementChange={selectedElementChange}
-                elementsWithCount={dropdownElements}
-              />
-            </div>
-
-            <div className="space-y-5">
-              {isLoading ? (
-                <div className="grid place-items-center h-96">
-                  <LoadingSpinner />
+        {isLoading ? (
+          <div className="space-y-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="pt-8 w-full h-screen">
+            <div className="space-y-12 scroll">
+              <span className="font-sans text-3xl font-semibold pb-12">
+                Users
+              </span>
+              <div className="flex justify-between">
+                <div className="grid grid-cols-3 gap-4">
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => onClickFilter(UserTypeConst.Candidate)}
+                  >
+                    employee
+                  </button>
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => onClickFilter(UserTypeConst.Recruiter)}
+                  >
+                    recruiters
+                  </button>
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => onClickFilter("All")}
+                  >
+                    All
+                  </button>
                 </div>
-              ) : elementsRendered?.length !== 0 ? (
-                <div className="space-y-5">{elementsRendered}</div>
-              ) : (
-                <NoDataComponent
-                  imageName={NoDataImage}
-                  height={"top-60 left-1/3"}
-                  text="No Data"
+                <DropdownElement
+                  dropdownName="Domain"
+                  selectedElementChange={selectedElementChange}
+                  elementsWithCount={dropdownElements}
                 />
-              )}
+              </div>
+
+              <div className="space-y-5">
+                {elementsRendered?.length !== 0 ? (
+                  <div className="space-y-5">{elementsRendered}</div>
+                ) : (
+                  <NoDataComponent
+                    imageName={NoDataImage}
+                    height={"top-60 left-1/3"}
+                    text="No Data"
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </PageFooterHeaderTemplate>
     </>
   );

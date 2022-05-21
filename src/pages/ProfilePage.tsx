@@ -20,7 +20,12 @@ import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import JobUserCardElement from "../components/JobUserCardElement";
-import { ButtonsType, RoutesList, UserType } from "../util/constants";
+import {
+  ButtonsType,
+  RoutesList,
+  UserType,
+  UserTypeConst,
+} from "../util/constants";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
 export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
@@ -80,16 +85,15 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
         setIsLoading(true);
         const usersList = await usersValues.usersAll(user.uid);
 
-        setIsLoading(false);
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
-          if (usersList[0].type === "Candidate") {
+          if (usersList[0].type === UserTypeConst.Candidate) {
             const jobsList = await candidateJobs.getCandidateJobs({
               userID: user.uid,
             });
             setUserTypeValue(UserType.User);
             setUserJobs(jobsList);
             setInitialUserJobs(jobsList);
-          } else if (usersList[0].type === "Recruiter") {
+          } else if (usersList[0].type === UserTypeConst.Recruiter) {
             const jobsList = await candidateJobs.getRecruiterJobs({
               userID: user.uid,
             });
@@ -101,6 +105,7 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
           localStorage.setItem("JWT", await user.getIdToken());
           setUserDetails(usersList[0]);
         }
+        setIsLoading(false);
       };
 
       fetchData().catch(console.error);
@@ -123,17 +128,17 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
 
   return (
     <PageFooterHeaderTemplate isAdmin={isRecruiter === 0}>
-      <div className="pt-8 scrollbar-hid">
-        <div className="space-y-12 content-center">
-          <span className="font-sans text-3xl font-semibold pb-12 grid place-items-center">
-            {userDetails.isAdmin ? "My Admin Profile" : "My Profile"}
-          </span>
+      {isLoading ? (
+        <div className="space-y-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div className="pt-8 scrollbar-hid">
+          <div className="space-y-12 content-center">
+            <span className="font-sans text-3xl font-semibold pb-12 grid place-items-center">
+              {userDetails.isAdmin ? "My Admin Profile" : "My Profile"}
+            </span>
 
-          {isLoading ? (
-            <div className="grid place-items-center">
-              <LoadingSpinner />
-            </div>
-          ) : (
             <div className="grid place-items-center">
               <ProfilePicture
                 height="262"
@@ -141,114 +146,118 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
                 isMasculine={userDetails.gender !== "F"}
               />
             </div>
-          )}
 
-          <div className="flex-col items-center space-y-8">
-            <div className="grow self-center space-y-1 items-center grid place-items-center">
-              <div className="title-primary text-2xl">{userDetails.name}</div>
-              <div className="text-sm">{userDetails.email}</div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex content-center items-end">
-                <div className="text-3xl font-semibold">{userDetails?.age}</div>
-                <div className="text-sm font-mono">
-                  {!isNullOrUndefined(userDetails?.age) && "Years"}
-                </div>
+            <div className="flex-col items-center space-y-8">
+              <div className="grow self-center space-y-1 items-center grid place-items-center">
+                <div className="title-primary text-2xl">{userDetails.name}</div>
+                <div className="text-sm">{userDetails.email}</div>
               </div>
-              <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 text-center font-bold text-xl items-center h-8 w-max">
-                {userDetails.domain}
-              </div>
-            </div>
-
-            <div className="space-y-3 ">
-              {userTypeValue === UserType.User && (
-                <div>
-                  <div>Last Level Graduate</div>
-                  <div className="text-xl">{userDetails.last_level_grad}</div>
-                </div>
-              )}
-              <div>
-                {userTypeValue === UserType.User && <div>Description</div>}
-                <div className="text-xl w-96">{userDetails.description}</div>
-              </div>
-              {userTypeValue === UserType.User && (
-                <div>
-                  <div>Last Job Description</div>
-                  <div className="text-xl">
-                    {userDetails.description_last_job}
+              <div className="flex justify-between items-center">
+                <div className="flex content-center items-end">
+                  <div className="text-3xl font-semibold">
+                    {userDetails?.age}
+                  </div>
+                  <div className="text-sm font-mono">
+                    {!isNullOrUndefined(userDetails?.age) && "Years"}
                   </div>
                 </div>
+                <div className="flex-none rounded bg-LightBlue text-WhiteBlue px-4 text-center font-bold text-xl items-center h-8 w-max">
+                  {userDetails.domain}
+                </div>
+              </div>
+
+              <div className="space-y-3 ">
+                {userTypeValue === UserType.User && (
+                  <div>
+                    <div>Last Level Graduate</div>
+                    <div className="text-xl">{userDetails.last_level_grad}</div>
+                  </div>
+                )}
+                <div>
+                  {userTypeValue === UserType.User && <div>Description</div>}
+                  <div className="text-xl w-96">{userDetails.description}</div>
+                </div>
+                {userTypeValue === UserType.User && (
+                  <div>
+                    <div>Last Job Description</div>
+                    <div className="text-xl">
+                      {userDetails.description_last_job}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {initialUserJobs.length !== 0 && (
+                <div className="flex justify-center space-x-8">
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => {
+                      onClickFilter("On Hold");
+                    }}
+                  >
+                    On Hold
+                  </button>
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => {
+                      onClickFilter("Accepted");
+                    }}
+                  >
+                    Accepted
+                  </button>
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => {
+                      onClickFilter("Rejected");
+                    }}
+                  >
+                    Rejected
+                  </button>
+                  <button
+                    className="btn-primary focus:bg-LightBlue"
+                    onClick={() => {
+                      onClickFilter("All");
+                    }}
+                  >
+                    All
+                  </button>
+                </div>
               )}
-            </div>
-            {initialUserJobs.length !== 0 && (
-              <div className="flex justify-center space-x-8">
+              <div className="flex-col space-y-4">
+                {jobCards.length === 0 ? jobCardsRecruter : jobCards}
+              </div>
+              <div className="flex justify-between">
                 <button
-                  className="btn-primary focus:bg-LightBlue"
+                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
                   onClick={() => {
-                    onClickFilter("On Hold");
+                    navigate(RoutesList.RegisterExtended, {
+                      state: userDetails,
+                    });
                   }}
                 >
-                  On Hold
+                  <div className="flex-1">Edit</div>
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
+                  />
                 </button>
                 <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => {
-                    onClickFilter("Accepted");
+                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
+                  onClick={async () => {
+                    await signOut();
+                    navigate(RoutesList.Login);
                   }}
                 >
-                  Accepted
-                </button>
-                <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => {
-                    onClickFilter("Rejected");
-                  }}
-                >
-                  Rejected
-                </button>
-                <button
-                  className="btn-primary focus:bg-LightBlue"
-                  onClick={() => {
-                    onClickFilter("All");
-                  }}
-                >
-                  All
+                  <div className="flex-1">Log Out</div>
+                  <FontAwesomeIcon
+                    icon={faArrowRightFromBracket}
+                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
+                  />
                 </button>
               </div>
-            )}
-            <div className="flex-col space-y-4">
-              {jobCards.length === 0 ? jobCardsRecruter : jobCards}
-            </div>
-            <div className="flex justify-between">
-              <button
-                className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
-                onClick={() => {
-                  navigate(RoutesList.RegisterExtended, { state: userDetails });
-                }}
-              >
-                <div className="flex-1">Edit</div>
-                <FontAwesomeIcon
-                  icon={faPencil}
-                  className="h-5 w-6 flex-none font-bold text-WhiteBlue"
-                />
-              </button>
-              <button
-                className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
-                onClick={async () => {
-                  await signOut();
-                  navigate("/");
-                }}
-              >
-                <div className="flex-1">Log Out</div>
-                <FontAwesomeIcon
-                  icon={faArrowRightFromBracket}
-                  className="h-5 w-6 flex-none font-bold text-WhiteBlue"
-                />
-              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </PageFooterHeaderTemplate>
   );
 };

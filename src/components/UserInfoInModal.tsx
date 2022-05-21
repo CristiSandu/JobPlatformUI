@@ -1,4 +1,5 @@
 import { User } from "../api/ui-service-client";
+import { UserTypeConst } from "../util/constants";
 
 export interface UserInfoInModalInterface {
   userInfo: User | null;
@@ -22,7 +23,9 @@ export default function UserInfoInModal({
         <div className="flex space-x-12">
           <div className="flex content-center items-end">
             <div className="text-3xl font-semibold">{userInfo?.age}</div>
-            <div className="text-sm font-mono">Years</div>
+            <div className="text-sm font-mono">
+              {userInfo?.type === UserTypeConst.Candidate && "Years"}
+            </div>
           </div>
           <div className="flex space-x-4 items-center">
             <div className="rounded bg-MainBlue text-WhiteBlue px-4 py-2 text-center font-bold text-sm items-center h-max w-32">

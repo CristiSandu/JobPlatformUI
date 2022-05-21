@@ -36,5 +36,11 @@ export const RoutesList = {
     ProfilePage: "/profilePage",
     HomePage: "/homePage",
     JobPageExtended: "/jobPage",
-    AddJobForm: "/addJob"
+    AddJobForm: "/addJob",
+    Back: -1
+}
+
+export const UserTypeConst = {
+    Recruiter: "Recruiter",
+    Candidate: "Candidate",
 }
