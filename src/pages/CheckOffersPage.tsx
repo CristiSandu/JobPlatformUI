@@ -31,8 +31,6 @@ export const CheckOffersPage = (): JSX.Element => {
   const [elementsList, setElementsList] = useState<JobExtendedModel[]>();
   const [initialJobsList, setInitialJobsList] = useState<JobExtendedModel[]>();
 
-  const [userInfo, setUserInfo] = useState<User>();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, loading, error] = useAuthState(auth);
 
@@ -53,17 +51,7 @@ export const CheckOffersPage = (): JSX.Element => {
       const uid = user?.uid;
       if (isNullOrUndefined(uid)) return;
       const elementDropdown = await dropdownsValues.domainsAndNumbers(false);
-
-      let newObject = window.localStorage.getItem("userInfo");
-      let newobj = !isNullOrUndefined(newObject) ? newObject : "";
-      const userinfo: User = JSON.parse(newobj);
-      setUserInfo(userinfo);
-
-      const jobsList = await jobsValues.getJobs({
-        isRecruter: userinfo.type === UserTypeConst.Recruiter,
-        isAdmin: userinfo.isAdmin,
-        userID: uid,
-      });
+      const jobsList = await jobsValues.getJobs();
 
       elementDropdown.unshift({ name: "Domains" });
 
@@ -146,8 +134,8 @@ export const CheckOffersPage = (): JSX.Element => {
             <LoadingSpinner />
           </div>
         ) : (
-          <div className="pt-8 w-full h-screen">
-            <div className="space-y-12 scroll">
+          <div className="pt-8 w-full h-screen ">
+            <div className="space-y-12 scroll scrollbar-hide">
               <span className="font-sans text-3xl font-semibold pb-12">
                 Offers
               </span>

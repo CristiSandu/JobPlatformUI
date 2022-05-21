@@ -166,17 +166,12 @@ export default function ButtonsModalLayout({
               className="btn-primary bg-SecondBlue"
               type="button"
               onClick={async () => {
-                let newObject = window.localStorage.getItem("userInfo");
-                let newobj = !isNullOrUndefined(newObject) ? newObject : "";
-                const userinfo: User = JSON.parse(newobj);
-
-                const respons = await jobData.applyToAJob({
-                  angajatorId: jobInfo?.recruterID,
+                const response = await jobData.applyToAJob({
+                  recruiterId: jobInfo?.recruterID,
                   jobId: jobInfo?.docID,
-                  candidateId: userinfo.documentId,
                 });
 
-                if (respons) {
+                if (response) {
                   closeModalCall(false);
                 }
               }}

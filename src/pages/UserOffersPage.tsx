@@ -57,11 +57,7 @@ export const UserOffersPage = (): JSX.Element => {
 
       setUserData(userinfo);
 
-      const jobsList = await jobsValues.getJobs({
-        isRecruter: userinfo.type === UserTypeConst.Recruiter,
-        isAdmin: userinfo.isAdmin,
-        userID: userinfo.documentId,
-      });
+      const jobsList = await jobsValues.getJobs();
 
       elementDropdown.unshift({ name: "Domains" });
 

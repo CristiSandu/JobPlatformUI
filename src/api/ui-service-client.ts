@@ -268,20 +268,17 @@ export class DropdownClient implements IDropdownClient {
 
 export interface IJobsClient {
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getJobs(body: GetJobsModelRequest | undefined): Promise<JobExtendedModel[]>;
+    getJobs(): Promise<JobExtendedModel[]>;
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getCandidateJobs(body: GetCandidateJobsModelRequest | undefined): Promise<CandidateJobsExtendedModel[]>;
+    getCandidateJobs(): Promise<CandidateJobsExtendedModel[]>;
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getRecruiterJobs(body: GetRecruiterJobsModelRequest | undefined): Promise<RecruterJobs[]>;
+    getRecruiterJobs(): Promise<RecruterJobs[]>;
     /**
      * @param body (optional) 
      * @return Success
@@ -334,21 +331,16 @@ export class JobsClient implements IJobsClient {
     }
 
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getJobs(body: GetJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<JobExtendedModel[]> {
+    getJobs(  abortController?: AbortController | undefined): Promise<JobExtendedModel[]> {
         let url_ = this.baseUrl + "/api/Jobs/GetJobs";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_ = <AxiosRequestConfig>{
-            data: content_,
-            method: "POST",
+            method: "GET",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             signal: abortController?.signal
@@ -392,21 +384,16 @@ export class JobsClient implements IJobsClient {
     }
 
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getCandidateJobs(body: GetCandidateJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<CandidateJobsExtendedModel[]> {
+    getCandidateJobs(  abortController?: AbortController | undefined): Promise<CandidateJobsExtendedModel[]> {
         let url_ = this.baseUrl + "/api/Jobs/GetCandidateJobs";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_ = <AxiosRequestConfig>{
-            data: content_,
-            method: "POST",
+            method: "GET",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             signal: abortController?.signal
@@ -450,21 +437,16 @@ export class JobsClient implements IJobsClient {
     }
 
     /**
-     * @param body (optional) 
      * @return Success
      */
-    getRecruiterJobs(body: GetRecruiterJobsModelRequest | undefined , abortController?: AbortController | undefined): Promise<RecruterJobs[]> {
+    getRecruiterJobs(  abortController?: AbortController | undefined): Promise<RecruterJobs[]> {
         let url_ = this.baseUrl + "/api/Jobs/GetRecruiterJobs";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_ = <AxiosRequestConfig>{
-            data: content_,
-            method: "POST",
+            method: "GET",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             signal: abortController?.signal
@@ -1295,6 +1277,11 @@ export interface IUsersClient {
      * @param body (optional) 
      * @return Success
      */
+    makeUserAdmin(body: MakeUserAdminModelRequest | undefined): Promise<boolean>;
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     usersPUT(id: string, body: UpdateUserModelRequest | undefined): Promise<boolean>;
     /**
      * @return Success
@@ -1401,6 +1388,64 @@ export class UsersClient implements IUsersClient {
     }
 
     protected processUsersPOST(response: AxiosResponse): Promise<boolean> {
+        const status = response?.status;
+        if (response == null)
+            return Promise.resolve<boolean>(null as any);
+        let _headers: any = {};
+        if (response != null && response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<boolean>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    makeUserAdmin(body: MakeUserAdminModelRequest | undefined , abortController?: AbortController | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/Users/MakeUserAdmin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            signal: abortController?.signal
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processMakeUserAdmin(_response);
+        });
+    }
+
+    protected processMakeUserAdmin(response: AxiosResponse): Promise<boolean> {
         const status = response?.status;
         if (response == null)
             return Promise.resolve<boolean>(null as any);
@@ -1559,8 +1604,7 @@ export interface AddValuesModelRequest {
 
 export interface ApplyToJobsModelRequest {
     jobId?: string | null;
-    angajatorId?: string | null;
-    candidateId?: string | null;
+    recruiterId?: string | null;
     readonly recruterJobId?: string | null;
 }
 
@@ -1610,24 +1654,10 @@ export interface ExpirationModelRequest {
     jobId?: string | null;
 }
 
-export interface GetCandidateJobsModelRequest {
-    userID?: string | null;
-}
-
-export interface GetJobsModelRequest {
-    isRecruter?: boolean;
-    isAdmin?: boolean;
-    userID?: string | null;
-}
-
 export interface GetRecruiterJobsByIdModelRequest {
     angajatorID?: string | null;
     jobID?: string | null;
     readonly documentID?: string | null;
-}
-
-export interface GetRecruiterJobsModelRequest {
-    userID?: string | null;
 }
 
 export interface Job {
@@ -1663,6 +1693,11 @@ export interface JobExtendedModel {
     docID?: string | null;
 }
 
+export interface MakeUserAdminModelRequest {
+    userID?: string | null;
+    role?: string | null;
+}
+
 export interface RecruterJobs {
     readonly documentId?: string | null;
     jobId?: string | null;
@@ -1673,12 +1708,10 @@ export interface RecruterJobs {
 
 export interface UpdateJobsModelRequest {
     jobData?: Job;
-    jobId?: string | null;
 }
 
 export interface UpdateUserModelRequest {
     userData?: User;
-    userID?: string | null;
 }
 
 export interface User {

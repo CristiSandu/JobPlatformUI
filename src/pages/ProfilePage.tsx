@@ -27,15 +27,16 @@ import {
   UserTypeConst,
 } from "../util/constants";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
+import NoDataComponent from "../components/NoDataComponent";
+import NoDataImage from "../Images/no_data_logo.svg";
 
 export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState<User>({});
-  const [userJobsRecruter, setUserJobsRecruter] = useState<RecruterJobs[]>([]);
-  const [initialUserJobsRecruter, setInitialUserJobsRecruter] = useState<
-    RecruterJobs[]
-  >([]);
+  const [userJobsRecruiter, setUserJobsRecruiter] = useState<RecruterJobs[]>(
+    []
+  );
 
   const [userTypeValue, setUserTypeValue] = useState<UserType>();
 
@@ -87,20 +88,14 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
 
         if (usersList.length === 1 && !isNullOrUndefined(usersList[0])) {
           if (usersList[0].type === UserTypeConst.Candidate) {
-            const jobsList = await candidateJobs.getCandidateJobs({
-              userID: user.uid,
-            });
+            const jobsList = await candidateJobs.getCandidateJobs();
             setUserTypeValue(UserType.User);
             setUserJobs(jobsList);
             setInitialUserJobs(jobsList);
           } else if (usersList[0].type === UserTypeConst.Recruiter) {
-            const jobsList = await candidateJobs.getRecruiterJobs({
-              userID: user.uid,
-            });
+            const jobsList = await candidateJobs.getRecruiterJobs();
             setUserTypeValue(UserType.Recruiter);
-
-            setUserJobsRecruter(jobsList);
-            setInitialUserJobsRecruter(jobsList);
+            setUserJobsRecruiter(jobsList);
           }
           localStorage.setItem("JWT", await user.getIdToken());
           setUserDetails(usersList[0]);
@@ -119,7 +114,7 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
     />
   ));
 
-  const jobCardsRecruter = userJobsRecruter.map((element: RecruterJobs) => (
+  const jobCardsRecruter = userJobsRecruiter.map((element: RecruterJobs) => (
     <JobUserCardElement
       jobInfoRecruter={element}
       buttonsType={ButtonsType.DefaultCancel}
@@ -165,7 +160,6 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
                   {userDetails.domain}
                 </div>
               </div>
-
               <div className="space-y-3 ">
                 {userTypeValue === UserType.User && (
                   <div>
@@ -185,6 +179,35 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
                     </div>
                   </div>
                 )}
+              </div>
+              <div className="flex justify-between">
+                <button
+                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
+                  onClick={() => {
+                    navigate(RoutesList.RegisterExtended, {
+                      state: userDetails,
+                    });
+                  }}
+                >
+                  <div className="flex-1">Edit</div>
+                  <FontAwesomeIcon
+                    icon={faPencil}
+                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
+                  />
+                </button>
+                <button
+                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
+                  onClick={async () => {
+                    await signOut();
+                    navigate(RoutesList.Login);
+                  }}
+                >
+                  <div className="flex-1">Log Out</div>
+                  <FontAwesomeIcon
+                    icon={faArrowRightFromBracket}
+                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
+                  />
+                </button>
               </div>
               {initialUserJobs.length !== 0 && (
                 <div className="flex justify-center space-x-8">
@@ -222,38 +245,17 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
                   </button>
                 </div>
               )}
-              <div className="flex-col space-y-4">
-                {jobCards.length === 0 ? jobCardsRecruter : jobCards}
-              </div>
-              <div className="flex justify-between">
-                <button
-                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
-                  onClick={() => {
-                    navigate(RoutesList.RegisterExtended, {
-                      state: userDetails,
-                    });
-                  }}
-                >
-                  <div className="flex-1">Edit</div>
-                  <FontAwesomeIcon
-                    icon={faPencil}
-                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
-                  />
-                </button>
-                <button
-                  className="btn-primary space-x-4 flex  items-center bg-SecondBlue  text-WhiteBlue focus:bg-LightBlue"
-                  onClick={async () => {
-                    await signOut();
-                    navigate(RoutesList.Login);
-                  }}
-                >
-                  <div className="flex-1">Log Out</div>
-                  <FontAwesomeIcon
-                    icon={faArrowRightFromBracket}
-                    className="h-5 w-6 flex-none font-bold text-WhiteBlue"
-                  />
-                </button>
-              </div>
+              {jobCards.length === 0 && jobCardsRecruter.length === 0 ? (
+                <NoDataComponent
+                  imageName={NoDataImage}
+                  height={"left-1/3"}
+                  text="No Data"
+                />
+              ) : (
+                <div className="flex-col space-y-4">
+                  {jobCards.length === 0 ? jobCardsRecruter : jobCards}
+                </div>
+              )}
             </div>
           </div>
         </div>

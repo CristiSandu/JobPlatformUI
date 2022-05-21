@@ -1,4 +1,5 @@
 import { JobExtendedModel, User } from "../api/ui-service-client";
+import { isNullOrUndefined } from "../util/generic-helpers";
 import ValidationSwitch from "./ValidationSwitch";
 
 export interface MainModalContentInterface {
@@ -21,24 +22,28 @@ export default function MainModalContent({
       {userInfo !== null ? (
         <div className="relative py-6 flex-auto">
           <div className="space-y-3 pb-4">
-            <div className="-space-y-1">
-              <p className="px-6 font-semibold text-xl font-mono">
-                Last Level Graduate
-              </p>
-              <div className="px-6 text-4xl">{userInfo?.last_level_grad}</div>
-            </div>
+            {!isNullOrUndefined(userInfo?.last_level_grad) && (
+              <div className="-space-y-1">
+                <p className="px-6 font-semibold text-xl font-mono">
+                  Last Level Graduate
+                </p>
+                <div className="px-6 text-4xl">{userInfo?.last_level_grad}</div>
+              </div>
+            )}
             <div className="-space-y-1 border-solid border-slate-200 ">
               <p className="px-6 font-semibold text-xl font-mono">Location</p>
               <div className="px-6 text-4xl">{userInfo?.location}</div>
             </div>
-            <div className="-space-y-1 border-solid border-slate-200 ">
-              <p className="px-6 font-semibold text-xl font-mono">
-                Last job description
-              </p>
-              <div className="px-6 text-4xl">
-                {userInfo?.description_last_job}
+            {!isNullOrUndefined(userInfo?.description_last_job) && (
+              <div className="-space-y-1 border-solid border-slate-200 ">
+                <p className="px-6 font-semibold text-xl font-mono">
+                  Last job description
+                </p>
+                <div className="px-6 text-4xl">
+                  {userInfo?.description_last_job}
+                </div>
               </div>
-            </div>
+            )}
             <div className="-space-y-1 border-solid border-slate-200 ">
               <p className="px-6 font-semibold text-xl font-mono">
                 Phone Number
@@ -49,7 +54,16 @@ export default function MainModalContent({
               <p className="px-6 font-semibold text-xl font-mono">
                 Description
               </p>
-              <div className="px-6 text-4xl">{userInfo?.description}</div>
+              <div
+                className={`px-6 ${
+                  userInfo?.description?.length !== undefined &&
+                  userInfo?.description?.length > 250
+                    ? "text-xl"
+                    : "text-4xl"
+                } `}
+              >
+                {userInfo?.description}
+              </div>
             </div>
           </div>
           {isRecruiter && (
