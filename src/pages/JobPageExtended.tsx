@@ -33,7 +33,7 @@ export const JobPageExtended = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const location = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const jobData = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,
@@ -118,7 +118,18 @@ export const JobPageExtended = (): JSX.Element => {
         <div className="pt-8 w-full">
           <div className="space-y-8 scroll">
             <div className="grid grid-cols-4 gap-4">
-              <button className="btn-primary bg-SecondBlue focus:bg-LightBlue">
+              <button
+                className="btn-primary bg-SecondBlue focus:bg-LightBlue"
+                onClick={() => {
+                  if (
+                    !isNullOrUndefined(recruiterJobsList?.job) &&
+                    recruiterJobsList?.job !== undefined
+                  )
+                    navigate(RoutesList.AddJobForm, {
+                      state: recruiterJobsList?.job,
+                    });
+                }}
+              >
                 Update
               </button>
               <button
@@ -163,9 +174,9 @@ export const JobPageExtended = (): JSX.Element => {
                 className="btn-primary focus:bg-LightBlue"
                 onClick={() => {
                   if (isFromProfile === FromEnum.FromMainJobs) {
-                    navigator(RoutesList.HomePage);
+                    navigate(RoutesList.HomePage);
                   } else {
-                    navigator(RoutesList.Back);
+                    navigate(RoutesList.Back);
                   }
                 }}
               >

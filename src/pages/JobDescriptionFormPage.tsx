@@ -12,12 +12,14 @@ import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { AxiosHelpers } from "../util/axios-helper";
 import { RoutesList } from "../util/constants";
+import { isNullOrUndefined } from "../util/generic-helpers";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 
 export const JobDescriptionFormPage = (): JSX.Element => {
   const [jobData, setJobData] = useState<Job>({});
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
   const [userData, setUserData] = useState<User>();
+  const [isForUpdate, setIsForUpdate] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,14 +34,23 @@ export const JobDescriptionFormPage = (): JSX.Element => {
     AxiosHelpers.axiosClient
   );
 
+  let newObject = window.localStorage.getItem("userInfo");
+  let newobj = !isNullOrUndefined(newObject) ? newObject : "";
+  const userinfo: User = JSON.parse(newobj);
+
   useEffect(() => {
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
       element.unshift({ name: "Domain" });
       setDropdownElements(element);
-    };
+      if (!isNullOrUndefined(location.state)) {
+        setJobData(location.state as Job);
 
-    setUserData(location.state as User);
+        setIsForUpdate(true);
+      } else {
+        setIsForUpdate(false);
+      }
+    };
 
     fetchData().catch(console.error);
   }, []);
@@ -75,6 +86,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                     onChange={(e) =>
                       setJobData({ ...jobData, name: e.target.value })
                     }
+                    defaultValue={jobData.name ?? ""}
                     placeholder="Full Job Name"
                   />
                 </div>
@@ -83,6 +95,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                   <DropdownElement
                     selectedElementChange={selectedElementChange}
                     dropdownName="Domain"
+                    preSelectedElement={jobData.domain}
                     elements={dropdownElements}
                   />
                   <input
@@ -95,6 +108,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                         numberEmp: +e.target.value,
                       })
                     }
+                    defaultValue={jobData.numberEmp ?? ""}
                     placeholder="Number"
                   />
                 </div>
@@ -108,6 +122,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                         description: e.target.value,
                       })
                     }
+                    defaultValue={jobData.description ?? ""}
                     placeholder="Description"
                   />
                 </div>
@@ -118,7 +133,8 @@ export const JobDescriptionFormPage = (): JSX.Element => {
                     onChange={(e) =>
                       setJobData({ ...jobData, address: e.target.value })
                     }
-                    name="name"
+                    defaultValue={jobData.address ?? ""}
+                    name="Location"
                     placeholder="Location"
                   />
                 </div>
@@ -126,27 +142,49 @@ export const JobDescriptionFormPage = (): JSX.Element => {
               <div className="flex justify-between">
                 <div className="text-xl">{userData?.name}</div>
                 <div className="text-xl">
-                  {dayjs(Date.now()).format("DD.MM.YYYY")}
+                  {!isForUpdate
+                    ? dayjs(Date.now()).format("DD.MM.YYYY")
+                    : dayjs(jobData.date).format("DD.MM.YYYY")}
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4 px-4 pt-8">
                 <button
                   className="btn-primary"
                   onClick={async () => {
-                    jobData.documentId = "default";
-                    jobData.numberApplicants = 0;
-                    jobData.isCheck = false;
-                    jobData.isExpired = false;
-                    jobData.recruterID = userData?.documentId;
-                    jobData.date = dayjs(Date.now());
-                    jobData.recruterName = userData?.name;
-                    const response: boolean = await jobInstance.jobsPOST({
-                      jobData: jobData,
-                    });
-                    if (response) {
-                      navigate(RoutesList.HomePage);
+                    if (!isForUpdate) {
+                      jobData.documentId = "default";
+                      jobData.numberApplicants = 0;
+                      jobData.isCheck = false;
+                      jobData.isExpired = false;
+                      jobData.recruterID = userData?.documentId;
+                      jobData.date = dayjs(Date.now());
+                      jobData.recruterName = userData?.name;
+                      const response: boolean = await jobInstance.jobsPOST({
+                        jobData: jobData,
+                      });
+                      if (response) {
+                        navigate(RoutesList.HomePage);
+                      } else {
+                        alert("Error on Save, Retry");
+                      }
                     } else {
-                      alert("Error on Save, Retry");
+                      if (!isNullOrUndefined(jobData.documentId)) {
+                        jobData.recruterName = userinfo.name;
+                        jobData.isCheck = true;
+
+                        const response: boolean = await jobInstance.jobsPUT(
+                          jobData.documentId,
+                          {
+                            jobData: jobData,
+                          }
+                        );
+
+                        if (response) {
+                          navigate(RoutesList.Back);
+                        } else {
+                          alert("Error on Save, Retry");
+                        }
+                      }
                     }
                   }}
                 >

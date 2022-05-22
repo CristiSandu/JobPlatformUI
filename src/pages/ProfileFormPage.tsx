@@ -33,17 +33,15 @@ export type UserProfileData = {
 export const ProfileFormPage = (): JSX.Element => {
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState<string>("");
-
   const [userData, setUserData] = useState<User>({});
-  const [user, loading, error] = useAuthState(auth);
-  const navigate = useNavigate();
   const [isForUpdate, setIsForUpdate] = useState<boolean>(false);
-
   const [userEmail, setUserEmail] = useState<string>("");
-
   const [dropdownElements, setDropdownElements] = useState<DomainModel[]>();
 
+  const [user, loading, error] = useAuthState(auth);
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   const usersValues = new UsersClient(
     process.env.REACT_APP_UI_SERVICE,
@@ -59,7 +57,11 @@ export const ProfileFormPage = (): JSX.Element => {
     const fetchData = async () => {
       const element = await dropdownsValues.domainsAll();
       if (!isNullOrUndefined(location.state)) {
+        const userLocal = location.state as User;
         setUserData(location.state as User);
+        if (userLocal.type === UserTypeConst.Recruiter) {
+          setSelectedType(userLocal.type);
+        }
         setIsForUpdate(true);
       } else {
         const uid = user?.uid;

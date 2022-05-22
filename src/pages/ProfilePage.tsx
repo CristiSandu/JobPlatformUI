@@ -58,8 +58,6 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
     AxiosHelpers.axiosClient
   );
 
-  useEffect(() => {}, []);
-
   function onClickFilter(filterName: string): void {
     if (filterName === "On Hold") {
       const elements = initialUserJobs?.filter((elem) => elem.status === 0);
