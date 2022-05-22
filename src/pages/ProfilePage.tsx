@@ -167,7 +167,9 @@ export const ProfilePage = ({ isRecruiter }: UserPageParams): JSX.Element => {
                 )}
                 <div>
                   {userTypeValue === UserType.User && <div>Description</div>}
-                  <div className="text-xl w-96">{userDetails.description}</div>
+                  <div className="text-xl w-full">
+                    {userDetails.description}
+                  </div>
                 </div>
                 {userTypeValue === UserType.User && (
                   <div>
