@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   DomainModel,
@@ -14,6 +15,7 @@ import { AxiosHelpers } from "../util/axios-helper";
 import { RoutesList } from "../util/constants";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
+import { auth, signOut } from "../provider/firebase";
 
 export const JobDescriptionFormPage = (): JSX.Element => {
   const [jobData, setJobData] = useState<Job>({});
@@ -23,6 +25,8 @@ export const JobDescriptionFormPage = (): JSX.Element => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [user, loading, error] = useAuthState(auth);
 
   const jobInstance = new JobsClient(
     process.env.REACT_APP_UI_SERVICE,
@@ -53,7 +57,7 @@ export const JobDescriptionFormPage = (): JSX.Element => {
     };
 
     fetchData().catch(console.error);
-  }, []);
+  }, [user, loading]);
 
   function selectedElementChange(element: string, dropdownName: string): void {
     switch (dropdownName) {

@@ -186,9 +186,8 @@ export const ProfileFormPage = (): JSX.Element => {
                       />
                     </div>
                     <div>
-                      <input
-                        className="entry-primary w-96"
-                        type="text"
+                      <textarea
+                        className="entry-primary w-96 h-32"
                         name="name"
                         onChange={(e) =>
                           setUserData({

@@ -183,7 +183,7 @@ export const JobPageExtended = (): JSX.Element => {
                 Back
               </button>
             </div>
-            <div className="flex justify-between pt-5 pl-5 pb-2 pr-0 border-b border-solid border-slate-200 rounded-t">
+            <div className="flex justify-between pt-5 pl-5 pb-2 pr-0  border-solid border-slate-200 rounded-t">
               <img
                 className="z-0"
                 src={JobPostLogo}

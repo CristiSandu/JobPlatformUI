@@ -113,8 +113,8 @@ export default function JobUserCardElement({
             {jobInfo?.address || jobData.address}
           </div>
           <div className="text-sm font-semibold">
-            {dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY") ||
-              dayjs(jobData.date?.toString()).format("DD.MM.YYYY")}
+            {dayjs(jobData.date?.toString()).format("DD.MM.YYYY") ||
+              dayjs(jobInfo?.date?.toString()).format("DD.MM.YYYY")}
           </div>
         </div>
         <div className="grid grid-cols-1 grid-rows-2 gap-2 items-center py-2 pr-6">
