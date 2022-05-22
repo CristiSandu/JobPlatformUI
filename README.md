@@ -1,13 +1,9 @@
 # 💼 Jobs For Refugees 
 
-![](./image/main_image.png)
-
+![](./image/main_image.png)  
 
 A platform for refugees to get a job more easy   
 📐🖌️ **Figma** - https://www.figma.com/file/RGffo9skbTc0la2tDEdYLA/Design?node-id=20%3A107
-
-
-
 
 ## 💿 Demo
 ### Login Flow 
