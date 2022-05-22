@@ -1,4 +1,5 @@
-import { RecruterJobs } from "../api/ui-service-client";
+import { User } from "firebase/auth";
+import { Job, RecruterJobs } from "../api/ui-service-client";
 
 export enum ButtonsType {
     AdminUserButtons = 0,
@@ -38,6 +39,13 @@ export const RoutesList = {
     JobPageExtended: "/jobPage",
     AddJobForm: "/addJob",
     Back: -1
+}
+
+
+export interface JobDetailFormModel {
+    userData?: User;
+    jobData?: Job;
+    isFromUpdate: boolean;
 }
 
 export const UserTypeConst = {

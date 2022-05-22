@@ -126,7 +126,10 @@ export const JobPageExtended = (): JSX.Element => {
                     recruiterJobsList?.job !== undefined
                   )
                     navigate(RoutesList.AddJobForm, {
-                      state: recruiterJobsList?.job,
+                      state: {
+                        jobData: recruiterJobsList?.job,
+                        isFromUpdate: true,
+                      },
                     });
                 }}
               >

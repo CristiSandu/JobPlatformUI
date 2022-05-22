@@ -177,7 +177,9 @@ export const UserOffersPage = (): JSX.Element => {
                   <button
                     className="btn-primary text-2xl w-full focus:bg-LightBlue"
                     onClick={() => {
-                      navigate(RoutesList.AddJobForm, { state: userData });
+                      navigate(RoutesList.AddJobForm, {
+                        state: { userData: userData, isFromUpdate: false },
+                      });
                     }}
                   >
                     + Add A Offer

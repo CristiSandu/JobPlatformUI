@@ -12,10 +12,10 @@ import {
 import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { AxiosHelpers } from "../util/axios-helper";
-import { RoutesList } from "../util/constants";
+import { JobDetailFormModel, RoutesList } from "../util/constants";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
-import { auth, signOut } from "../provider/firebase";
+import { auth } from "../provider/firebase";
 
 export const JobDescriptionFormPage = (): JSX.Element => {
   const [jobData, setJobData] = useState<Job>({});
@@ -48,11 +48,15 @@ export const JobDescriptionFormPage = (): JSX.Element => {
       element.unshift({ name: "Domain" });
       setDropdownElements(element);
       if (!isNullOrUndefined(location.state)) {
-        setJobData(location.state as Job);
-
-        setIsForUpdate(true);
-      } else {
-        setIsForUpdate(false);
+        const dataPassed: JobDetailFormModel =
+          location.state as JobDetailFormModel;
+        if (dataPassed.isFromUpdate && dataPassed.jobData) {
+          setJobData(dataPassed.jobData);
+          setIsForUpdate(true);
+        } else {
+          setUserData(dataPassed.userData);
+          setIsForUpdate(false);
+        }
       }
     };
 
