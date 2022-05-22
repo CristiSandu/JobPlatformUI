@@ -28,5 +28,3 @@ A platform for refugees to get a job more easy
 ![](./image/main_page_user_filter.png)
 ![](./image/profile_page_user.png)
 ![](./image/user_popUps.png)
-
-
