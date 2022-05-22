@@ -6,7 +6,7 @@ docker-build-master:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
   only:
-    - master
+    - main
 
 deploy-service-master:
   stage: deploy
@@ -14,4 +14,4 @@ deploy-service-master:
     - apk add --update curl
     - curl -XPOST http://host.docker.internal:9000/api/webhooks/4d113d66-ae31-4fc7-98a0-9ec03755dbfe
   only:
-    - master
+    - main
