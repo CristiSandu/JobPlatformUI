@@ -3,7 +3,6 @@ import DropdownElement from "../components/DropdownElement";
 import FormImage from "../Images/form_logo.svg";
 import { PageFooterHeaderTemplate } from "./PageFooterHeaderTeamplate";
 import ProfilePicture from "../components/ProfilePicture";
-import { auth } from "../provider/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -15,6 +14,7 @@ import {
 import { AxiosHelpers } from "../util/axios-helper";
 import { isNullOrUndefined } from "../util/generic-helpers";
 import { RoutesList, UserTypeConst } from "../util/constants";
+import { auth, signOut } from "../provider/firebase";
 
 export type UserProfileData = {
   email: string;
@@ -37,6 +37,7 @@ export const ProfileFormPage = (): JSX.Element => {
   const [userData, setUserData] = useState<User>({});
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
+  const [isForUpdate, setIsForUpdate] = useState<boolean>(false);
 
   const [userEmail, setUserEmail] = useState<string>("");
 
@@ -59,11 +60,13 @@ export const ProfileFormPage = (): JSX.Element => {
       const element = await dropdownsValues.domainsAll();
       if (!isNullOrUndefined(location.state)) {
         setUserData(location.state as User);
+        setIsForUpdate(true);
       } else {
         const uid = user?.uid;
         setUserEmail(user?.email ?? "");
         element.unshift({ name: "Domain" });
 
+        setIsForUpdate(false);
         setUserData({ ...userData, email: userEmail });
         setUserData({ ...userData, documentId: uid });
       }
@@ -299,11 +302,23 @@ export const ProfileFormPage = (): JSX.Element => {
                     userData.email = email;
                     setUserData({ ...userData, email: email });
                     setUserData({ ...userData, documentId: uid });
-                    const response = await usersValues.usersPOST({
-                      userData: userData,
-                    });
-                    if (response) {
-                      navigate(RoutesList.HomePage);
+                    if (!isForUpdate) {
+                      const response = await usersValues.usersPOST({
+                        userData: userData,
+                      });
+                      if (response) {
+                        await signOut();
+                        navigate(RoutesList.Login);
+                      }
+                    } else {
+                      if (!isNullOrUndefined(uid)) {
+                        const response = await usersValues.usersPUT(uid, {
+                          userData: userData,
+                        });
+                        if (response) {
+                          navigate(RoutesList.Back);
+                        }
+                      }
                     }
                   }}
                 >

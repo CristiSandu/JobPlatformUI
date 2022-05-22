@@ -110,9 +110,14 @@ export const CheckOffersPage = (): JSX.Element => {
   function checkAJobCall(jobId: string, value: boolean): void {
     const fetchData = async () => {
       setIsLoading(true);
-      const response = jobsValues.validateJob({ isCheck: value, jobId: jobId });
+      const response = await jobsValues.validateJob({
+        isCheck: value,
+        jobId: jobId,
+      });
       if (!response) alert("Error on Check Job Offer");
-
+      const jobsList = await jobsValues.getJobs();
+      setElementsList(jobsList);
+      setInitialJobsList(jobsList);
       setIsLoading(false);
     };
 

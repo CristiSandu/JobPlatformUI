@@ -27,7 +27,9 @@ export default function DropdownElement({
   const [selectedElement, setSelectedElement] = useState<
     string | null | undefined
   >(!isNullOrUndefined(preSelectedElement) ? preSelectedElement : dropdownName);
-
+  const selectedElement2: string = !isNullOrUndefined(preSelectedElement)
+    ? preSelectedElement
+    : "";
   const elementsRendered = elements?.map((element: DomainModel) => (
     <Menu.Item>
       {({ active }) => (
@@ -77,7 +79,7 @@ export default function DropdownElement({
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded border-2 border-MainBlue shadow-md px-4 py-3 bg-white text-base font-bold  text-gray-700 hover:bg-gray-50 focus:outline-none">
-          {selectedElement}
+          {selectedElement2 === "" ? selectedElement : selectedElement2}
           <ChevronDownIcon
             className="-mr-1 ml-2 h-5 w-5 justify-end"
             aria-hidden="true"
